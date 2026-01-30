@@ -59,11 +59,11 @@
     <div class="glow-spot" style="bottom: -200px; right: -100px; opacity: 0.1;"></div>
 
     <nav class="w-full max-w-6xl flex justify-between items-center px-8 py-6">
-        <div class="text-3xl font-black italic tracking-tighter text-glow">OHW<span class="text-indigo-500">.</span></div>
+        <div class="text-3xl font-black italic tracking-tighter text-glow">OHW<span class="text-indigo-500">.cloud-ip.cc</span></div>
         <div class="space-x-6 text-xs font-bold uppercase tracking-widest text-gray-400">
-            <a href="#" class="hover:text-white transition">Home</a>
-            <a href="#" class="hover:text-white transition">Rules</a>
-            <a href="#" class="hover:text-white transition">Store</a>
+            <a href="/" class="hover:text-white transition">Home</a>
+            <a href="/rules.html" class="hover:text-white transition">Rules</a>
+            <a href="/store.html" class="hover:text-white transition">Store</a>
         </div>
     </nav>
 
@@ -74,7 +74,7 @@
             
             <div class="flex flex-col md:flex-row justify-center items-center gap-6">
                 <button onclick="copyIP()" class="btn-gradient px-12 py-5 rounded-full font-black text-xl tracking-tighter">
-                    <span id="ip-text">OHW.CLOUD-IP.CC</span>
+                    <span id="ip-text">ohw.cloud-ip.cc</span>
                 </button>
                 <div class="flex items-center space-x-3">
                     <div class="w-3 h-3 bg-green-500 rounded-full animate-ping"></div>
@@ -138,6 +138,41 @@
                 renderProfile(id);
             }
         }
+
+        function renderProfile(id) {
+            // 這裡完全保留你原本的 HTML 結構
+            document.getElementById('login-section').innerHTML = `
+                <div class="flex flex-col items-center py-4">
+                    <img src="https://mc-heads.net/avatar/${id}/80" class="rounded-2xl mb-6 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
+                    <h2 class="text-3xl font-black mb-1">${id}</h2>
+                    <p class="text-indigo-400 text-xs font-bold tracking-[0.3em] mb-8 uppercase">Verified Player</p>
+                    <button onclick="logout()" class="text-gray-600 text-[10px] hover:text-white transition underline">LOGOUT</button>
+                </div>
+            `;
+        }
+
+        // 新增登出函數，確保清除資料
+        function logout() {
+            localStorage.removeItem('ohw_player_id');
+            location.reload();
+        }
+
+        function handlePurchase(rankName) {
+    const playerID = localStorage.getItem('ohw_player_id');
+    
+    if (!playerID) {
+        alert("請先回到首頁登入您的 Minecraft 帳號，才能進行購買！");
+        window.location.href = "index.html"; // 引導回首頁登入
+        return;
+    }
+
+    // 如果已經登入，跳轉到你的結帳連結 (例如 Discord 或綠界/藍新)
+    // 這裡可以自動把 ID 帶入網址中
+    const checkoutURL = `https://your-checkout-link.com?player=${playerID}&rank=${rankName}`;
+    
+    console.log(`準備為玩家 ${playerID} 購買 ${rankName}`);
+    window.open(checkoutURL, '_blank');
+}
 
         function renderProfile(id) {
             document.getElementById('login-section').innerHTML = `

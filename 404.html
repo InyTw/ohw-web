@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 空間迷失 | OHW NETWORK</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', "Microsoft JhengHei", sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+        .glitch {
+            font-size: 10rem;
+            font-weight: 900;
+            position: relative;
+            text-shadow: 0.05em 0 0 rgba(255,0,0,0.75),
+                        -0.025em -0.05em 0 rgba(0,255,0,0.75),
+                        0.025em 0.05em 0 rgba(0,0,255,0.75);
+            animation: glitch 500ms infinite;
+        }
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 rgba(255,0,0,.75), -0.05em -0.025em 0 rgba(0,255,0,.75), -0.025em 0.05em 0 rgba(0,0,255,.75); }
+            14% { text-shadow: 0.05em 0 0 rgba(255,0,0,.75), -0.05em -0.025em 0 rgba(0,255,0,.75), -0.025em 0.05em 0 rgba(0,0,255,.75); }
+            15% { text-shadow: -0.05em -0.025em 0 rgba(255,0,0,.75), 0.025em 0.025em 0 rgba(0,255,0,.75), -0.05em -0.05em 0 rgba(0,0,255,.75); }
+            49% { text-shadow: -0.05em -0.025em 0 rgba(255,0,0,.75), 0.025em 0.025em 0 rgba(0,255,0,.75), -0.05em -0.05em 0 rgba(0,0,255,.75); }
+            50% { text-shadow: 0.025em 0.05em 0 rgba(255,0,0,.75), 0.05em 0 0 rgba(0,255,0,.75), 0 -0.05em 0 rgba(0,0,255,.75); }
+            99% { text-shadow: 0.025em 0.05em 0 rgba(255,0,0,.75), 0.05em 0 0 rgba(0,255,0,.75), 0 -0.05em 0 rgba(0,0,255,.75); }
+            100% { text-shadow: -0.025em 0 0 rgba(255,0,0,.75), -0.025em -0.025em 0 rgba(0,255,0,.75), -0.025em -0.05em 0 rgba(0,0,255,.75); }
+        }
+        .grid-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 40px 40px; z-index: -1;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen border-8 border-indigo-500/20">
+    <div class="grid-bg"></div>
+
+    <div class="text-center px-6">
+        <h1 class="glitch italic mb-4">404</h1>
+        <h2 class="text-2xl font-black tracking-widest uppercase mb-6 italic">網頁已進入虛空 / Lost in Void</h2>
+        <p class="text-gray-500 max-w-md mx-auto mb-12 text-sm leading-relaxed tracking-widest uppercase">
+            你嘗試訪問的座標不存在於 OHW NETWORK 的現實中。<br>可能已被管理員刪除，或者你輸入了錯誤的傳送指令。
+        </p>
+        
+        <div class="flex flex-col md:flex-row gap-4 justify-center">
+            <a href="index.html" class="bg-white text-black font-black py-4 px-10 rounded-full hover:scale-105 transition uppercase text-xs tracking-widest">
+                回到首頁 / Home
+            </a>
+            <a href="store.html" class="bg-white/5 border border-white/10 text-white font-black py-4 px-10 rounded-full hover:bg-white/10 transition uppercase text-xs tracking-widest">
+                前往商店 / Store
+            </a>
+        </div>
+    </div>
+    
+    <div class="absolute bottom-10 text-[10px] text-gray-700 uppercase tracking-[0.5em]">
+        OHW Network Security System Active
+    </div>
+</body>
+</html>

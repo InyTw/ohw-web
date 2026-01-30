@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>伺服器規範 | OHW NETWORK</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', "Microsoft JhengHei", sans-serif;
+            background-color: #000000;
+            color: #fff;
+            scroll-behavior: smooth;
+        }
+        .grid-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.03) 1px, transparent 0);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+        .modern-card {
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+        }
+        .rule-number {
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+        .nav-link:hover {
+            color: #6366f1;
+            padding-left: 5px;
+        }
+        .nav-link { transition: 0.3s; }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+
+    <div class="grid-bg"></div>
+
+    <nav class="w-full flex justify-between items-center px-8 py-6 sticky top-0 bg-black/50 backdrop-blur-lg z-50 border-b border-white/5">
+        <div class="text-2xl font-black italic tracking-tighter">OHW<span class="text-indigo-500">.</span>RULES</div>
+        <a href="index.html" class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-white transition">← Back to Home</a>
+    </nav>
+
+    <header class="text-center pt-20 pb-10">
+        <h1 class="text-5xl md:text-7xl font-black mb-4 tracking-tighter">玩家規範</h1>
+        <p class="text-gray-500 tracking-widest uppercase text-sm">Player Regulations & Fair Play</p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-4 gap-10">
+        
+        <aside class="hidden lg:block space-y-4 sticky top-32 h-fit">
+            <p class="text-indigo-500 font-black text-xs tracking-widest mb-6">目錄 INDEX</p>
+            <a href="#general" class="nav-link block text-gray-400 font-bold">01 一般準則</a>
+            <a href="#chat" class="nav-link block text-gray-400 font-bold">02 聊天室規範</a>
+            <a href="#gameplay" class="nav-link block text-gray-400 font-bold">03 遊戲公平性</a>
+            <a href="#punish" class="nav-link block text-gray-400 font-bold">04 處罰條例</a>
+        </aside>
+
+        <div class="lg:col-span-3 space-y-12">
+            
+            <section id="general" class="modern-card p-8 md:p-12">
+                <div class="flex items-center mb-6">
+                    <span class="rule-number text-4xl mr-4">01</span>
+                    <h2 class="text-3xl font-black">一般準則</h2>
+                </div>
+                <ul class="space-y-6 text-gray-300">
+                    <li class="flex items-start">
+                        <span class="text-indigo-500 mr-3 mt-1">●</span>
+                        <div>
+                            <p class="font-bold text-white">尊重所有玩家</p>
+                            <p class="text-sm">嚴禁任何形式的歧視、霸凌或人身攻擊。</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-500 mr-3 mt-1">●</span>
+                        <div>
+                            <p class="font-bold text-white">帳號安全</p>
+                            <p class="text-sm">玩家需自行負擔帳號安全責任，任何由該帳號發出的行為皆視為本人所為。</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <section id="chat" class="modern-card p-8 md:p-12">
+                <div class="flex items-center mb-6">
+                    <span class="rule-number text-4xl mr-4">02</span>
+                    <h2 class="text-3xl font-black">聊天室規範</h2>
+                </div>
+                <ul class="space-y-6 text-gray-300">
+                    <li class="flex items-start">
+                        <span class="text-indigo-500 mr-3 mt-1">●</span>
+                        <div>
+                            <p class="font-bold text-white">嚴禁洗頻與廣告</p>
+                            <p class="text-sm">禁止發送重複訊息、推廣其他伺服器網址或 Discord 連結。</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-500 mr-3 mt-1">●</span>
+                        <div>
+                            <p class="font-bold text-white">語言規範</p>
+                            <p class="text-sm">請勿在公共頻道使用粗口、髒話或帶有性暗示的言論。</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <section id="gameplay" class="modern-card p-8 md:p-12 border-l-4 border-l-indigo-600">
+                <div class="flex items-center mb-6">
+                    <span class="rule-number text-4xl mr-4">03</span>
+                    <h2 class="text-3xl font-black">遊戲公平性 (重要)</h2>
+                </div>
+                <div class="bg-red-500/10 border border-red-500/20 p-6 rounded-xl mb-6">
+                    <p class="text-red-400 text-sm font-bold italic">！OHW 伺服器對外掛程式採取零容忍政策</p>
+                </div>
+                <ul class="space-y-6 text-gray-300">
+                    <li class="flex items-start">
+                        <span class="text-indigo-500 mr-3 mt-1">●</span>
+                        <div>
+                            <p class="font-bold text-white">禁止非法客戶端</p>
+                            <p class="text-sm">嚴禁使用任何自動點擊器 (Autoclicker)、飛行、穿牆或 X-Ray 等模組。</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-500 mr-3 mt-1">●</span>
+                        <div>
+                            <p class="font-bold text-white">禁止惡意利用漏洞 (Bug)</p>
+                            <p class="text-sm">發現漏洞請立即回報，惡意利用獲利者將面臨永久封禁。</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="text-center mt-20 text-gray-700 text-[10px] tracking-widest uppercase">
+        © 2026 OHW Network • Rules Version 1.0.2
+    </footer>
+
+</body>
+</html>
