@@ -89,6 +89,62 @@
 
     updateServerStatus();
     setInterval(updateServerStatus, 60000);
+
+
+
+
+
+    // 設定 Cookie (名稱, 值, 天數)
+function setCookie(name, value, days) {
+    const d = new Date();
+    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
+
+// 取得 Cookie
+function getCookie(name) {
+    let nameEQ = name + "=";
+    let ca = document.cookie.split(';');
+    for(let i=0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+// 執行登入並記住
+function performLogin() {
+    const playerID = document.getElementById('mc-id-input').value;
+    if (playerID) {
+        setCookie("ohw_player_id", playerID, 30); // 記住 30 天
+        showWelcomeMessage(playerID);
+    }
+}
+
+// 顯示歡迎訊息 (高級感的關鍵)
+function showWelcomeMessage(id) {
+    const loginBox = document.getElementById('login-box');
+    // 使用玩家頭像 API 讓畫面更高級
+    loginBox.innerHTML = `
+        <div class="text-center animate-bounce mb-4">
+            <img src="https://mc-heads.net/avatar/${id}/64" class="mx-auto rounded-lg shadow-lg mb-4">
+            <h2 class="text-xl font-bold">歡迎回來, ${id}!</h2>
+            <p class="text-xs text-gray-400 mt-2">正在同步您的 PVP 數據...</p>
+        </div>
+        <button onclick="logout()" class="text-xs text-red-500 underline opacity-50 hover:opacity-100">切換帳號</button>
+    `;
+}
+
+// 頁面加載時檢查
+window.onload = function() {
+    const savedID = getCookie("ohw_player_id");
+    if (savedID) {
+        showWelcomeMessage(savedID);
+    }
+    updateStatus(); // 這是你原本抓人數的 function
+};
 </script>
 
 </body>
