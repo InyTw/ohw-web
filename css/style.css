@@ -1,22 +1,47 @@
 body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%);
-            color: white;
+            font-family: 'Inter', "Microsoft JhengHei", sans-serif;
+            background-color: #0b0e14;
+            color: #fff;
             overflow-x: hidden;
         }
-        .hero-title { font-family: 'Montserrat', sans-serif; }
-        .glass {
+        /* 流體漸層背景 */
+        .bg-gradient {
+            background: radial-gradient(circle at 50% -20%, #2b3a8c 0%, #0b0e14 70%);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+        }
+        /* 漂浮動態圓球 */
+        .blob {
+            position: absolute; width: 400px; height: 400px;
+            background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+            filter: blur(80px); opacity: 0.15; border-radius: 50%;
+            animation: move 20s infinite alternate;
+        }
+        @keyframes move {
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(20%, 20%); }
+        }
+        /* BedTWL 風格卡片 */
+        .modern-card {
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            transition: all 0.3s ease;
         }
-        .glow-btn {
-            transition: 0.3s;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+        .modern-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(99, 102, 241, 0.5);
         }
-        .glow-btn:hover {
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
-            transform: translateY(-2px);
+        /* 發光按鈕 */
+        .btn-primary {
+            background: linear-gradient(90deg, #6366f1, #06b6d4);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+            filter: brightness(1.1);
         }
 
 .cookie-notice {

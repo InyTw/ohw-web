@@ -3,149 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OHW SERVER | INTERNAL SYSTEM</title>
+    <title>OHW Server | 競技、疊橋、生存</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=JetBrains+Mono:wght@300;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --neon-cyan: #00f2fe;
-            --neon-blue: #0047ff;
-        }
-        body {
-            background-color: #050505;
-            color: #e0e0e0;
-            font-family: 'JetBrains Mono', monospace;
-            overflow-x: hidden;
-            background-image: 
-                linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px; /* 科技感網格 */
-        }
-        .orbitron { font-family: 'Orbitron', sans-serif; }
-        
-        /* 科技感標題特效 */
-        .glitch-title {
-            font-size: clamp(5rem, 15vw, 10rem);
-            font-weight: 900;
-            text-transform: uppercase;
-            position: relative;
-            color: white;
-            letter-spacing: -5px;
-            line-height: 0.9;
-        }
-        .glitch-title::after {
-            content: 'OHW';
-            position: absolute;
-            left: 2px; text-shadow: -2px 0 #ff00c1;
-            top: 0; overflow: hidden; clip: rect(0, 900px, 0, 0);
-            animation: glitch 2s infinite linear alternate-reverse;
-        }
-
-        @keyframes glitch {
-            0% { clip: rect(44px, 9999px, 56px, 0); }
-            100% { clip: rect(12px, 9999px, 88px, 0); }
-        }
-
-        /* 磨砂玻璃強化 */
-        .cyber-card {
-            background: rgba(10, 10, 10, 0.8);
-            border: 1px solid rgba(0, 242, 254, 0.3);
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        .cyber-card::before {
-            content: "";
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-cyan));
-            animation: scan 3s infinite;
-        }
-        @keyframes scan {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        .stat-value {
-            color: var(--neon-cyan);
-            text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
-        }
-
-        input {
-            background: rgba(255, 255, 255, 0.05) !important;
-            border: 1px solid rgba(0, 242, 254, 0.2) !important;
-            color: var(--neon-cyan) !important;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
+<body class="min-h-screen flex flex-col items-center pt-20">
 
-    <div class="fixed inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%] z-50"></div>
+    <div class="bg-gradient"></div>
+    <div class="blob" style="top: 10%; left: 10%;"></div>
+    <div class="blob" style="bottom: 10%; right: 10%; animation-delay: -5s;"></div>
 
-    <main class="z-10 w-full max-w-5xl">
-        <div class="text-center mb-16">
-            <h1 class="glitch-title orbitron italic">OHW</h1>
-            <div class="flex items-center justify-center space-x-4 mt-4">
-                <span class="h-[1px] w-12 bg-cyan-500"></span>
-                <p class="orbitron text-cyan-400 tracking-[0.3em] text-xs md:text-sm uppercase">
-                    Tactical Bridge • High-Speed PVP • Tech Survival
-                </p>
-                <span class="h-[1px] w-12 bg-cyan-500"></span>
+    <nav class="fixed top-0 w-full z-50 flex justify-between items-center px-10 py-6 backdrop-blur-md">
+        <div class="text-2xl font-extrabold tracking-tighter">OHW<span class="text-indigo-500">.</span></div>
+        <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-400">
+            <a href="#" class="hover:text-white transition">首頁</a>
+            <a href="#" class="hover:text-white transition">伺服器規則</a>
+            <a href="#" class="hover:text-white transition">商店</a>
+        </div>
+        <button class="bg-white/5 border border-white/10 px-5 py-2 rounded-full text-sm hover:bg-white/10 transition" onclick="window.open('https://dsc.gg/ohw', '_blank')">加入 Discord</button>
+    </nav>
+
+    <main class="w-full max-w-6xl px-6 text-center">
+        <div class="mt-20 mb-16">
+            <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-indigo-400">
+                最極致的競技體驗
+            </h1>
+            <p class="text-lg text-gray-400 mb-10 max-w-2xl mx-auto">
+                OHW 是一個專為 PVP 與疊橋愛好者打造的伺服器。在這裡，實力決定一切。
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4">
+                <button onclick="copyIP()" class="btn-primary px-10 py-4 rounded-2xl font-bold text-lg flex items-center">
+                    <span id="ip-text">PLAY.OHW.CC</span>
+                </button>
+                <div class="flex items-center space-x-2 text-sm text-gray-400">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <span id="player-count">目前有 0 位玩家在線</span>
+                </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div class="lg:col-span-4 space-y-4">
-                <div class="cyber-card p-6 rounded-tl-3xl rounded-br-3xl">
-                    <p class="text-[10px] text-gray-500 uppercase mb-1">Live Status</p>
-                    <div class="flex justify-between items-end">
-                        <span class="text-sm">ONLINE</span>
-                        <span id="player-count" class="orbitron text-3xl stat-value font-black">00</span>
-                    </div>
-                </div>
-                <div class="cyber-card p-6 rounded-tl-3xl rounded-br-3xl border-l-4 border-l-cyan-500">
-                    <p class="text-[10px] text-gray-500 uppercase mb-1">System Version</p>
-                    <span class="orbitron text-xl">1.8 - 1.21.x</span>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+            <div class="modern-card p-10">
+                <div class="w-12 h-12 bg-indigo-500/20 rounded-2xl flex items-center justify-center mb-6 mx-auto text-indigo-400 font-bold">01</div>
+                <h3 class="text-xl font-bold mb-3">疊橋 Bridge</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">全台最穩定的連線，體驗毫秒級的疊橋對決。</p>
             </div>
+            <div class="modern-card p-10">
+                <div class="w-12 h-12 bg-cyan-500/20 rounded-2xl flex items-center justify-center mb-6 mx-auto text-cyan-400 font-bold">02</div>
+                <h3 class="text-xl font-bold mb-3">競技 PVP</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">多種競技模式，完善的匹配系統，尋找你的最強對手。</p>
+            </div>
+            <div class="modern-card p-10">
+                <div class="w-12 h-12 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 mx-auto text-purple-400 font-bold">03</div>
+                <h3 class="text-xl font-bold mb-3">生存 Survival</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">自由與危險並存的生存區，建立你的專屬領地。</p>
+            </div>
+        </div>
 
-            <div id="login-section" class="lg:col-span-4 cyber-card p-8 border-cyan-500/50 rounded-lg">
-                <div class="flex justify-between mb-8">
-                    <span class="text-[10px] border border-cyan-500 px-2 py-1 text-cyan-400">ACCESS POINT</span>
-                    <span class="text-[10px] text-gray-500">ID: OHW-03</span>
-                </div>
-                
-                <div class="space-y-6">
-                    <div class="text-left">
-                        <input type="text" id="mc-input" placeholder="MC USERNAME" 
-                               class="w-full py-4 rounded-none px-4 orbitron outline-none focus:ring-1 ring-cyan-500 transition-all">
-                    </div>
-                    <button onclick="login()" class="w-full bg-cyan-500 hover:bg-white text-black font-black py-4 orbitron transition-all duration-300 group">
-                        INITIALIZE LOGIN <span class="group-hover:ml-2">_</span>
-                    </button>
-                </div>
-                <p class="mt-6 text-[9px] text-gray-600 text-center tracking-tighter">ENCRYPTED CONNECTION VIA UUID PROTOCOL</p>
-            </div>
-
-            <div class="lg:col-span-4 space-y-4">
-                <div class="cyber-card p-6 rounded-tr-3xl rounded-bl-3xl">
-                    <p class="text-[10px] text-gray-500 uppercase mb-1">Server IP</p>
-                    <button onclick="copyIP()" id="ip-display" class="orbitron text-sm text-cyan-400 hover:text-white transition">OHW.CLOUD-IP.CC</button>
-                </div>
-                <div class="cyber-card p-6 rounded-tr-3xl rounded-bl-3xl border-r-4 border-r-cyan-500">
-                    <p class="text-[10px] text-gray-500 uppercase mb-1">Ping</p>
-                    <span class="orbitron text-xl stat-value">STABLE</span>
-                </div>
-            </div>
+        <div id="login-section" class="modern-card p-12 max-w-xl mx-auto border-indigo-500/30">
+            <h2 class="text-2xl font-bold mb-8">快速進入帳號門戶</h2>
+            <input type="text" id="mc-input" placeholder="請輸入 Minecraft ID" 
+                   class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 mb-6 focus:outline-none focus:border-indigo-500 transition-all text-center">
+            <button onclick="login()" class="w-full btn-primary py-4 rounded-2xl font-bold text-lg">登入</button>
         </div>
     </main>
 
-    <div id="cookie-notice" class="fixed bottom-6 left-6 right-6 cyber-card p-4 lg:max-w-xl mx-auto z-[100] hidden flex-col md:flex-row items-center gap-4 border-cyan-500/80">
-        <p class="text-[11px] text-gray-400 flex-1">
-            [SYSTEM] 本站使用 COOKIES 紀錄您的存取權限。
-        </p>
-        <button onclick="acceptCookies()" class="text-[10px] border border-cyan-500 px-4 py-2 hover:bg-cyan-500 hover:text-black transition">I ACCEPT</button>
+    <footer class="mt-32 py-10 text-gray-600 text-xs">
+        &copy; 2026 OHW NETWORK. NOT AN OFFICIAL MINECRAFT PRODUCT.
+    </footer>
+
+    <div id="cookie-notice" class="fixed bottom-8 right-8 modern-card p-5 max-w-xs z-[100] hidden flex-col">
+        <p class="text-xs text-gray-400 mb-4">我們使用 Cookie 以優化您的使用體驗。</p>
+        <button onclick="acceptCookies()" class="btn-primary py-2 rounded-lg text-xs font-bold">了解並關閉</button>
     </div>
 
     <script>
@@ -156,9 +85,9 @@
                 const res = await fetch(`https://api.mcsrvstat.us/3/${serverIP}`);
                 const data = await res.json();
                 if (data.online) {
-                    document.getElementById('player-count').innerText = data.players.online.toString().padStart(2, '0');
+                    document.getElementById('player-count').innerText = `目前有 ${data.players.online} 位玩家在線`;
                 }
-            } catch (e) { console.log("Status check failed"); }
+            } catch (e) {}
         }
 
         function login() {
@@ -171,22 +100,20 @@
 
         function renderProfile(id) {
             document.getElementById('login-section').innerHTML = `
-                <div class="text-center py-6 animate-pulse">
-                    <div class="relative inline-block mb-4">
-                        <img src="https://mc-heads.net/avatar/${id}/80" class="rounded-none border-2 border-cyan-500 p-1">
-                        <div class="absolute -top-2 -right-2 bg-cyan-500 text-black text-[10px] px-1 font-bold">ONLINE</div>
-                    </div>
-                    <h2 class="orbitron text-xl font-black mb-1">${id}</h2>
-                    <p class="text-[10px] text-cyan-500 mb-8 tracking-[0.4em]">AUTHENTICATED</p>
-                    <button onclick="location.reload()" class="text-[10px] text-gray-600 hover:text-red-500 underline">TERMINATE SESSION</button>
+                <div class="flex flex-col items-center animate-fade-in">
+                    <img src="https://mc-heads.net/avatar/${id}/80" class="rounded-3xl mb-4 shadow-2xl">
+                    <h2 class="text-2xl font-extrabold mb-1">你好, ${id}</h2>
+                    <p class="text-indigo-400 text-sm font-medium mb-6">歡迎回到 OHW 網絡</p>
+                    <button onclick="location.reload()" class="text-gray-500 text-xs hover:text-white underline">登出帳號</button>
                 </div>
             `;
         }
 
         function copyIP() {
             navigator.clipboard.writeText(serverIP);
-            document.getElementById('ip-display').innerText = 'COPIED!';
-            setTimeout(() => { document.getElementById('ip-display').innerText = serverIP.toUpperCase(); }, 2000);
+            const btnText = document.getElementById('ip-text');
+            btnText.innerText = "已複製 IP！";
+            setTimeout(() => { btnText.innerText = serverIP.toUpperCase(); }, 2000);
         }
 
         function acceptCookies() {
