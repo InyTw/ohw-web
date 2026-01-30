@@ -18,3 +18,46 @@ body {
             box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
             transform: translateY(-2px);
         }
+
+.cookie-notice {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 500px;
+    padding: 15px 25px;
+    background: rgba(255, 255, 255, 0.05); /* 磨砂背景 */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    display: none; /* 預設隱藏，由 JS 控制顯示 */
+    align-items: center;
+    justify-content: space-between;
+    z-index: 9999;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.cookie-notice p {
+    font-size: 14px;
+    color: #ccc;
+    margin: 0;
+    padding-right: 20px;
+}
+
+.cookie-notice button {
+    background: #00f2fe;
+    color: black;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: 0.3s;
+}
+
+.cookie-notice button:hover {
+    background: white;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
+}
