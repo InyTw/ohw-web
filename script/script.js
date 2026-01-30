@@ -71,7 +71,7 @@ let selectedPayment = '';
             alert(`正在導向支付頁面...\n玩家：${id}\n方式：${selectedPayment}`);
             
             if(selectedPayment === 'PayPal') {
-                window.open("https://www.paypal.me/YOUR_ID", "_blank");
+                window.open("https://www.paypal.me/AnyIny", "_blank");
             } else {
                 // 這裡對接你的國內金流 URL
                 console.log("Redirecting to local payment...");
