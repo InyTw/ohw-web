@@ -11,12 +11,10 @@
     <style>
         body { font-family: 'Inter', "Microsoft JhengHei", sans-serif; background-color: #000000; color: #fff; }
         .grid-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.03) 1px, transparent 0); background-size: 30px 30px; z-index: -1; }
-        
-        /* 卡片基礎樣式 */
+
         .store-card { background: rgba(15, 15, 15, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border-radius: 28px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; position: relative; }
         .store-card:hover { transform: translateY(-10px); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); }
-        
-        /* Rank 顏色裝飾 */
+
         .rank-vip { border-top: 5px solid #55ff55; }
         .rank-vipp { border-top: 5px solid #55ff55; box-shadow: 0 5px 20px rgba(85, 255, 85, 0.05); }
         .rank-mvp { border-top: 5px solid #55ffff; }
@@ -24,14 +22,12 @@
         .rank-mvppp { border-top: 5px solid #ffaa00; background: linear-gradient(180deg, rgba(255, 170, 0, 0.05) 0%, rgba(15, 15, 15, 0.8) 100%); }
 
         .price-tag { font-size: 2.2rem; font-weight: 900; letter-spacing: -1.5px; }
-        
-        /* 按鈕樣式 */
+
         .buy-btn { background: #fff; color: #000; font-weight: 900; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
         .buy-btn:hover { transform: scale(1.02); filter: brightness(1.1); box-shadow: 0 5px 20px rgba(255, 255, 255, 0.2); }
         .btn-ultimate { background: linear-gradient(90deg, #ffaa00, #ff7700); color: white; }
         .btn-gradient { background: linear-gradient(90deg, #6366f1, #a855f7); color: white; }
 
-        /* 彈窗樣式 */
         .modern-card { background: #0a0a0a; border-radius: 32px; }
         .payment-option { transition: 0.2s; }
     </style>
