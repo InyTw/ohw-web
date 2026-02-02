@@ -5,62 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OHW Server | 競技、疊橋、生存</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="/images/server-icon.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', "Microsoft JhengHei", sans-serif;
-            background-color: #000000;
-            color: #fff;
-            overflow-x: hidden;
-        }
-        .grid-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
-            background-size: 40px 40px;
-            z-index: -1;
-        }
-        .glow-spot {
-            position: absolute; width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
-            filter: blur(50px); border-radius: 50%; z-index: -1;
-        }
-        .modern-card {
-            background: rgba(20, 20, 20, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            transition: 0.3s;
-        }
-        .modern-card:hover {
-            border-color: #6366f1;
-            box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
-        }
-        .text-glow {
-            text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
-        }
-        .btn-gradient {
-            background: linear-gradient(90deg, #6366f1, #a855f7);
-            transition: 0.3s;
-        }
-        .btn-gradient:hover {
-            filter: brightness(1.2);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-        }
+        body { font-family: 'Inter', "Microsoft JhengHei", sans-serif; background-color: #000000; color: #fff; overflow-x: hidden; }
+        .grid-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 40px 40px; z-index: -1; }
+        .glow-spot { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%); filter: blur(50px); border-radius: 50%; z-index: -1; }
+        .modern-card { background: rgba(20, 20, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-radius: 20px; transition: 0.3s; }
+        .modern-card:hover { border-color: #6366f1; box-shadow: 0 0 30px rgba(99, 102, 241, 0.2); }
+        .text-glow { text-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
+        .btn-gradient { background: linear-gradient(90deg, #6366f1, #a855f7); transition: 0.3s; color: white; }
+        .btn-gradient:hover { filter: brightness(1.2); box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center pt-10">
+<body class="min-h-screen flex flex-col items-center">
 
     <div class="grid-bg"></div>
     <div class="glow-spot" style="top: -200px; left: -100px;"></div>
-    <div class="glow-spot" style="bottom: -200px; right: -100px; opacity: 0.1;"></div>
 
-    <nav class="w-full max-w-6xl flex justify-between items-center px-8 py-6">
-        <div class="text-3xl font-black italic tracking-tighter text-glow">OHW<span class="text-indigo-500">.cloud-ip.cc</span></div>
-        <div class="space-x-6 text-xs font-bold uppercase tracking-widest text-gray-400">
-            <a href="index.html" class="hover:text-white transition">Home</a>
-            <a href="rules.html" class="hover:text-white transition">Rules</a>
-            <a href="store.html" class="hover:text-white transition">Store</a>
+    <nav class="w-full flex justify-between items-center px-10 py-8 sticky top-0 bg-black/60 backdrop-blur-xl z-50 border-b border-white/5">
+        <div class="text-2xl font-black italic tracking-tighter uppercase">OHW<span class="text-indigo-500">.</span>STORE</div>
+        
+        <div class="flex items-center gap-8">
+            <div class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest text-gray-400">
+                <a href="https://ohw.cloud-ip.cc/index.html" class="hover:text-white transition">Home</a>
+                <a href="https://ohw.cloud-ip.cc/rules.html" class="hover:text-white transition">Rules</a>
+                <a href="https://store.ohw.cloud-ip.cc" class="hover:text-white transition text-white">Store</a>
+            </div>
+
+            <div id="auth-section" class="flex items-center gap-4 border-l border-white/10 pl-8">
+                </div>
         </div>
     </nav>
 
@@ -102,7 +75,7 @@
                        class="w-full bg-black border border-white/20 rounded-xl px-6 py-4 focus:outline-none focus:border-indigo-500 transition-all text-center text-xl">
             </div>
             <button onclick="login()" class="w-full btn-gradient py-4 rounded-xl font-bold text-lg">確認進入系統</button>
-            <p class="text-center text-gray-600 text-xs mt-4">LOGIN WITHOUT PASSWORD • SECURE UUID VERIFY</p>
+            <p class="text-center text-gray-600 text-[10px] mt-4 uppercase tracking-widest">Login to sync your profile across OHW</p>
         </div>
     </main>
 
@@ -110,13 +83,14 @@
         © 2026 OHW Network Group. All rights reserved.
     </footer>
 
-    <div id="cookie-notice" class="fixed bottom-10 left-10 modern-card p-6 max-w-xs z-[100] hidden">
-        <p class="text-xs text-gray-400 mb-4 font-medium">我們使用 Cookie 來記住您的身份，確保您在 OHW 的流暢體驗。</p>
-        <button onclick="acceptCookies()" class="w-full btn-gradient py-2 rounded-lg text-xs font-bold">我接受</button>
-    </div>
-
     <script>
         const serverIP = 'ohw.cloud-ip.cc';
+
+        // 初始化與渲染
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStatus();
+            refreshUI();
+        });
 
         async function updateStatus() {
             try {
@@ -128,24 +102,44 @@
             } catch (e) {}
         }
 
-        function login() {
-            const id = document.getElementById('mc-input').value;
-            if (id) {
-                localStorage.setItem('ohw_player_id', id);
-                renderProfile(id);
+        function refreshUI() {
+            const playerID = localStorage.getItem('ohw_player_id');
+            const authSection = document.getElementById('auth-section');
+            const loginSection = document.getElementById('login-section');
+
+            if (playerID) {
+                // 更新導覽列 (紅框處)
+                authSection.innerHTML = `
+                    <div class="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+                        <img src="https://mc-heads.net/avatar/${playerID}/24" class="rounded-sm">
+                        <span class="text-indigo-400 font-black text-xs uppercase">${playerID}</span>
+                        <button onclick="logout()" class="ml-2 text-[10px] text-gray-500 hover:text-red-500 transition font-bold border-l border-white/10 pl-3">LOGOUT</button>
+                    </div>
+                `;
+
+                // 更新首頁中間登入框
+                loginSection.innerHTML = `
+                    <div class="flex flex-col items-center py-4 text-center">
+                        <img src="https://mc-heads.net/avatar/${playerID}/80" class="rounded-2xl mb-6 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
+                        <h2 class="text-3xl font-black mb-1">${playerID}</h2>
+                        <p class="text-indigo-400 text-xs font-bold tracking-[0.3em] mb-8 uppercase">Verified Player</p>
+                        <button onclick="logout()" class="text-gray-600 text-[10px] hover:text-white transition underline tracking-widest">切換帳號 / LOGOUT</button>
+                    </div>
+                `;
+            } else {
+                // 未登入狀態
+                authSection.innerHTML = `<button onclick="document.getElementById('mc-input').focus()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-black px-6 py-2 rounded-full transition uppercase tracking-widest shadow-lg shadow-indigo-500/20">Login</button>`;
             }
         }
 
-        function renderProfile(id) {
-
-            document.getElementById('login-section').innerHTML = `
-                <div class="flex flex-col items-center py-4">
-                    <img src="https://mc-heads.net/avatar/${id}/80" class="rounded-2xl mb-6 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
-                    <h2 class="text-3xl font-black mb-1">${id}</h2>
-                    <p class="text-indigo-400 text-xs font-bold tracking-[0.3em] mb-8 uppercase">Verified Player</p>
-                    <button onclick="logout()" class="text-gray-600 text-[10px] hover:text-white transition underline">LOGOUT</button>
-                </div>
-            `;
+        function login() {
+            const id = document.getElementById('mc-input').value.trim();
+            if (id) {
+                localStorage.setItem('ohw_player_id', id);
+                refreshUI();
+            } else {
+                alert("請輸入 Minecraft ID");
+            }
         }
 
         function logout() {
@@ -153,49 +147,12 @@
             location.reload();
         }
 
-        function handlePurchase(rankName) {
-    const playerID = localStorage.getItem('ohw_player_id');
-    
-    if (!playerID) {
-        alert("請先回到首頁登入您的 Minecraft 帳號，才能進行購買！");
-        window.location.href = "index.html"; // 回首頁登入
-        return;
-    }
-
-    const checkoutURL = `https://www.ohw.cloud-ip.cc?player=${playerID}&rank=${rankName}`;
-    
-    console.log(`準備為玩家 ${playerID} 購買 ${rankName}`);
-    window.open(checkoutURL, '_blank');
-}
-
-        function renderProfile(id) {
-            document.getElementById('login-section').innerHTML = `
-                <div class="flex flex-col items-center py-4">
-                    <img src="https://mc-heads.net/avatar/${id}/80" class="rounded-2xl mb-6 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
-                    <h2 class="text-3xl font-black mb-1">${id}</h2>
-                    <p class="text-indigo-400 text-xs font-bold tracking-[0.3em] mb-8 uppercase">Verified Player</p>
-                    <button onclick="location.reload()" class="text-gray-600 text-[10px] hover:text-white transition underline">LOGOUT</button>
-                </div>
-            `;
-        }
-
         function copyIP() {
             navigator.clipboard.writeText(serverIP);
             const btnText = document.getElementById('ip-text');
             btnText.innerText = "IP COPIED!";
-            setTimeout(() => { btnText.innerText = serverIP.toUpperCase(); }, 2000);
+            setTimeout(() => { btnText.innerText = serverIP; }, 2000);
         }
-
-        function acceptCookies() {
-            localStorage.setItem('ohw_cookies_accepted', 'true');
-            document.getElementById('cookie-notice').style.display = 'none';
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            updateStatus();
-            if (localStorage.getItem('ohw_player_id')) renderProfile(localStorage.getItem('ohw_player_id'));
-            if (!localStorage.getItem('ohw_cookies_accepted')) document.getElementById('cookie-notice').style.display = 'block';
-        });
     </script>
 </body>
 </html>
