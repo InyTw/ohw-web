@@ -2,64 +2,102 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>OHW Dashboard</title>
-    <link rel="icon" href="images/server-icon.png">
-    <link rel="stylesheet" href="style.css"> </head>
-<body>
-    <div class="dashboard-container">
-        <nav>
-            <h1>OHW STORE</h1>
-            <div id="user-profile">
-                <img id="user-avatar" src="" alt="Avatar">
-                <span id="user-name">載入中...</span>
-            </div>
-            <button onclick="logout()">登出</button>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OHW - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0a0a0a; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <aside class="w-64 bg-black/40 border-r border-white/5 flex flex-col p-6 sticky top-0 h-screen">
+        <div class="text-2xl font-black tracking-tighter mb-10 text-indigo-500">OHW DASH</div>
+        
+        <nav class="space-y-4 flex-grow text-sm font-bold uppercase tracking-widest text-gray-400">
+            <a href="#" class="block text-white bg-indigo-600/20 px-4 py-3 rounded-lg border border-indigo-500/30">Overview</a>
+            <a href="store.html" class="block hover:text-white hover:bg-white/5 px-4 py-3 rounded-lg transition">Store</a>
+            <a href="rules.html" class="block hover:text-white hover:bg-white/5 px-4 py-3 rounded-lg transition">Rules</a>
         </nav>
 
-        <main>
-            <h2>歡迎回來，<span id="welcome-name">玩家</span>！</h2>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>我的代幣</h3>
-                    <p id="coin-balance">100</p>
+        <div class="border-t border-white/5 pt-6">
+            <div class="flex items-center gap-3 mb-4">
+                <img id="dash-avatar" src="" class="w-10 h-10 rounded-full border border-indigo-500">
+                <div class="overflow-hidden">
+                    <p id="dash-username" class="text-sm font-bold truncate">Loading...</p>
+                    <p class="text-[10px] text-gray-500 font-bold">Online</p>
                 </div>
-                <div class="stat-card">
-                    <h3>每日獎勵</h3>
-                    <button id="claim-btn" onclick="claimReward()">領取 10 Coins</button>
-                </div>
+            </div>
+            <button onclick="logout()" class="w-full text-xs font-bold uppercase tracking-widest py-2 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded transition">Logout</button>
+        </div>
+    </aside>
+
+    <main class="flex-grow p-10">
+        <header class="mb-12">
+            <h1 class="text-4xl font-black tracking-tight">Welcome back, <span id="welcome-user" class="text-indigo-500">Player</span>!</h1>
+            <p class="text-gray-400 font-medium mt-2">Manage your account and daily rewards here.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            <div class="glass p-8 rounded-2xl">
+                <p class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">My Balance</p>
+                <h2 class="text-3xl font-black text-white"><span id="coin-balance">--</span> <span class="text-sm font-bold text-indigo-400">OHW-Coins</span></h2>
             </div>
 
-            <div class="quick-links">
-                <a href="store.html" class="btn">前往商店購物</a>
+            <div class="glass p-8 rounded-2xl relative overflow-hidden group">
+                <p class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Daily Reward</p>
+                <div id="reward-timer" class="mb-4 text-sm font-bold text-gray-300">Available Now!</div>
+                <button onclick="claimReward()" id="claim-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-3 rounded-xl transition shadow-lg shadow-indigo-600/30">CLAIM 10 COINS</button>
             </div>
-        </main>
-    </div>
+        </div>
+
+        <div class="glass p-8 rounded-2xl">
+            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-500 mb-6 border-b border-white/5 pb-4">Recent Activity</h3>
+            <div class="space-y-4 text-sm text-gray-400">
+                <p>• Logged in via Discord successfully.</p>
+                <p>• Shop integration active.</p>
+            </div>
+        </div>
+    </main>
 
     <script>
+        // 1. 初始化資料與安全性檢查
         document.addEventListener('DOMContentLoaded', () => {
-            const user = JSON.parse(localStorage.getItem('discord_user'));
-            if (!user) {
+            const userData = localStorage.getItem('discord_user');
+            if (!userData) {
                 window.location.href = 'login.html';
                 return;
             }
-
-            // 顯示 Discord 資料
-            document.getElementById('user-name').innerText = user.username;
-            document.getElementById('welcome-name').innerText = user.username;
+            const user = JSON.parse(userData);
+            
+            // 顯示資訊
+            document.getElementById('dash-username').innerText = user.username;
+            document.getElementById('welcome-user').innerText = user.username;
             if (user.avatar) {
-                document.getElementById('user-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+                const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+                document.getElementById('dash-avatar').src = avatarUrl;
             }
+
+            // 這裡可以呼叫 PHP 撈取真正的錢數
+            fetchCoinsFromDB(user.id);
         });
+
+        // 2. 模擬從資料庫撈取錢數
+        async function fetchCoinsFromDB(discordID) {
+            // 之後對接你的 get_player_data.php
+            document.getElementById('coin-balance').innerText = "120"; 
+        }
+
+        // 3. 領取獎勵
+        async function claimReward() {
+            // 呼叫你寫的 claim_reward.php
+            alert("Reward claimed! (Connecting to MySQL...)");
+        }
 
         function logout() {
             localStorage.clear();
             window.location.href = 'login.html';
-        }
-
-        async function claimReward() {
-            // 調用你之前的 PHP API
-            // ... (同之前的領取邏輯)
         }
     </script>
 </body>
