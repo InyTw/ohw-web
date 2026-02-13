@@ -60,45 +60,6 @@
             </div>
         </div>
     </main>
-
-    <script>
-        // 1. 初始化資料與安全性檢查
-        document.addEventListener('DOMContentLoaded', () => {
-            const userData = localStorage.getItem('discord_user');
-            if (!userData) {
-                window.location.href = 'login.html';
-                return;
-            }
-            const user = JSON.parse(userData);
-            
-            // 顯示資訊
-            document.getElementById('dash-username').innerText = user.username;
-            document.getElementById('welcome-user').innerText = user.username;
-            if (user.avatar) {
-                const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-                document.getElementById('dash-avatar').src = avatarUrl;
-            }
-
-            // 這裡可以呼叫 PHP 撈取真正的錢數
-            fetchCoinsFromDB(user.id);
-        });
-
-        // 2. 模擬從資料庫撈取錢數
-        async function fetchCoinsFromDB(discordID) {
-            // 之後對接你的 get_player_data.php
-            document.getElementById('coin-balance').innerText = "120"; 
-        }
-
-        // 3. 領取獎勵
-        async function claimReward() {
-            // 呼叫你寫的 claim_reward.php
-            alert("Reward claimed! (Connecting to MySQL...)");
-        }
-
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'login.html';
-        }
-    </script>
+<script src="script/dash.js"></script>
 </body>
 </html>
