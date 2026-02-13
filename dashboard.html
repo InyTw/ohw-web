@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>OHW Dashboard</title>
+    <link rel="icon" href="images/server-icon.png">
+    <link rel="stylesheet" href="style.css"> </head>
+<body>
+    <div class="dashboard-container">
+        <nav>
+            <h1>OHW STORE</h1>
+            <div id="user-profile">
+                <img id="user-avatar" src="" alt="Avatar">
+                <span id="user-name">載入中...</span>
+            </div>
+            <button onclick="logout()">登出</button>
+        </nav>
+
+        <main>
+            <h2>歡迎回來，<span id="welcome-name">玩家</span>！</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>我的代幣</h3>
+                    <p id="coin-balance">100</p>
+                </div>
+                <div class="stat-card">
+                    <h3>每日獎勵</h3>
+                    <button id="claim-btn" onclick="claimReward()">領取 10 Coins</button>
+                </div>
+            </div>
+
+            <div class="quick-links">
+                <a href="store.html" class="btn">前往商店購物</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('discord_user'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // 顯示 Discord 資料
+            document.getElementById('user-name').innerText = user.username;
+            document.getElementById('welcome-name').innerText = user.username;
+            if (user.avatar) {
+                document.getElementById('user-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+            }
+        });
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        async function claimReward() {
+            // 調用你之前的 PHP API
+            // ... (同之前的領取邏輯)
+        }
+    </script>
+</body>
+</html>

@@ -6,6 +6,7 @@
     <title>OHW Server | 競技、疊橋、生存</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="images/server-icon.png">
     <style>
         body { font-family: 'Inter', "Microsoft JhengHei", sans-serif; background-color: #000000; color: #fff; overflow-x: hidden; }
         .grid-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 40px 40px; z-index: -1; }
@@ -22,20 +23,33 @@
     <div class="grid-bg"></div>
     <div class="glow-spot" style="top: -200px; left: -100px;"></div>
 
-    <nav class="w-full flex justify-between items-center px-10 py-8 sticky top-0 bg-black/60 backdrop-blur-xl z-50 border-b border-white/5">
-        <div class="text-2xl font-black italic tracking-tighter uppercase">OHW<span class="text-indigo-500">.</span>STORE</div>
-        
-        <div class="flex items-center gap-8">
-            <div class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest text-gray-400">
-                <a href="https://www.ohw.cloud-ip.cc/index.html" class="hover:text-white transition">Home</a>
-                <a href="https://www.ohw.cloud-ip.cc/rules.html" class="hover:text-white transition">Rules</a>
-                <a href="https://www.ohw.cloud-ip.cc/store.html" class="hover:text-white transition text-white">Store</a>
-            </div>
+    <nav class="flex items-center justify-between px-8 py-6 bg-black/50 backdrop-blur-md sticky top-0 z-50">
+    
 
-            <div id="auth-section" class="flex items-center gap-4 border-l border-white/10 pl-8">
-                </div>
+    <div class="hidden md:flex flex-grow justify-center">
+        <div class="flex space-x-8 text-xs font-bold uppercase tracking-widest text-gray-400">
+            <a href="https://www.ohw.cloud-ip.cc/index.html" class="hover:text-white transition">Home</a>
+            <a href="https://www.ohw.cloud-ip.cc/rules.html" class="hover:text-white transition">Rules</a>
+            <a href="https://www.ohw.cloud-ip.cc/store.html" class="hover:text-white transition text-white">Store</a>
         </div>
-    </nav>
+    </div>
+
+    <div class="flex-shrink-0 min-w-[120px] flex justify-end">
+        <div id="auth-zone">
+            <a href="login.html" id="nav-login-btn" class="text-xs font-bold uppercase tracking-widest bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-md transition shadow-lg shadow-indigo-500/20">
+                Login
+            </a>
+            
+            <a href="dashboard.html" id="nav-user-info" class="hidden flex items-center gap-3 group transition">
+                <div class="text-right hidden sm:block">
+                    <p id="nav-username" class="text-[10px] font-bold text-white uppercase tracking-widest leading-none">Username</p>
+                    <p class="text-[9px] text-indigo-400 font-bold uppercase tracking-tighter">Dashboard</p>
+                </div>
+                <img id="nav-avatar" src="" alt="" class="w-9 h-9 rounded-full border-2 border-indigo-500/50 group-hover:border-indigo-400 transition">
+            </a>
+        </div>
+    </div>
+</nav>
 
     <main class="w-full max-w-5xl px-6">
         <div class="text-center py-20">
@@ -67,16 +81,6 @@
                 <p class="text-2xl font-bold">SURVIVAL</p>
             </div>
         </div>
-
-        <div id="login-section" class="modern-card p-12 max-w-xl mx-auto mb-20">
-            <h2 class="text-2xl font-bold mb-8 text-center">玩家登入</h2>
-            <div class="relative mb-6">
-                <input type="text" id="mc-input" placeholder="Minecraft ID" 
-                       class="w-full bg-black border border-white/20 rounded-xl px-6 py-4 focus:outline-none focus:border-indigo-500 transition-all text-center text-xl">
-            </div>
-            <button onclick="login()" class="w-full btn-gradient py-4 rounded-xl font-bold text-lg">確認進入系統</button>
-            <p class="text-center text-gray-600 text-[10px] mt-4 uppercase tracking-widest">Login to sync your profile across OHW</p>
-        </div>
     </main>
 
     <footer class="py-10 text-gray-700 text-[10px] tracking-widest uppercase">
@@ -84,68 +88,6 @@
     </footer>
 
     <script>
-        const serverIP = 'ohw.cloud-ip.cc';
-
-        // 初始化與渲染
-        document.addEventListener('DOMContentLoaded', () => {
-            updateStatus();
-            refreshUI();
-        });
-
-        async function updateStatus() {
-            try {
-                const res = await fetch(`https://api.mcsrvstat.us/3/${serverIP}`);
-                const data = await res.json();
-                if (data.online) {
-                    document.getElementById('player-count').innerText = `${data.players.online} PLAYERS ONLINE`;
-                }
-            } catch (e) {}
-        }
-
-        function refreshUI() {
-            const playerID = localStorage.getItem('ohw_player_id');
-            const authSection = document.getElementById('auth-section');
-            const loginSection = document.getElementById('login-section');
-
-            if (playerID) {
-                // 更新導覽列 (紅框處)
-                authSection.innerHTML = `
-                    <div class="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/10">
-                        <img src="https://mc-heads.net/avatar/${playerID}/24" class="rounded-sm">
-                        <span class="text-indigo-400 font-black text-xs uppercase">${playerID}</span>
-                        <button onclick="logout()" class="ml-2 text-[10px] text-gray-500 hover:text-red-500 transition font-bold border-l border-white/10 pl-3">LOGOUT</button>
-                    </div>
-                `;
-
-                // 更新首頁中間登入框
-                loginSection.innerHTML = `
-                    <div class="flex flex-col items-center py-4 text-center">
-                        <img src="https://mc-heads.net/avatar/${playerID}/80" class="rounded-2xl mb-6 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
-                        <h2 class="text-3xl font-black mb-1">${playerID}</h2>
-                        <p class="text-indigo-400 text-xs font-bold tracking-[0.3em] mb-8 uppercase">Verified Player</p>
-                        <button onclick="logout()" class="text-gray-600 text-[10px] hover:text-white transition underline tracking-widest">切換帳號 / LOGOUT</button>
-                    </div>
-                `;
-            } else {
-                // 未登入狀態
-                authSection.innerHTML = `<button onclick="document.getElementById('mc-input').focus()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-black px-6 py-2 rounded-full transition uppercase tracking-widest shadow-lg shadow-indigo-500/20">Login</button>`;
-            }
-        }
-
-        function login() {
-            const id = document.getElementById('mc-input').value.trim();
-            if (id) {
-                localStorage.setItem('ohw_player_id', id);
-                refreshUI();
-            } else {
-                alert("請輸入 Minecraft ID");
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('ohw_player_id');
-            location.reload();
-        }
 
         function copyIP() {
             navigator.clipboard.writeText(serverIP);

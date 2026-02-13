@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <link rel="icon" href="images/server-icon.png">
+    <meta charset="UTF-8">
+    <title>OHW Store - 登入</title>
+    <style>
+        body { background: #2c2f33; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; }
+        .login-card { background: #23272a; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .btn-discord { background: #5865F2; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; text-decoration: none; }
+        .btn-discord:hover { background: #4752c4; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>歡迎來到 OHW Store</h2>
+        <p>請使用 Discord 帳號登入以繼續</p><br>
+        <a id="login-link" class="btn-discord" href="#">使用 Discord 登入</a>
+    </div>
+
+    <script>
+        const CLIENT_ID = '1468282390316187813';
+        const REDIRECT_URI = encodeURIComponent('https://www.ohw.cloud-ip.cc/login.html');
+        
+        // 構造 Discord 授權網址
+        document.getElementById('login-link').href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=identify`;
+
+        // 檢查網址是否有 Discord 回傳的 Token
+        window.onload = () => {
+            const fragment = new URLSearchParams(window.location.hash.slice(1));
+            const accessToken = fragment.get('access_token');
+
+            if (accessToken) {
+                // 拿到 Token 後，去跟 Discord 換玩家資料
+                fetch('https://discord.com/api/users/@me', {
+                    headers: { authorization: `Bearer ${accessToken}` }
+                })
+                .then(res => res.json())
+                .then(user => {
+                    // 儲存玩家資料
+                    localStorage.setItem('discord_user', JSON.stringify(user));
+                    window.location.href = 'dashboard.html';
+                });
+            }
+        };
+    </script>
+</body>
+</html>

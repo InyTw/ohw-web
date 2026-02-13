@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>贊助商店 | OHW NETWORK</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="/images/server-icon.png" type="image/x-icon">
+    <link rel="icon" href="images/server-icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', "Microsoft JhengHei", sans-serif; background-color: #000000; color: #fff; }
@@ -192,52 +192,16 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            renderAuth();
-            initBuyButtons();
-        });
-
-        function renderAuth() {
-            const authSection = document.getElementById('auth-section');
-            const playerID = localStorage.getItem('ohw_player_id');
-            if (playerID) {
-                authSection.innerHTML = `
-                    <div class="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/10">
-                        <img src="https://mc-heads.net/avatar/${playerID}/24" class="rounded-sm">
-                        <span class="text-indigo-400 font-black text-xs uppercase">${playerID}</span>
-                        <button onclick="logout()" class="ml-2 text-[10px] text-gray-500 hover:text-red-500 transition font-bold border-l border-white/10 pl-3 uppercase">Logout</button>
-                    </div>
-                `;
-            } else {
-                authSection.innerHTML = `<a href="index.html" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-black px-6 py-2 rounded-full transition uppercase tracking-widest">Login</a>`;
-            }
-        }
-
-        function initBuyButtons() {
-            document.querySelectorAll('.buy-btn').forEach(btn => {
-                btn.onclick = () => {
-                    const playerID = localStorage.getItem('ohw_player_id');
-                    if (!playerID) {
-                        alert("請先回首頁登入 Minecraft ID！");
-                        window.location.href = "index.html";
-                        return;
-                    }
-                    const card = btn.closest('.store-card');
-                    const itemName = (card.querySelector('h3').innerText + " " + card.querySelector('h2').innerText).replace('COINS', '').trim();
-                    const price = card.querySelector('.price-tag').innerText;
-                    
-                    openModal(playerID, itemName, price);
-                };
-            });
-        }
-
-        let selectedMethod = '';
-        function openModal(id, item, price) {
-            document.getElementById('modal-player-id').innerText = id;
-            document.getElementById('modal-avatar').src = `https://mc-heads.net/avatar/${id}/24`;
-            document.getElementById('modal-item-name').innerText = item;
-            document.getElementById('modal-price').innerText = price;
-            document.getElementById('checkout-modal').classList.remove('hidden');
-        }
+    const userData = localStorage.getItem('discord_user');
+    if (!userData) {
+        alert("請先登入！");
+        window.location.href = 'login.html';
+        return;
+    }
+    const user = JSON.parse(userData);
+    console.log("當前使用者：", user.username);
+    // 你可以在頁面上顯示他的 Discord 頭像或名字
+});
 
         function setPayment(method, el) {
             selectedMethod = method;
