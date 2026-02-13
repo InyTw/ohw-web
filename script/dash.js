@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://f0ed-2001-b011-9801-d9e6-410a-257c-8f0a-4640.ngrok-free.app/api";
+const API_BASE_URL = "https://e19a-2001-b011-9801-d9e6-410a-257c-8f0a-4640.ngrok-free.app/api";
 
 document.addEventListener('DOMContentLoaded', () => {
     const userData = localStorage.getItem('discord_user');
