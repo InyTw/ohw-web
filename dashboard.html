@@ -3,44 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OHW - 玩家中心 & 贊助商店</title>
+    <title>OHW - 玩家の窩</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
-        body { 
-            background-color: #000; 
-            color: white; 
-            font-family: 'Inter', "Microsoft JhengHei", sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* 網格背景 */
+        body { background-color: #000; color: white; font-family: 'Inter', "Microsoft JhengHei", sans-serif; overflow-x: hidden; }
         .grid-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.03) 1px, transparent 0); background-size: 30px 30px; z-index: -1; }
-
-        /* Dashboard 共通樣式 */
         .glass { background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease; }
         .nav-link-active { background: rgba(79, 70, 229, 0.1); color: #818cf8; border-left: 4px solid #4f46e5; }
-        
-        /* Store 商品卡片樣式 */
         .store-card { background: rgba(15, 15, 15, 0.9); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 28px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; position: relative; }
-        .store-card:hover { transform: translateY(-10px); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); }
-
-        /* 等級顏色條 */
-        .rank-vip { border-top: 5px solid #55ff55; }
-        .rank-vipp { border-top: 5px solid #55ff55; }
-        .rank-mvp { border-top: 5px solid #55ffff; }
-        .rank-mvpp { border-top: 5px solid #55ffff; }
+        .store-card:hover { transform: translateY(-10px); border-color: rgba(255, 255, 255, 0.2); }
+        .rank-vip, .rank-vipp { border-top: 5px solid #55ff55; }
+        .rank-mvp, .rank-mvpp { border-top: 5px solid #55ffff; }
         .rank-mvppp { border-top: 5px solid #ffaa00; background: linear-gradient(180deg, rgba(255, 170, 0, 0.05) 0%, rgba(15, 15, 15, 0.9) 100%); }
-
         .price-tag { font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; }
         .buy-btn { background: #fff; color: #000; font-weight: 900; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
-        .buy-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
         .btn-ultimate { background: linear-gradient(90deg, #ffaa00, #ff7700); color: white; }
         .btn-gradient { background: linear-gradient(90deg, #6366f1, #a855f7); color: white; }
-
-        #user-dropdown { transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
     </style>
 </head>
 <body class="flex min-h-screen">
@@ -49,7 +30,7 @@
     <div id="checkout-modal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
         <div class="bg-[#0a0a0a] max-w-md w-full p-8 border border-white/10 shadow-2xl rounded-[2.5rem]">
             <h2 class="text-2xl font-black mb-1 italic tracking-tighter">CHECKOUT</h2>
-            <p class="text-gray-500 text-[9px] tracking-[0.3em] uppercase mb-8 font-bold">帳單明細與支付方式</p>
+            <p class="text-gray-500 text-[9px] tracking-[0.3em] uppercase mb-8 font-bold">選擇支付方式</p>
             
             <div class="space-y-4">
                 <div class="flex items-center justify-between border-b border-white/5 pb-3">
@@ -62,234 +43,278 @@
                 </div>
 
                 <div class="pt-4 space-y-2">
-                    <p class="text-[10px] text-gray-600 uppercase tracking-widest mb-2 font-bold">選擇支付通道</p>
-                    <button onclick="setPayment('Card', this)" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl flex items-center justify-between hover:bg-white/10 transition group">
+                    <p class="text-[10px] text-gray-600 uppercase tracking-widest mb-2 font-bold">支付管道</p>
+                    
+                    <button onclick="setPayment('Coins', this)" id="pay-with-coins" class="payment-option w-full bg-indigo-500/10 border border-indigo-500/30 p-4 rounded-2xl flex items-center justify-between hover:bg-indigo-500/20 transition group">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xl">💰</span>
+                            <div class="text-left leading-tight">
+                                <div class="text-white text-sm font-bold">使用 OHW-Coins</div>
+                                <div class="text-[9px] text-indigo-400 uppercase font-bold">帳戶餘額支付</div>
+                            </div>
+                        </div>
+                        <div id="coin-status" class="text-[10px] font-black text-indigo-500">可用</div>
+                    </button>
+
+                    <div id="cash-pay-divider" class="py-2 flex items-center gap-4">
+                        <div class="flex-grow border-t border-white/5"></div>
+                        <span class="text-[9px] text-gray-700 font-bold">或使用現金贊助</span>
+                        <div class="flex-grow border-t border-white/5"></div>
+                    </div>
+
+                    <button onclick="setPayment('Card', this)" class="payment-option w-full bg-white/5 border border-white/10 p-4 rounded-2xl flex items-center justify-between hover:bg-white/10 transition group">
                         <div class="flex items-center gap-3">
                             <span class="text-xl">💳</span>
-                            <div class="text-left leading-tight"><div class="text-white text-sm font-bold">信用卡 / ATM</div><div class="text-[9px] text-gray-500 uppercase font-bold">Credit Card</div></div>
-                        </div>
-                    </button>
-                    <button onclick="setPayment('CVS', this)" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl flex items-center justify-between hover:bg-white/10 transition group">
-                        <div class="flex items-center gap-3">
-                            <span class="text-xl">🏪</span>
-                            <div class="text-left leading-tight"><div class="text-white text-sm font-bold">超商代碼</div><div class="text-[9px] text-gray-500 uppercase font-bold">CVS Code</div></div>
+                            <div class="text-left leading-tight"><div class="text-white text-sm font-bold">信用卡 / ATM</div><div class="text-[9px] text-gray-500 uppercase font-bold">NTD 贊助</div></div>
                         </div>
                     </button>
                 </div>
             </div>
 
-            <button onclick="finalSubmit()" class="w-full btn-gradient mt-8 py-4 rounded-2xl font-black tracking-widest hover:scale-[1.02] transition uppercase shadow-lg shadow-indigo-500/20">確認並前往付款</button>
-            <button onclick="closeModal()" class="w-full text-gray-600 text-[10px] mt-4 hover:text-white transition uppercase tracking-[0.3em] font-bold">取消結帳</button>
+            <button id="final-submit-btn" onclick="finalSubmit()" class="w-full btn-gradient mt-8 py-4 rounded-2xl font-black tracking-widest hover:scale-[1.02] transition shadow-lg shadow-indigo-500/20">確認購買</button>
+            <button onclick="closeModal()" class="w-full text-gray-600 text-[10px] mt-4 hover:text-white transition uppercase tracking-[0.3em] font-bold text-center">取消結帳</button>
         </div>
     </div>
 
     <aside class="w-64 bg-[#0d1117] border-r border-white/5 flex flex-col fixed inset-y-0 left-0 z-50">
-        <div class="p-8">
-            <div class="text-2xl font-black tracking-tighter text-indigo-500 italic">OHW NETWORK</div>
-        </div>
-        
+        <div class="p-8"><div class="text-2xl font-black tracking-tighter text-indigo-500 italic">玩家の窩</div></div>
         <nav class="flex-grow px-4 space-y-2">
             <button onclick="switchTab('overview')" id="nav-overview" class="w-full nav-link-active flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-bold text-sm text-left">
-                <i class="fas fa-th-large"></i><span>Overview</span>
+                <i class="fas fa-th-large"></i><span>首頁</span>
             </button>
             <button onclick="switchTab('store')" id="nav-store" class="w-full flex items-center gap-4 text-gray-500 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl transition-all font-bold text-sm text-left">
-                <i class="fas fa-shopping-cart"></i><span>Store</span>
+                <i class="fas fa-shopping-cart"></i><span>商店</span>
             </button>
             <button onclick="switchTab('rules')" id="nav-rules" class="w-full flex items-center gap-4 text-gray-500 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl transition-all font-bold text-sm text-left">
-                <i class="fas fa-gavel"></i><span>Rules</span>
+                <i class="fas fa-gavel"></i><span>規則</span>
             </button>
         </nav>
-
         <div class="p-4 border-t border-white/5 bg-[#0d1117] mt-auto">
             <div class="relative">
                 <div id="user-dropdown" class="hidden absolute bottom-16 left-0 right-0 bg-[#21262d] border border-white/10 rounded-2xl shadow-2xl py-2 z-50 overflow-hidden">
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-indigo-600 hover:text-white transition">
-                        <i class="fas fa-user-cog w-4 text-center"></i> 個人設定
-                    </a>
-                    <div class="border-t border-white/5 my-1"></div>
                     <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition text-left">
                         <i class="fas fa-sign-out-alt w-4 text-center"></i> 登出帳號
                     </button>
                 </div>
-
                 <div class="bg-[#161b22] rounded-2xl p-3 border border-white/5 flex items-center justify-between">
                     <div class="flex items-center gap-3 overflow-hidden">
                         <img id="dash-avatar" src="" class="w-9 h-9 rounded-full border border-indigo-500/30">
                         <div class="overflow-hidden">
                             <p id="dash-username" class="text-xs font-bold truncate text-gray-200">Loading...</p>
-                            <div class="flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                                <p class="text-[9px] text-gray-500 font-bold uppercase">Online</p>
-                            </div>
+                            <div class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span><p class="text-[9px] text-gray-500 font-bold uppercase">Online</p></div>
                         </div>
                     </div>
-                    <button onclick="toggleUserMenu(event)" id="user-menu-btn" class="text-gray-500 hover:text-white p-1 hover:bg-white/5 rounded-lg transition">
-                        <i class="fas fa-ellipsis-v text-xs"></i>
-                    </button>
+                    <button onclick="toggleUserMenu(event)" id="user-menu-btn" class="text-gray-500 hover:text-white p-1 rounded-lg transition"><i class="fas fa-ellipsis-v text-xs"></i></button>
                 </div>
             </div>
         </div>
     </aside>
 
     <main class="flex-grow ml-64 p-10 lg:p-16">
-        
         <div id="overview-section">
-            <header class="mb-12">
-                <h1 class="text-5xl font-black tracking-tighter uppercase italic">Overview</h1>
-                <p class="text-gray-400 font-bold mt-2 text-lg">歡迎回來, <span id="welcome-user" class="text-indigo-500">玩家</span>!</p>
-            </header>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <h1 class="text-5xl font-black tracking-tighter uppercase italic mb-12">Overview</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 <div class="glass p-8 rounded-[2rem]">
-                    <div class="flex justify-between items-start mb-6">
-                        <p class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">我的餘額</p>
-                        <i class="fas fa-coins text-indigo-400"></i>
-                    </div>
-                    <h2 class="text-4xl font-black"><span id="coin-balance">--</span> <span class="text-sm font-bold text-indigo-400 uppercase">Coins</span></h2>
+                    <p class="text-xs font-bold uppercase text-gray-500 mb-6">我的錢錢</p>
+                    <h2 class="text-4xl font-black"><span id="coin-balance">500</span> <span class="text-sm font-bold text-indigo-400">Coins</span></h2>
                 </div>
-                <div class="glass p-8 rounded-[2rem] border-indigo-500/10">
-                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-6">每日獎勵</p>
-                    <button onclick="claimReward()" id="claim-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-4 rounded-2xl transition shadow-lg shadow-indigo-500/20 active:scale-95">CLAIM 10 COINS</button>
-                </div>
-            </div>
-
-            <div class="glass p-10 rounded-[2.5rem]">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-500 mb-8 flex items-center gap-2">
-                    <span class="w-2 h-2 bg-indigo-500 rounded-full"></span> 最近活動
-                </h3>
-                <div class="space-y-6 text-sm font-bold text-gray-400">
-                    <p>• 您已透過 Discord 帳號安全登入系統。</p>
-                    <p>• 商店連線已就緒，可開始贊助支持。</p>
+                <div class="glass p-8 rounded-[2rem] border-indigo-500/10 text-center">
+                    <p class="text-xs font-bold uppercase text-gray-500 mb-6">每日獎勵</p>
+                    <button onclick="claimReward()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-4 rounded-2xl transition">CLAIM 10 COINS</button>
                 </div>
             </div>
         </div>
 
         <div id="store-section" class="hidden">
-            <header class="mb-12">
-                <h1 class="text-5xl font-black tracking-tighter uppercase italic">Rank Store</h1>
-                <p class="text-gray-500 tracking-[0.4em] uppercase text-xs mt-2 font-bold">Exclusive Ranks & VIP Benefits</p>
-            </header>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-20">
+            <h1 class="text-5xl font-black tracking-tighter uppercase italic mb-12">Rank Store</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-20">
                 <div class="store-card p-6 rank-vip">
-                    <h3 class="text-3xl font-black mb-6 italic text-[#55ff55]">[VIP]</h3>
-                    <div class="price-tag mb-8 text-white">$100<span class="text-[10px] text-gray-500 ml-1">NTD</span></div>
-                    <button onclick="openCheckout('[VIP]', '$100 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs">立即結帳</button>
-                </div>
-                <div class="store-card p-6 rank-vipp">
-                    <h3 class="text-3xl font-black mb-6 italic text-[#55ff55]">[VIP+]</h3>
-                    <div class="price-tag mb-8 text-white">$250<span class="text-[10px] text-gray-500 ml-1">NTD</span></div>
-                    <button onclick="openCheckout('[VIP+]', '$250 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs">立即結帳</button>
-                </div>
-                <div class="store-card p-6 rank-mvp">
-                    <h3 class="text-3xl font-black mb-6 italic text-[#55ffff]">[MVP]</h3>
-                    <div class="price-tag mb-8 text-white">$450<span class="text-[10px] text-gray-500 ml-1">NTD</span></div>
-                    <button onclick="openCheckout('[MVP]', '$450 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs !bg-[#55ffff]">立即結帳</button>
-                </div>
-                <div class="store-card p-6 rank-mvpp bg-white/5">
-                    <h3 class="text-3xl font-black mb-6 italic text-[#55ffff]">[MVP+]</h3>
-                    <div class="price-tag mb-8 text-white">$700<span class="text-[10px] text-gray-500 ml-1">NTD</span></div>
-                    <button onclick="openCheckout('[MVP+]', '$700 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs !bg-[#55ffff]">立即結帳</button>
+                    <h3 class="text-2xl font-black italic text-[#55ff55] mb-4">[VIP]</h3>
+                    <div class="price-tag mb-6">$100</div>
+                    <button onclick="openCheckout('[VIP]', '$100 NTD', 1000, false)" class="buy-btn w-full py-3 rounded-xl text-xs">立即結帳</button>
                 </div>
                 <div class="store-card p-6 rank-mvppp">
-                    <h3 class="text-3xl font-black mb-6 italic text-[#ffaa00]">[MVP++]</h3>
-                    <div class="price-tag mb-8 text-[#ffaa00]">$1200<span class="text-[10px] text-white ml-1">NTD</span></div>
-                    <button onclick="openCheckout('[MVP++]', '$1200 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs btn-ultimate">立即結帳</button>
+                    <h3 class="text-2xl font-black italic text-[#ffaa00] mb-4">[MVP++]</h3>
+                    <div class="price-tag mb-6">$1200</div>
+                    <button onclick="openCheckout('[MVP++]', '$1200 NTD', 12000, false)" class="buy-btn w-full py-3 rounded-xl text-xs btn-ultimate">立即結帳</button>
                 </div>
             </div>
 
-            <header class="mb-12">
-                <h1 class="text-4xl font-black tracking-tighter uppercase italic">Coins Store</h1>
-                <p class="text-gray-500 tracking-[0.4em] uppercase text-xs mt-2 font-bold">Buy In-Game Currency</p>
-            </header>
-
+            <h1 class="text-4xl font-black tracking-tighter uppercase italic mb-12">Coins Store</h1>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-20">
-                <div class="store-card p-8 rank-vip text-center">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase mb-2">Pocket Bag</h4>
-                    <h2 class="text-3xl font-black mb-8 italic">1,000 <span class="text-xs">COINS</span></h2>
-                    <div class="price-tag mb-8">$100</div>
-                    <button onclick="openCheckout('1,000 Coins', '$100 NTD')" class="buy-btn w-full py-4 rounded-2xl">立即結帳</button>
+                <div class="store-card p-8 text-center border-white/5">
+                    <h2 class="text-3xl font-black italic mb-6">1,000 <span class="text-xs">COINS</span></h2>
+                    <div class="price-tag mb-6">$100</div>
+                    <button onclick="openCheckout('1,000 Coins', '$100 NTD', 0, true)" class="buy-btn w-full py-4 rounded-2xl">立即購買</button>
                 </div>
-                <div class="store-card p-8 rank-mvp text-center scale-105 bg-white/5 border-white/10">
-                    <h4 class="text-xs font-bold text-indigo-400 uppercase mb-2">Treasury Box</h4>
-                    <h2 class="text-3xl font-black mb-8 italic">5,000 <span class="text-xs">COINS</span></h2>
-                    <div class="price-tag mb-8">$500</div>
-                    <button onclick="openCheckout('5,000 Coins', '$500 NTD')" class="buy-btn w-full py-4 rounded-2xl !bg-indigo-500 !text-white">立即結帳</button>
-                </div>
-                <div class="store-card p-8 rank-mvppp text-center">
-                    <h4 class="text-xs font-bold text-orange-400 uppercase mb-2">Vault Pack</h4>
-                    <h2 class="text-3xl font-black mb-8 italic">12,000 <span class="text-xs">COINS</span></h2>
-                    <div class="price-tag mb-8">$1000</div>
-                    <button onclick="openCheckout('12,000 Coins', '$1000 NTD')" class="buy-btn w-full py-4 rounded-2xl btn-ultimate">立即結帳</button>
+                <div class="store-card p-8 text-center border-white/5">
+                    <h2 class="text-3xl font-black italic mb-6">12,000 <span class="text-xs">COINS</span></h2>
+                    <div class="price-tag mb-6">$1000</div>
+                    <button onclick="openCheckout('12,000 Coins', '$1000 NTD', 0, true)" class="buy-btn w-full py-4 rounded-2xl btn-ultimate">立即購買</button>
                 </div>
             </div>
         </div>
 
         <div id="rules-section" class="hidden">
-            <header class="mb-12">
-                <h1 class="text-5xl font-black tracking-tighter uppercase italic">Rules</h1>
-                <p class="text-gray-400 font-bold mt-2 text-lg font-bold">請遵守以下伺服器規範</p>
-            </header>
-            <div class="glass p-10 rounded-[2.5rem] space-y-4 font-bold text-gray-300">
-                <p>1. 禁止使用任何不公平競爭之第三方軟體或模組。</p>
-                <p>2. 禁止在公共頻道進行人身攻擊或洗版行為。</p>
-                <p>3. 贊助項目屬數位商品，一旦發放概不退還。</p>
-            </div>
+            <aside class="hidden lg:block space-y-4 sticky top-32 h-fit">
+            <p class="text-indigo-500 font-black text-xs tracking-widest mb-6">目錄 INDEX</p>
+            <a href="#general" class="nav-link block text-gray-400 font-bold">01 一般準則</a>
+            <a href="#chat" class="nav-link block text-gray-400 font-bold">02 聊天室規範</a>
+            <a href="#gameplay" class="nav-link block text-gray-400 font-bold">03 遊戲公平性</a>
+            <a href="#punish" class="nav-link block text-gray-400 font-bold">04 處罰條例</a>
+        </aside>
+
+        <div class="lg:col-span-3 space-y-12">
+            
+            <section id="general" class="modern-card p-8 md:p-12">
+                <div class="flex items-center mb-6">
+                    <span class="rule-number text-4xl mr-4">01</span>
+                    <h2 class="text-3xl font-black">一般準則</h2>
+                </div>
+                <ul class="space-y-6 text-gray-300">
+                    <li class="flex items-start">
+                        <span class="text-indigo-500 mr-3 mt-1">●</span>
+                        <div>
+                            <p class="font-bold text-white">尊重所有玩家</p>
+                            <p class="text-sm">嚴禁任何形式的歧視、霸凌或人身攻擊。</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-500 mr-3 mt-1">●</span>
+                        <div>
+                            <p class="font-bold text-white">帳號安全</p>
+                            <p class="text-sm">玩家需自行負擔帳號安全責任，任何由該帳號發出的行為皆視為本人所為。</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <section id="chat" class="modern-card p-8 md:p-12">
+                <div class="flex items-center mb-6">
+                    <span class="rule-number text-4xl mr-4">02</span>
+                    <h2 class="text-3xl font-black">聊天室規範</h2>
+                </div>
+                <ul class="space-y-6 text-gray-300">
+                    <li class="flex items-start">
+                        <span class="text-indigo-500 mr-3 mt-1">●</span>
+                        <div>
+                            <p class="font-bold text-white">嚴禁洗頻與廣告</p>
+                            <p class="text-sm">禁止發送重複訊息、推廣其他伺服器網址或 Discord 連結。</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-500 mr-3 mt-1">●</span>
+                        <div>
+                            <p class="font-bold text-white">語言規範</p>
+                            <p class="text-sm">請勿在公共頻道使用粗口、髒話或帶有性暗示的言論。</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <section id="gameplay" class="modern-card p-8 md:p-12 border-l-4 border-l-indigo-600">
+                <div class="flex items-center mb-6">
+                    <span class="rule-number text-4xl mr-4">03</span>
+                    <h2 class="text-3xl font-black">遊戲公平性 (重要)</h2>
+                </div>
+                <div class="bg-red-500/10 border border-red-500/20 p-6 rounded-xl mb-6">
+                    <p class="text-red-400 text-sm font-bold italic">！OHW 伺服器對外掛程式採取零容忍政策</p>
+                </div>
+                <ul class="space-y-6 text-gray-300">
+                    <li class="flex items-start">
+                        <span class="text-indigo-500 mr-3 mt-1">●</span>
+                        <div>
+                            <p class="font-bold text-white">禁止非法客戶端</p>
+                            <p class="text-sm">嚴禁使用任何自動點擊器 (Autoclicker)、飛行、穿牆或 X-Ray 等模組。</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-500 mr-3 mt-1">●</span>
+                        <div>
+                            <p class="font-bold text-white">禁止惡意利用漏洞 (Bug)</p>
+                            <p class="text-sm">發現漏洞請立即回報，惡意利用獲利者將面臨永久封禁。</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <section id="punish" class="modern-card p-8 md:p-12 border-l-4 border-l-indigo-600">
+                <div class="flex items-center mb-6">
+                    <span class="rule-number text-4xl mr-4">04</span>
+                    <h2 class="text-3xl font-black">處罰條例</h2>
+                </div>
+                <div class="bg-red-500/10 border border-red-500/20 p-6 rounded-xl mb-6">
+                    <p class="text-red-400 text-sm font-bold italic">！OHW 伺服器尚未對此做出決策</p>
+                </div>
+            </section>
+        
+
+        </div>
         </div>
     </main>
 
     <script>
-        // 切換分頁
+        let selectedMethod = 'Coins';
+
         function switchTab(tab) {
             ['overview', 'store', 'rules'].forEach(id => {
                 document.getElementById(id + '-section').classList.add('hidden');
-                document.getElementById('nav-' + id).classList.remove('nav-link-active');
-                document.getElementById('nav-' + id).classList.add('text-gray-500');
+                document.getElementById('nav-' + id).classList.replace('nav-link-active', 'text-gray-500');
             });
             document.getElementById(tab + '-section').classList.remove('hidden');
-            document.getElementById('nav-' + tab).classList.add('nav-link-active');
-            document.getElementById('nav-' + tab).classList.remove('text-gray-500');
+            document.getElementById('nav-' + tab).classList.replace('text-gray-500', 'nav-link-active');
         }
 
-        // 使用者選單切換
-        function toggleUserMenu(event) {
-            event.stopPropagation();
-            document.getElementById('user-dropdown').classList.toggle('hidden');
-        }
+        function toggleUserMenu(e) { e.stopPropagation(); document.getElementById('user-dropdown').classList.toggle('hidden'); }
 
-        // 結帳功能
-        function openCheckout(name, price) {
+        function openCheckout(name, priceStr, coinCost, isCoinPackage = false) {
             document.getElementById('modal-item-name').innerText = name;
-            document.getElementById('modal-price').innerText = price;
+            document.getElementById('modal-price').innerText = priceStr;
+            
+            const coinBtn = document.getElementById('pay-with-coins');
+            const divider = document.getElementById('cash-pay-divider');
+            const coinStatus = document.getElementById('coin-status');
+
+            if (isCoinPackage) {
+                // 如果買的是金幣，隱藏金幣支付，避免刷錢 Bug
+                coinBtn.classList.add('hidden');
+                divider.classList.add('hidden');
+                selectedMethod = 'Card';
+            } else {
+                coinBtn.classList.remove('hidden');
+                divider.classList.remove('hidden');
+                
+                const balance = parseInt(document.getElementById('coin-balance').innerText) || 0;
+                if (balance < coinCost) {
+                    coinBtn.style.opacity = "0.4";
+                    coinBtn.style.cursor = "not-allowed";
+                    coinStatus.innerText = "餘額不足";
+                    selectedMethod = 'Card';
+                } else {
+                    coinBtn.style.opacity = "1";
+                    coinBtn.style.cursor = "pointer";
+                    coinStatus.innerText = "可用";
+                    setPayment('Coins', coinBtn);
+                }
+            }
             document.getElementById('checkout-modal').classList.remove('hidden');
         }
 
-        function closeModal() { document.getElementById('checkout-modal').classList.add('hidden'); }
-
-        let selectedMethod = '';
         function setPayment(method, el) {
+            if (method === 'Coins' && el.style.opacity === "0.4") return;
             selectedMethod = method;
-            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('border-indigo-500'));
-            // 這裡可以增加更明顯的選中樣式
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('border-indigo-500', 'bg-indigo-500/20'));
+            el.classList.add('border-indigo-500', 'bg-indigo-500/20');
         }
 
         function finalSubmit() {
-            const playerID = localStorage.getItem('ohw_player_id') || 'inytw';
-            const item = document.getElementById('modal-item-name').innerText;
-            alert(`正在為玩家 [${playerID}] 導向支付系統...\n購買項目: ${item}`);
+            alert(`【確認提交】\n項目：${document.getElementById('modal-item-name').innerText}\n支付方式：${selectedMethod}`);
+            closeModal();
         }
 
-        // 點擊外面自動關閉
-        window.onclick = function(event) {
-            const dropdown = document.getElementById('user-dropdown');
-            if (!event.target.closest('#user-menu-btn')) dropdown.classList.add('hidden');
-        }
-
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'index.html';
-        }
+        function closeModal() { document.getElementById('checkout-modal').classList.add('hidden'); }
+        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+        window.onclick = () => document.getElementById('user-dropdown').classList.add('hidden');
     </script>
-    <script src="script/dash.js"></script>
 </body>
 </html>
