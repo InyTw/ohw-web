@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OHW - Dashboard</title>
+    <title>OHW - 玩家の窩</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0a0a0a; color: white; }
@@ -13,10 +13,10 @@
 <body class="flex min-h-screen">
 
     <aside class="w-64 bg-black/40 border-r border-white/5 flex flex-col p-6 sticky top-0 h-screen">
-        <div class="text-2xl font-black tracking-tighter mb-10 text-indigo-500">OHW DASH</div>
+        <div class="text-2xl font-black tracking-tighter mb-10 text-indigo-500">玩家の窩</div>
         
         <nav class="space-y-4 flex-grow text-sm font-bold uppercase tracking-widest text-gray-400">
-            <a href="#" class="block text-white bg-indigo-600/20 px-4 py-3 rounded-lg border border-indigo-500/30">Overview</a>
+            <a href="home.html" class="block text-white bg-indigo-600/20 px-4 py-3 rounded-lg border border-indigo-500/30">Overview</a>
             <a href="store.html" class="block hover:text-white hover:bg-white/5 px-4 py-3 rounded-lg transition">Store</a>
             <a href="rules.html" class="block hover:text-white hover:bg-white/5 px-4 py-3 rounded-lg transition">Rules</a>
         </nav>
@@ -25,8 +25,8 @@
             <div class="flex items-center gap-3 mb-4">
                 <img id="dash-avatar" src="" class="w-10 h-10 rounded-full border border-indigo-500">
                 <div class="overflow-hidden">
-                    <p id="dash-username" class="text-sm font-bold truncate">Loading...</p>
-                    <p class="text-[10px] text-gray-500 font-bold">Online</p>
+                    <p id="dash-username" class="text-sm font-bold truncate">正在疊橋過去了...</p>
+                    <p class="text-[10px] text-gray-500 font-bold">在線</p>
                 </div>
             </div>
             <button onclick="logout()" class="w-full text-xs font-bold uppercase tracking-widest py-2 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded transition">Logout</button>
@@ -35,28 +35,28 @@
 
     <main class="flex-grow p-10">
         <header class="mb-12">
-            <h1 class="text-4xl font-black tracking-tight">Welcome back, <span id="welcome-user" class="text-indigo-500">Player</span>!</h1>
-            <p class="text-gray-400 font-medium mt-2">Manage your account and daily rewards here.</p>
+            <h1 class="text-4xl font-black tracking-tight">歡迎回來, <span id="welcome-user" class="text-indigo-500">玩家</span>!</h1>
+            <p class="text-gray-400 font-medium mt-2">在這裡管理您的帳戶和每日獎勵</p>
         </header>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
             <div class="glass p-8 rounded-2xl">
-                <p class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">My Balance</p>
+                <p class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">我的錢錢</p>
                 <h2 class="text-3xl font-black text-white"><span id="coin-balance">--</span> <span class="text-sm font-bold text-indigo-400">OHW-Coins</span></h2>
             </div>
 
             <div class="glass p-8 rounded-2xl relative overflow-hidden group">
-                <p class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Daily Reward</p>
-                <div id="reward-timer" class="mb-4 text-sm font-bold text-gray-300">Available Now!</div>
+                <p class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">每日獎勵</p>
+                <div id="reward-timer" class="mb-4 text-sm font-bold text-gray-300">領取</div>
                 <button onclick="claimReward()" id="claim-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-3 rounded-xl transition shadow-lg shadow-indigo-600/30">CLAIM 10 COINS</button>
             </div>
         </div>
 
         <div class="glass p-8 rounded-2xl">
-            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-500 mb-6 border-b border-white/5 pb-4">Recent Activity</h3>
+            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-500 mb-6 border-b border-white/5 pb-4">最近活動</h3>
             <div class="space-y-4 text-sm text-gray-400">
-                <p>• Logged in via Discord successfully.</p>
-                <p>• Shop integration active.</p>
+                <p>• 已成功透過 Discord 登入。</p>
+                <p>• 商店整合功能已啟用。</p>
             </div>
         </div>
     </main>
