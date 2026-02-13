@@ -7,171 +7,82 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        
-        body { 
-            background-color: #0a0a0a; 
-            color: white; 
-            font-family: 'Inter', sans-serif;
-        }
-
-        /* HNHost 招牌：玻璃擬態卡片 */
-        .glass { 
-            background: rgba(22, 27, 34, 0.7); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-        
-        .glass:hover {
-            border-color: rgba(99, 102, 241, 0.4);
-        }
-
-        /* 側邊欄隱藏滾動條 */
-        aside::-webkit-scrollbar {
-            width: 0px;
-        }
-
-        /* 選單彈出動畫 */
-        #user-dropdown {
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-origin: bottom;
-        }
-
-        .nav-link-active {
-            background: rgba(79, 70, 229, 0.1);
-            color: #818cf8;
-            border-left: 4px solid #4f46e5;
-        }
+        body { background-color: #0a0a0a; color: white; font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(22, 27, 34, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        /* 側邊欄固定高度並使用 flex 佈局 */
+        .sidebar-container { height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; }
     </style>
 </head>
 <body class="flex min-h-screen">
 
-    <aside class="w-64 bg-[#0d1117] border-r border-white/5 flex flex-col sticky top-0 h-screen z-40">
+    <aside class="w-64 bg-[#0d1117] border-r border-white/5 sidebar-container">
         <div class="p-8">
-            <div class="text-2xl font-black tracking-tighter text-indigo-500">
-                玩家の窩
-            </div>
+            <div class="text-2xl font-black tracking-tighter text-indigo-500">玩家の窩</div>
             <p class="text-[10px] text-gray-500 font-bold tracking-[0.2em] uppercase mt-1">Player Dashboard</p>
         </div>
         
         <nav class="flex-grow px-4 space-y-2">
-            <a href="store.html" class="flex items-center gap-4 text-gray-500 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl border-left-transparent transition-all group">
-                <i class="fas fa-shopping-cart text-lg"></i>
-                <span class="text-sm font-bold tracking-wide">Store</span>
+            <a href="home.html" class="flex items-center gap-4 px-4 py-3 rounded-xl bg-indigo-500/10 text-indigo-400 border-l-4 border-indigo-500 transition-all font-bold">
+                <i class="fas fa-th-large"></i> Overview
             </a>
+            <a href="store.html" class="flex items-center gap-4 text-gray-500 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl transition-all font-bold">
+                <i class="fas fa-shopping-cart"></i> Store
+            </a>
+            <a href="rules.html" class="flex items-center gap-4 text-gray-500 hover:text-white hover:bg-white/5 px-4 py-3 rounded-xl transition-all font-bold">
+                <i class="fas fa-gavel"></i> Rules
+            </a>
+        </nav>
 
-        <div class="p-4 relative">
-            <div class="bg-[#161b22] rounded-2xl p-3 border border-white/5 flex items-center justify-between">
-                <div class="flex items-center gap-3 overflow-hidden">
-                    <img id="dash-avatar" src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full border-2 border-indigo-500/20">
-                    <div class="overflow-hidden">
-                        <p id="dash-username" class="text-sm font-bold truncate text-gray-200">載入中...</p>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                            <p class="text-[10px] text-gray-500 font-bold uppercase">Online</p>
+        <div class="p-4 mt-auto border-t border-white/5 bg-[#0d1117]">
+            <div class="relative">
+                <div id="user-dropdown" class="hidden absolute bottom-16 left-0 right-0 bg-[#21262d] border border-white/10 rounded-2xl shadow-2xl py-2 z-50">
+                    <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-indigo-600 hover:text-white transition">
+                        <i class="fas fa-user-cog"></i> 個人設定
+                    </a>
+                    <div class="border-t border-white/5 my-1"></div>
+                    <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition text-left">
+                        <i class="fas fa-sign-out-alt"></i> 登出帳號
+                    </button>
+                </div>
+
+                <div class="bg-[#161b22] rounded-2xl p-3 border border-white/5 flex items-center justify-between">
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <img id="dash-avatar" src="https://via.placeholder.com/40" class="w-9 h-9 rounded-full border border-indigo-500/30">
+                        <div class="overflow-hidden">
+                            <p id="dash-username" class="text-xs font-bold truncate text-gray-200">inytw</p>
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">Online</p>
+                            </div>
                         </div>
                     </div>
+                    
+                    <button onclick="toggleUserMenu(event)" id="user-menu-btn" class="text-gray-500 hover:text-white p-2 hover:bg-white/5 rounded-lg transition">
+                        <i class="fas fa-ellipsis-v text-xs"></i>
+                    </button>
                 </div>
-                
-                <button onclick="toggleUserMenu(event)" id="user-menu-btn" class="text-gray-500 hover:text-white p-2 hover:bg-white/5 rounded-lg transition">
-                    <i class="fas fa-ellipsis-v"></i>
-                </button>
-            </div>
-
-            <div id="user-dropdown" class="hidden absolute bottom-20 left-4 right-4 bg-[#21262d] border border-white/10 rounded-2xl shadow-2xl py-2 z-50 overflow-hidden">
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-indigo-600 hover:text-white transition">
-                    <i class="fas fa-user-cog w-5"></i> 個人設定
-                </a>
-                <div class="border-t border-white/5 my-1"></div>
-                <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition text-left">
-                    <i class="fas fa-sign-out-alt w-5"></i> 登出帳號
-                </button>
             </div>
         </div>
     </aside>
 
-    <main class="flex-grow p-10 lg:p-16">
+    <main class="flex-grow p-10">
         <header class="mb-12">
-            <h1 class="text-5xl font-black tracking-tight">歡迎回來, <span id="welcome-user" class="text-indigo-500">玩家</span>!</h1>
-            <p class="text-gray-400 font-medium mt-4 text-lg">在這裡管理您的帳戶和每日獎勵</p>
+            <h1 class="text-4xl font-black tracking-tight">歡迎回來, <span id="welcome-user" class="text-indigo-500">inytw</span>!</h1>
+            <p class="text-gray-400 font-medium mt-2">在這裡管理您的帳戶和每日獎勵</p>
         </header>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            <div class="glass p-8 rounded-[2rem]">
-                <div class="flex justify-between items-start mb-6">
-                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">我的錢錢</p>
-                    <div class="p-2 bg-indigo-500/10 rounded-lg text-indigo-400">
-                        <i class="fas fa-coins"></i>
-                    </div>
-                </div>
-                <h2 class="text-4xl font-black text-white flex items-baseline gap-2">
-                    <span id="coin-balance">--</span>
-                    <span class="text-sm font-bold text-indigo-400 uppercase tracking-tighter">OHW-Coins</span>
-                </h2>
-            </div>
-
-            <div class="glass p-8 rounded-[2rem] relative border-indigo-500/10">
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">每日獎勵</p>
-                    <div id="reward-timer" class="text-[10px] font-black bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded">可領取</div>
-                </div>
-                <p class="text-gray-400 text-sm mb-6 font-medium">每天回來點擊即可獲得 10 枚金幣！</p>
-                <button onclick="claimReward()" id="claim-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-4 rounded-2xl transition shadow-lg shadow-indigo-600/20 active:scale-95">
-                    CLAIM 10 COINS
-                </button>
-            </div>
-        </div>
-
-        <div class="glass p-10 rounded-[2.5rem]">
-            <h3 class="text-sm font-bold uppercase tracking-[0.2em] text-gray-500 mb-8 flex items-center gap-2">
-                <span class="w-2 h-2 bg-indigo-500 rounded-full"></span> 最近活動
-            </h3>
-            <div class="space-y-6">
-                <div class="flex items-center gap-4 group">
-                    <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500">
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm font-bold text-gray-200">成功登入</p>
-                        <p class="text-xs text-gray-500 font-medium">您已透過 Discord 帳號安全登入。</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4 group">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
-                        <i class="fas fa-plug"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm font-bold text-gray-200">API 連線正常</p>
-                        <p class="text-xs text-gray-500 font-medium">後台伺服器隧道已建立，數據同步中。</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+        </main>
 
     <script>
-        // 切換使用者選單
         function toggleUserMenu(event) {
             event.stopPropagation();
-            const dropdown = document.getElementById('user-dropdown');
-            dropdown.classList.toggle('hidden');
+            document.getElementById('user-dropdown').classList.toggle('hidden');
         }
 
-        // 點擊頁面其他地方關閉選單
         window.onclick = function(event) {
             const dropdown = document.getElementById('user-dropdown');
             if (!event.target.closest('#user-menu-btn')) {
-                if (!dropdown.classList.contains('hidden')) {
-                    dropdown.classList.add('hidden');
-                }
+                dropdown.classList.add('hidden');
             }
-        }
-
-        // 登出邏輯 (範例)
-        function logout() {
-            localStorage.removeItem('discord_id');
-            window.location.href = 'index.html';
         }
     </script>
     <script src="script/dash.js"></script>
