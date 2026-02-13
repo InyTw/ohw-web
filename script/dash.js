@@ -1,4 +1,3 @@
-// 在最上方定義你的 ngrok API 位址 (記得最後面不要多斜線，或者後面接 /api)
 const API_BASE_URL = "https://f0ed-2001-b011-9801-d9e6-410a-257c-8f0a-4640.ngrok-free.app/api";
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -19,11 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchCoinsFromDB(user.id);
 });
 
-// 2. 改用 API_BASE_URL 抓取資料
 async function fetchCoinsFromDB(discordID) {
     try {
-        // 修改這裡：加上 API_BASE_URL
-        const response = await fetch(`${API_BASE_URL}/get_player_data.php?discordID=${discordID}`);
+        const response = await fetch(`${API_BASE_URL}/get_player_data.php?discordID=${discordID}`, {
+            headers: {
+                'ngrok-skip-browser-warning': 'true' // 👈 加上這一行，直接跳過警告頁面
+            }
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -39,7 +40,6 @@ async function fetchCoinsFromDB(discordID) {
     }
 }
 
-// 3. 改用 API_BASE_URL 領取獎勵
 async function claimReward() {
     const userData = JSON.parse(localStorage.getItem('discord_user'));
     const btn = document.getElementById('claim-btn');
@@ -52,10 +52,12 @@ async function claimReward() {
     formData.append('username', userData.username);
 
     try {
-        // 修改這裡：加上 API_BASE_URL
         const response = await fetch(`${API_BASE_URL}/claim_reward.php`, {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: {
+                'ngrok-skip-browser-warning': 'true' // 👈 這裡也要加
+            }
         });
         const result = await response.json();
 
@@ -71,16 +73,16 @@ async function claimReward() {
         } else {
             alert("❌ " + result.message);
             btn.disabled = false;
-            btn.innerText = "CLAIM 10 COINS";
+            btn.innerText = "領取10 ohw coins";
         }
     } catch (error) {
         alert("連線失敗，請確認你的 ngrok 視窗是否開啟中");
         btn.disabled = false;
-        btn.innerText = "CLAIM 10 COINS";
+        btn.innerText = "領取10 ohw coins";
     }
 }
 
-// 數字滾動效果 (維持不變)
+// 數字滾動效果維持不變...
 function animateValue(obj, start, end, duration) {
     let startTimestamp = null;
     const step = (timestamp) => {
