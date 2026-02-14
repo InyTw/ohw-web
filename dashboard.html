@@ -12,7 +12,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
 
-        /* 主題變數 */
         :root {
             --bg-color: #000;
             --text-color: #ffffff;
@@ -74,14 +73,20 @@
         .store-card:hover { transform: translateY(-10px); border-color: #6366f1; }
 
         .rank-vip { border-top: 5px solid #22c55e; }
+        .rank-vipp { border-top: 5px solid #22c55e; }
         .rank-mvp { border-top: 5px solid #06b6d4; }
-        .rank-mvppp { border-top: 5px solid #f59e0b; }
+        .rank-mvpp { border-top: 5px solid #06b6d4; }
+        .rank-mvppp {
+            border-top: 5px solid #f59e0b;
+            background: linear-gradient(180deg, rgba(245, 158, 11, 0.05) 0%, var(--card-bg) 100%);
+        }
 
         .price-tag { font-size: 1.8rem; font-weight: 900; color: var(--text-color); }
-        .buy-btn { background: #4f46e5; color: #fff; font-weight: 900; text-transform: uppercase; }
+        .buy-btn { background: #4f46e5; color: #fff; font-weight: 900; text-transform: uppercase; transition: 0.3s; }
         .btn-ultimate { background: linear-gradient(90deg, #f59e0b, #ea580c); color: white; }
         .btn-gradient { background: linear-gradient(90deg, #6366f1, #a855f7); color: white; }
 
+        .modern-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; }
         .theme-option { cursor: pointer; border: 2px solid var(--border-color); padding: 1rem; border-radius: 1rem; transition: 0.3s; }
         .theme-option.active { border-color: #6366f1; background: rgba(99, 102, 241, 0.1); }
     </style>
@@ -118,12 +123,15 @@
                 </div>
                 <div class="bg-black/5 rounded-2xl p-3 border border-[var(--border-color)] flex items-center justify-between cursor-pointer" onclick="toggleUserMenu(event)">
                     <div class="flex items-center gap-3 overflow-hidden">
-                        <img id="dash-avatar" src="" class="w-9 h-9 rounded-full bg-gray-800 border border-indigo-500/50">
-                        <div>
-                            <p id="dash-username" class="text-xs font-bold truncate">Loading...</p>
-                            <p class="text-[8px] text-green-500 font-black">ONLINE</p>
-                        </div>
-                    </div>
+    <img id="dash-avatar" src="" class="w-9 h-9 rounded-full bg-gray-800 border border-indigo-500/50">
+    <div>
+        <p id="dash-username" class="text-xs font-bold truncate">Loading...</p>
+        <div class="flex items-center gap-1.5">
+            <span id="dash-status-dot" class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            <p id="dash-status-text" class="text-[8px] text-green-500 font-black uppercase">Online</p>
+        </div>
+    </div>
+</div>
                     <i class="fas fa-chevron-up text-[10px] text-gray-500"></i>
                 </div>
             </div>
@@ -131,6 +139,7 @@
     </aside>
 
     <main class="flex-grow ml-64 p-10 lg:p-16">
+        
         <div id="overview-section" class="tab-content">
             <header class="mb-12">
                 <h1 class="text-5xl font-black tracking-tighter uppercase italic">Overview</h1>
@@ -143,16 +152,37 @@
                 </div>
                 <div class="glass p-8 rounded-[2rem]">
                     <p class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-widest">Daily Reward</p>
-                    <button onclick="claimReward()" id="claim-btn" class="w-full bg-indigo-600 text-white font-black py-4 rounded-2xl hover:bg-indigo-500 transition shadow-lg shadow-indigo-500/20">CLAIM 10 COINS</button>
+                    <button onclick="claimReward()" id="claim-btn" class="w-full bg-indigo-600 text-white font-black py-4 rounded-2xl hover:bg-indigo-500 transition shadow-lg shadow-indigo-500/20 uppercase tracking-widest">CLAIM 10 COINS</button>
                 </div>
             </div>
         </div>
 
         <div id="store-section" class="tab-content hidden">
             <header class="mb-12"><h1 class="text-5xl font-black tracking-tighter uppercase italic">Rank Store</h1></header>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                <div class="store-card p-6 rank-vip"><h3 class="font-black text-green-500">[VIP]</h3><div class="price-tag mb-4">$100</div><button onclick="openCheckout('[VIP]', '$100')" class="buy-btn w-full py-2 rounded-xl text-xs">購買</button></div>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-20">
+                <div class="store-card p-6 rank-vip"><h3 class="text-2xl font-black mb-4 italic text-green-500">[VIP]</h3><div class="price-tag mb-8">$100</div><button onclick="openCheckout('[VIP]', '$100')" class="buy-btn w-full py-4 rounded-2xl text-xs">購買</button></div>
+                <div class="store-card p-6 rank-vipp"><h3 class="text-2xl font-black mb-4 italic text-green-500">[VIP+]</h3><div class="price-tag mb-8">$250</div><button onclick="openCheckout('[VIP+]', '$250')" class="buy-btn w-full py-4 rounded-2xl text-xs">購買</button></div>
+                <div class="store-card p-6 rank-mvp"><h3 class="text-2xl font-black mb-4 italic text-cyan-500">[MVP]</h3><div class="price-tag mb-8">$450</div><button onclick="openCheckout('[MVP]', '$450')" class="buy-btn w-full py-4 rounded-2xl text-xs">購買</button></div>
+                <div class="store-card p-6 rank-mvpp"><h3 class="text-2xl font-black mb-4 italic text-cyan-500">[MVP+]</h3><div class="price-tag mb-8">$700</div><button onclick="openCheckout('[MVP+]', '$700')" class="buy-btn w-full py-4 rounded-2xl text-xs">購買</button></div>
+                <div class="store-card p-6 rank-mvppp"><h3 class="text-2xl font-black mb-4 italic text-orange-500">[MVP++]</h3><div class="price-tag mb-8">$1200</div><button onclick="openCheckout('[MVP++]', '$1200')" class="buy-btn w-full py-4 rounded-2xl text-xs btn-ultimate">購買</button></div>
+            </div>
+
+            <header class="mb-12"><h1 class="text-4xl font-black tracking-tighter uppercase italic">Coins Package</h1></header>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-20">
+                <div class="store-card p-8 rank-vip text-center"><h2 class="text-3xl font-black mb-6 italic">1,000 C</h2><div class="price-tag mb-8">$100</div><button onclick="openCheckout('1,000 Coins', '$100')" class="buy-btn w-full py-4 rounded-2xl">購買</button></div>
+                <div class="store-card p-8 rank-mvp text-center scale-105 shadow-2xl"><h2 class="text-3xl font-black mb-6 italic">5,000 C</h2><div class="price-tag mb-8">$500</div><button onclick="openCheckout('5,000 Coins', '$500')" class="buy-btn w-full py-4 rounded-2xl">購買</button></div>
+                <div class="store-card p-8 rank-mvppp text-center"><h2 class="text-3xl font-black mb-6 italic">12,000 C</h2><div class="price-tag mb-8">$1000</div><button onclick="openCheckout('12,000 Coins', '$1000')" class="buy-btn w-full py-4 rounded-2xl btn-ultimate">購買</button></div>
+            </div>
+        </div>
+
+        <div id="rules-section" class="tab-content hidden">
+            <header class="mb-12"><h1 class="text-5xl font-black tracking-tighter uppercase italic">Server Rules</h1></header>
+            <div class="space-y-6">
+                <section class="modern-card p-8 border-l-4 border-indigo-500"><h2 class="text-2xl font-black mb-2">01. 一般準則</h2><p class="font-bold opacity-80">禁止任何形式的歧視與人身攻擊，請保持友善。</p></section>
+                <section class="modern-card p-8 border-l-4 border-indigo-500"><h2 class="text-2xl font-black mb-2">02. 聊天規範</h2><p class="font-bold opacity-80">嚴禁洗屏、推廣、及發送違法連結。</p></section>
+                <section class="modern-card p-8 border-l-4 border-indigo-500"><h2 class="text-2xl font-black mb-2">03. 公平競爭</h2><p class="font-bold opacity-80">禁止使用外掛、宏、或利用漏洞。違者永久封禁。</p></section>
+                <section class="modern-card p-8 border-l-4 border-indigo-500"><h2 class="text-2xl font-black mb-2">04. 其他事項</h2><p class="italic opacity-50 font-bold">服主保留最終解釋權。</p></section>
+            </div>
         </div>
 
         <div id="settings-section" class="tab-content hidden">
@@ -172,15 +202,17 @@
     </main>
 
     <script>
-        // 分頁、菜單、彈窗邏輯
+        // 分頁切換
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(s => s.classList.add('hidden'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-link-active'));
             document.getElementById(tabId + '-section').classList.remove('hidden');
             document.getElementById('nav-' + tabId).classList.add('nav-link-active');
             document.getElementById('user-dropdown').classList.add('hidden');
+            window.scrollTo(0,0);
         }
 
+        // 主題切換 (包含過渡動畫)
         function setTheme(theme) {
             const body = document.body;
             body.style.opacity = "0.7";
@@ -199,11 +231,16 @@
             }, 100);
         }
 
-        // 初始化主題
+        // 初始化
         setTheme(localStorage.getItem('user-theme') || 'dark');
 
         function toggleUserMenu(e) { e.stopPropagation(); document.getElementById('user-dropdown').classList.toggle('hidden'); }
         window.onclick = () => document.getElementById('user-dropdown').classList.add('hidden');
+
+        // 簡易 Store 彈窗模擬 (對接 store.js 前的預留)
+        function openCheckout(name, price) {
+            alert("正在為您處理 " + name + " 的訂單，總計 " + price);
+        }
     </script>
 </body>
 </html>

@@ -96,6 +96,23 @@ function animateValue(obj, start, end, duration) {
     window.requestAnimationFrame(step);
 }
 
+async function syncDiscordPresence(discordID) {
+    try {
+        const response = await fetch(`https://api.lanyard.rest/v1/users/${discordID}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            const status = data.data.discord_status;
+            updateUserStatus(status);
+        }
+    } catch (e) {
+        console.error("無法同步 Discord 狀態");
+    }
+}
+
+// 在獲取完玩家資料後執行
+syncDiscordPresence(user.id);
+
 function logout() {
     localStorage.clear();
     window.location.href = 'login.html';
