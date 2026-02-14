@@ -1,6 +1,6 @@
 const API_BASE_URL = "https://buzzard-assured-unicorn.ngrok-free.app/api";
+const DISCORD_GUILD_ID = "1466688887102505107";
 
-// 數字滾動效果
 function animateValue(obj, start, end, duration) {
     let startTimestamp = null;
     const step = (timestamp) => {
@@ -14,7 +14,6 @@ function animateValue(obj, start, end, duration) {
     window.requestAnimationFrame(step);
 }
 
-// 狀態更新函式
 function updateUserStatus(status) {
     const dot = document.getElementById('dash-status-dot');
     const text = document.getElementById('dash-status-text');
@@ -33,20 +32,24 @@ function updateUserStatus(status) {
     text.innerText = current.label;
 }
 
-// 同步 Discord 實時狀態 (Lanyard API)
 async function syncDiscordPresence(discordID) {
     try {
-        const response = await fetch(`https://api.lanyard.rest/v1/users/${discordID}`);
+        const response = await fetch(`https://discord.com/api/guilds/${DISCORD_GUILD_ID}/widget.json`);
         const data = await response.json();
-        if (data.success) {
-            updateUserStatus(data.data.discord_status);
+        
+        const member = data.members.find(m => m.id === discordID);
+        
+        if (member) {
+            updateUserStatus(member.status);
+        } else {
+            updateUserStatus('online');
         }
     } catch (e) {
-        console.error("無法同步 Discord 狀態", e);
+        console.warn("Widget API 失敗，使用預設亮綠燈");
+        updateUserStatus('online');
     }
 }
 
-// 獲取餘額
 async function fetchCoinsFromDB(discordID) {
     try {
         const response = await fetch(`${API_BASE_URL}/get_player_data.php?discordID=${discordID}`, {
@@ -59,11 +62,12 @@ async function fetchCoinsFromDB(discordID) {
         }
     } catch (error) {
         console.error("資料庫連線異常", error);
-        document.getElementById('coin-balance').innerText = "Error";
+        if(document.getElementById('coin-balance')) {
+            document.getElementById('coin-balance').innerText = "0";
+        }
     }
 }
 
-// 領取獎勵
 async function claimReward() {
     const userData = JSON.parse(localStorage.getItem('discord_user'));
     if (!userData) return;
@@ -104,7 +108,6 @@ async function claimReward() {
     }
 }
 
-// 初始化
 document.addEventListener('DOMContentLoaded', () => {
     const userData = localStorage.getItem('discord_user');
     if (!userData) {
@@ -113,18 +116,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const user = JSON.parse(userData);
     
-    // 渲染基礎資訊
-    document.getElementById('dash-username').innerText = user.username;
-    if(document.getElementById('welcome-user')) {
-        document.getElementById('welcome-user').innerText = user.username;
-    }
+    const nameEl = document.getElementById('dash-username');
+    if (nameEl) nameEl.innerText = user.username;
+
+    const welcomeEl = document.getElementById('welcome-user');
+    if (welcomeEl) welcomeEl.innerText = user.username;
     
-    if (user.avatar && document.getElementById('dash-avatar')) {
-        const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-        document.getElementById('dash-avatar').src = avatarUrl;
+    const avatarImg = document.getElementById('dash-avatar');
+    if (avatarImg && user.avatar) {
+        avatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
     }
 
-    // 呼叫外部 API
     fetchCoinsFromDB(user.id);
     syncDiscordPresence(user.id);
 });
