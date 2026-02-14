@@ -1,5 +1,4 @@
 const API_BASE_URL = "https://buzzard-assured-unicorn.ngrok-free.app/api";
-const DISCORD_GUILD_ID = "1466688887102505107";
 
 function animateValue(obj, start, end, duration) {
     let startTimestamp = null;
@@ -7,46 +6,19 @@ function animateValue(obj, start, end, duration) {
         if (!startTimestamp) startTimestamp = timestamp;
         const progress = Math.min((timestamp - startTimestamp) / duration, 1);
         obj.innerHTML = Math.floor(progress * (end - start) + start);
-        if (progress < 1) {
-            window.requestAnimationFrame(step);
-        }
+        if (progress < 1) window.requestAnimationFrame(step);
     };
     window.requestAnimationFrame(step);
 }
 
-function updateUserStatus(status) {
+// 既然不抓狀態了，我們直接讓它初始化為亮綠燈
+function initStaticStatus() {
     const dot = document.getElementById('dash-status-dot');
     const text = document.getElementById('dash-status-text');
-    if (!dot || !text) return;
-
-    const statusMap = {
-        'online': { color: 'bg-green-500', textColor: 'text-green-500', label: 'ONLINE' },
-        'idle': { color: 'bg-yellow-500', textColor: 'text-yellow-500', label: 'IDLE' },
-        'dnd': { color: 'bg-red-500', textColor: 'text-red-500', label: 'DND' },
-        'offline': { color: 'bg-gray-500', textColor: 'text-gray-500', label: 'OFFLINE' }
-    };
-
-    const current = statusMap[status] || statusMap['online'];
-    dot.className = `w-2 h-2 rounded-full ${current.color} animate-pulse`;
-    text.className = `text-[8px] font-black uppercase ${current.textColor}`;
-    text.innerText = current.label;
-}
-
-async function syncDiscordPresence(discordID) {
-    try {
-        const response = await fetch(`https://discord.com/api/guilds/${DISCORD_GUILD_ID}/widget.json`);
-        const data = await response.json();
-        
-        const member = data.members.find(m => m.id === discordID);
-        
-        if (member) {
-            updateUserStatus(member.status);
-        } else {
-            updateUserStatus('online');
-        }
-    } catch (e) {
-        console.warn("Widget API 失敗，使用預設亮綠燈");
-        updateUserStatus('online');
+    if (dot && text) {
+        dot.className = `w-2 h-2 rounded-full bg-green-500 animate-pulse`;
+        text.className = `text-[8px] font-black uppercase text-green-500`;
+        text.innerText = 'ONLINE';
     }
 }
 
@@ -62,9 +34,6 @@ async function fetchCoinsFromDB(discordID) {
         }
     } catch (error) {
         console.error("資料庫連線異常", error);
-        if(document.getElementById('coin-balance')) {
-            document.getElementById('coin-balance').innerText = "0";
-        }
     }
 }
 
@@ -92,6 +61,7 @@ async function claimReward() {
             const coinElement = document.getElementById('coin-balance');
             const currentCoins = parseInt(coinElement.innerText) || 0;
             animateValue(coinElement, currentCoins, result.newBalance, 1000);
+            
             alert("🎉 " + result.message);
             btn.innerText = "今日已領取";
             btn.classList.replace('bg-indigo-600', 'bg-gray-700');
@@ -116,19 +86,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const user = JSON.parse(userData);
     
-    const nameEl = document.getElementById('dash-username');
-    if (nameEl) nameEl.innerText = user.username;
-
-    const welcomeEl = document.getElementById('welcome-user');
-    if (welcomeEl) welcomeEl.innerText = user.username;
+    if (document.getElementById('dash-username')) document.getElementById('dash-username').innerText = user.username;
+    if (document.getElementById('welcome-user')) document.getElementById('welcome-user').innerText = user.username;
     
     const avatarImg = document.getElementById('dash-avatar');
     if (avatarImg && user.avatar) {
         avatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
     }
 
+    initStaticStatus();
     fetchCoinsFromDB(user.id);
-    syncDiscordPresence(user.id);
 });
 
 function logout() {
