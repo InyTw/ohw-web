@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,38 +9,133 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        
-        body { 
-            background-color: #000; 
-            color: white; 
-            font-family: 'Inter', "Microsoft JhengHei", sans-serif;
-            overflow-x: hidden;
+
+        :root {
+            --theme-bg: #000;
+            --grid-color: rgba(255, 255, 255, 0.03);
+            --accent-color: #4f46e5;
         }
 
-        .grid-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.03) 1px, transparent 0); background-size: 30px 30px; z-index: -1; }
-        .glass { background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease; }
-        .nav-link-active { background: rgba(79, 70, 229, 0.1); color: #818cf8; border-left: 4px solid #4f46e5; }
-        
-        .store-card { background: rgba(15, 15, 15, 0.9); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 28px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; position: relative; }
-        .store-card:hover { transform: translateY(-10px); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); }
+        /* 宇宙黑主題樣式 */
+        body.theme-space {
+            --theme-bg: #050505;
+            --grid-color: rgba(99, 102, 241, 0.05);
+        }
 
+        body {
+            background-color: var(--theme-bg);
+            color: white;
+            font-family: 'Inter', "Microsoft JhengHei", sans-serif;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 2px 2px, var(--grid-color) 1px, transparent 0);
+            background-size: 30px 30px;
+            z-index: -1;
+            transition: background-image 0.5s ease;
+        }
+
+        .glass {
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link-active {
+            background: rgba(79, 70, 229, 0.1);
+            color: #818cf8;
+            border-left: 4px solid #4f46e5;
+        }
+
+        .store-card {
+            background: rgba(15, 15, 15, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 28px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .store-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Rank Colors */
         .rank-vip { border-top: 5px solid #55ff55; }
         .rank-vipp { border-top: 5px solid #55ff55; }
         .rank-mvp { border-top: 5px solid #55ffff; }
         .rank-mvpp { border-top: 5px solid #55ffff; }
-        .rank-mvppp { border-top: 5px solid #ffaa00; background: linear-gradient(180deg, rgba(255, 170, 0, 0.05) 0%, rgba(15, 15, 15, 0.9) 100%); }
+        .rank-mvppp {
+            border-top: 5px solid #ffaa00;
+            background: linear-gradient(180deg, rgba(255, 170, 0, 0.05) 0%, rgba(15, 15, 15, 0.9) 100%);
+        }
 
-        .price-tag { font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; }
-        .buy-btn { background: #fff; color: #000; font-weight: 900; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
-        .buy-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+        .price-tag {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .buy-btn {
+            background: #fff;
+            color: #000;
+            font-weight: 900;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
         .btn-ultimate { background: linear-gradient(90deg, #ffaa00, #ff7700); color: white; }
         .btn-gradient { background: linear-gradient(90deg, #6366f1, #a855f7); color: white; }
 
-        .modern-card { background: rgba(20, 20, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); border-radius: 20px; }
-        .rule-number { background: linear-gradient(90deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
-        .payment-selected { border: 2px solid #6366f1 !important; background: rgba(99, 102, 241, 0.1) !important; }
+        .modern-card {
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+        }
+
+        .rule-number {
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+
+        .payment-selected {
+            border: 2px solid #6366f1 !important;
+            background: rgba(99, 102, 241, 0.1) !important;
+        }
+
+        /* 主題按鈕樣式 */
+        .theme-option {
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+        .theme-option.active {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+        }
     </style>
 </head>
+
 <body class="flex min-h-screen">
     <div class="grid-bg"></div>
 
@@ -61,24 +157,32 @@
                     <button onclick="setPayment('Card', this)" class="payment-option w-full bg-white/5 border border-white/10 p-4 rounded-2xl flex items-center justify-between hover:bg-white/10 transition group">
                         <div class="flex items-center gap-3">
                             <span class="text-xl">💳</span>
-                            <div class="text-left leading-tight"><div class="text-white text-sm font-bold">信用卡 / ATM</div><div class="text-[9px] text-gray-500 uppercase font-bold">Credit Card</div></div>
+                            <div class="text-left leading-tight">
+                                <div class="text-white text-sm font-bold">信用卡 / ATM</div>
+                                <div class="text-[9px] text-gray-500 uppercase font-bold">Credit Card</div>
+                            </div>
                         </div>
                     </button>
                     <button onclick="setPayment('CVS', this)" class="payment-option w-full bg-white/5 border border-white/10 p-4 rounded-2xl flex items-center justify-between hover:bg-white/10 transition group">
                         <div class="flex items-center gap-3">
                             <span class="text-xl">🏪</span>
-                            <div class="text-left leading-tight"><div class="text-white text-sm font-bold">超商代碼</div><div class="text-[9px] text-gray-500 uppercase font-bold">CVS Code</div></div>
+                            <div class="text-left leading-tight">
+                                <div class="text-white text-sm font-bold">超商代碼</div>
+                                <div class="text-[9px] text-gray-500 uppercase font-bold">CVS Code</div>
+                            </div>
                         </div>
                     </button>
                 </div>
             </div>
-            <button onclick="finalSubmit()" class="w-full btn-gradient mt-8 py-4 rounded-2xl font-black tracking-widest hover:scale-[1.02] transition uppercase shadow-lg shadow-indigo-500/20">確認並前往付款</button>
+            <button onclick="finalSubmit()" class="w-full btn-gradient mt-8 py-4 rounded-2xl font-black tracking-widest hover:scale-[1.02] transition uppercase">確認並前往付款</button>
             <button onclick="closeModal()" class="w-full text-gray-600 text-[10px] mt-4 hover:text-white transition uppercase tracking-[0.3em] font-bold">取消結帳</button>
         </div>
     </div>
 
     <aside class="w-64 bg-[#0d1117] border-r border-white/5 flex flex-col fixed inset-y-0 left-0 z-50">
-        <div class="p-8"><div class="text-2xl font-black tracking-tighter text-indigo-500 italic">OHW NETWORK</div></div>
+        <div class="p-8">
+            <div class="text-2xl font-black tracking-tighter text-indigo-500 italic">OHW NETWORK</div>
+        </div>
         <nav class="flex-grow px-4 space-y-2">
             <button onclick="switchTab('overview')" id="nav-overview" class="nav-btn w-full nav-link-active flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-bold text-sm text-left">
                 <i class="fas fa-th-large"></i><span>Overview</span>
@@ -93,7 +197,7 @@
 
         <div class="p-4 border-t border-white/5 bg-[#0d1117] mt-auto">
             <div class="relative">
-                <div id="user-dropdown" class="hidden absolute bottom-16 left-0 right-0 bg-[#21262d] border border-white/10 rounded-2xl shadow-2xl py-2 z-50 overflow-hidden">
+                <div id="user-dropdown" class="hidden absolute bottom-16 left-0 right-0 bg-[#21262d] border border-white/10 rounded-2xl shadow-2xl py-2 z-50">
                     <button onclick="switchTab('settings')" class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-indigo-600 hover:text-white transition text-left">
                         <i class="fas fa-user-cog w-4 text-center"></i> 個人設定
                     </button>
@@ -103,20 +207,21 @@
                     </button>
                 </div>
                 <div class="bg-[#161b22] rounded-2xl p-3 border border-white/5 flex items-center justify-between">
-                    <div class="flex items-center gap-3 overflow-hidden">
+                    <div class="flex items-center gap-3">
                         <img id="dash-avatar" src="" class="w-9 h-9 rounded-full border border-indigo-500/30">
-                        <div class="overflow-hidden">
-                            <p id="dash-username" class="text-xs font-bold truncate text-gray-200">Loading...</p>
-                            <div class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span><p class="text-[9px] text-gray-500 font-bold uppercase">Online</p></div>
+                        <div>
+                            <p id="dash-username" class="text-xs font-bold truncate w-24 text-gray-200">Loading...</p>
+                            <div class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span><p class="text-[9px] text-gray-500 font-bold">ONLINE</p></div>
                         </div>
                     </div>
-                    <button onclick="toggleUserMenu(event)" id="user-menu-btn" class="text-gray-500 hover:text-white p-1 hover:bg-white/5 rounded-lg transition"><i class="fas fa-ellipsis-v text-xs"></i></button>
+                    <button onclick="toggleUserMenu(event)" id="user-menu-btn" class="text-gray-500 hover:text-white p-1"><i class="fas fa-ellipsis-v text-xs"></i></button>
                 </div>
             </div>
         </div>
     </aside>
 
     <main class="flex-grow ml-64 p-10 lg:p-16">
+        
         <div id="overview-section" class="tab-content">
             <header class="mb-12">
                 <h1 class="text-5xl font-black tracking-tighter uppercase italic">Overview</h1>
@@ -124,90 +229,142 @@
             </header>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                 <div class="glass p-8 rounded-[2rem]">
-                    <div class="flex justify-between items-start mb-6"><p class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">我的餘額</p><i class="fas fa-coins text-indigo-400"></i></div>
+                    <div class="flex justify-between items-start mb-6">
+                        <p class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">我的餘額</p>
+                        <i class="fas fa-coins text-indigo-400"></i>
+                    </div>
                     <h2 class="text-4xl font-black"><span id="coin-balance">--</span> <span class="text-sm font-bold text-indigo-400 uppercase">Coins</span></h2>
                 </div>
-                <div class="glass p-8 rounded-[2rem] border-indigo-500/10">
+                <div class="glass p-8 rounded-[2rem]">
                     <p class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-6">每日獎勵</p>
                     <button onclick="claimReward()" id="claim-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-4 rounded-2xl transition shadow-lg shadow-indigo-500/20 active:scale-95">CLAIM 10 COINS</button>
                 </div>
             </div>
             <div class="glass p-10 rounded-[2.5rem]">
                 <h3 class="text-sm font-bold uppercase tracking-widest text-gray-500 mb-8 flex items-center gap-2"><span class="w-2 h-2 bg-indigo-500 rounded-full"></span> 最近活動</h3>
-                <div class="space-y-6 text-sm font-bold text-gray-400"><p>• 您已透過 Discord 帳號安全登入系統。</p><p>• 商店連線已就緒，可開始贊助支持。</p></div>
+                <div class="space-y-6 text-sm font-bold text-gray-400">
+                    <p>• 您已透過 Discord 帳號安全登入系統。</p>
+                    <p>• 商店連線已就緒，可開始贊助支持。</p>
+                </div>
             </div>
         </div>
 
         <div id="store-section" class="tab-content hidden">
             <header class="mb-12">
                 <h1 class="text-5xl font-black tracking-tighter uppercase italic">Rank Store</h1>
-                <p class="text-gray-500 tracking-[0.4em] uppercase text-xs mt-2 font-bold">Exclusive Ranks & VIP Benefits</p>
             </header>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-20">
-                <div class="store-card p-6 rank-vip"><h3 class="text-3xl font-black mb-6 italic text-[#55ff55]">[VIP]</h3><div class="price-tag mb-8 text-white">$100<span class="text-[10px] text-gray-500 ml-1">NTD</span></div><button onclick="openCheckout('[VIP]', '$100 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs">立即結帳</button></div>
-                <div class="store-card p-6 rank-vipp"><h3 class="text-3xl font-black mb-6 italic text-[#55ff55]">[VIP+]</h3><div class="price-tag mb-8 text-white">$250<span class="text-[10px] text-gray-500 ml-1">NTD</span></div><button onclick="openCheckout('[VIP+]', '$250 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs">立即結帳</button></div>
-                <div class="store-card p-6 rank-mvp"><h3 class="text-3xl font-black mb-6 italic text-[#55ffff]">[MVP]</h3><div class="price-tag mb-8 text-white">$450<span class="text-[10px] text-gray-500 ml-1">NTD</span></div><button onclick="openCheckout('[MVP]', '$450 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs !bg-[#55ffff]">立即結帳</button></div>
-                <div class="store-card p-6 rank-mvpp bg-white/5"><h3 class="text-3xl font-black mb-6 italic text-[#55ffff]">[MVP+]</h3><div class="price-tag mb-8 text-white">$700<span class="text-[10px] text-gray-500 ml-1">NTD</span></div><button onclick="openCheckout('[MVP+]', '$700 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs !bg-[#55ffff]">立即結帳</button></div>
-                <div class="store-card p-6 rank-mvppp"><h3 class="text-3xl font-black mb-6 italic text-[#ffaa00]">[MVP++]</h3><div class="price-tag mb-8 text-[#ffaa00]">$1200<span class="text-[10px] text-white ml-1">NTD</span></div><button onclick="openCheckout('[MVP++]', '$1200 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs btn-ultimate">立即結帳</button></div>
+                <div class="store-card p-6 rank-vip">
+                    <h3 class="text-3xl font-black mb-6 italic text-[#55ff55]">[VIP]</h3>
+                    <div class="price-tag mb-8 text-white">$100<span class="text-[10px] text-gray-500 ml-1">NTD</span></div>
+                    <button onclick="openCheckout('[VIP]', '$100 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs">立即結帳</button>
+                </div>
+                <div class="store-card p-6 rank-vipp">
+                    <h3 class="text-3xl font-black mb-6 italic text-[#55ff55]">[VIP+]</h3>
+                    <div class="price-tag mb-8 text-white">$250<span class="text-[10px] text-gray-500 ml-1">NTD</span></div>
+                    <button onclick="openCheckout('[VIP+]', '$250 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs">立即結帳</button>
+                </div>
+                <div class="store-card p-6 rank-mvp">
+                    <h3 class="text-3xl font-black mb-6 italic text-[#55ffff]">[MVP]</h3>
+                    <div class="price-tag mb-8 text-white">$450<span class="text-[10px] text-gray-500 ml-1">NTD</span></div>
+                    <button onclick="openCheckout('[MVP]', '$450 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs !bg-[#55ffff]">立即結帳</button>
+                </div>
+                <div class="store-card p-6 rank-mvpp">
+                    <h3 class="text-3xl font-black mb-6 italic text-[#55ffff]">[MVP+]</h3>
+                    <div class="price-tag mb-8 text-white">$700<span class="text-[10px] text-gray-500 ml-1">NTD</span></div>
+                    <button onclick="openCheckout('[MVP+]', '$700 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs !bg-[#55ffff]">立即結帳</button>
+                </div>
+                <div class="store-card p-6 rank-mvppp">
+                    <h3 class="text-3xl font-black mb-6 italic text-[#ffaa00]">[MVP++]</h3>
+                    <div class="price-tag mb-8 text-[#ffaa00]">$1200<span class="text-[10px] text-white ml-1">NTD</span></div>
+                    <button onclick="openCheckout('[MVP++]', '$1200 NTD')" class="buy-btn w-full py-4 rounded-2xl text-xs btn-ultimate">立即結帳</button>
+                </div>
             </div>
-            <header class="mb-12"><h1 class="text-4xl font-black tracking-tighter uppercase italic">Coins Store</h1><p class="text-gray-500 tracking-[0.4em] uppercase text-xs mt-2 font-bold">Buy In-Game Currency</p></header>
+            <header class="mb-12"><h1 class="text-4xl font-black tracking-tighter uppercase italic">Coins Store</h1></header>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-20">
-                <div class="store-card p-8 rank-vip text-center"><h4 class="text-xs font-bold text-gray-500 uppercase mb-2">Pocket Bag</h4><h2 class="text-3xl font-black mb-8 italic">1,000 <span class="text-xs">COINS</span></h2><div class="price-tag mb-8">$100</div><button onclick="openCheckout('1,000 Coins', '$100 NTD')" class="buy-btn w-full py-4 rounded-2xl">立即結帳</button></div>
-                <div class="store-card p-8 rank-mvp text-center scale-105 bg-white/5 border-white/10"><h4 class="text-xs font-bold text-indigo-400 uppercase mb-2">Treasury Box</h4><h2 class="text-3xl font-black mb-8 italic">5,000 <span class="text-xs">COINS</span></h2><div class="price-tag mb-8">$500</div><button onclick="openCheckout('5,000 Coins', '$500 NTD')" class="buy-btn w-full py-4 rounded-2xl !bg-indigo-500 !text-white">立即結帳</button></div>
-                <div class="store-card p-8 rank-mvppp text-center"><h4 class="text-xs font-bold text-orange-400 uppercase mb-2">Vault Pack</h4><h2 class="text-3xl font-black mb-8 italic">12,000 <span class="text-xs">COINS</span></h2><div class="price-tag mb-8">$1000</div><button onclick="openCheckout('12,000 Coins', '$1000 NTD')" class="buy-btn w-full py-4 rounded-2xl btn-ultimate">立即結帳</button></div>
+                <div class="store-card p-8 rank-vip text-center">
+                    <h2 class="text-3xl font-black mb-8 italic">1,000 COINS</h2>
+                    <div class="price-tag mb-8">$100</div>
+                    <button onclick="openCheckout('1,000 Coins', '$100 NTD')" class="buy-btn w-full py-4 rounded-2xl">立即結帳</button>
+                </div>
+                <div class="store-card p-8 rank-mvp text-center scale-105 bg-white/5">
+                    <h2 class="text-3xl font-black mb-8 italic">5,000 COINS</h2>
+                    <div class="price-tag mb-8">$500</div>
+                    <button onclick="openCheckout('5,000 Coins', '$500 NTD')" class="buy-btn w-full py-4 rounded-2xl !bg-indigo-500 !text-white">立即結帳</button>
+                </div>
+                <div class="store-card p-8 rank-mvppp text-center">
+                    <h2 class="text-3xl font-black mb-8 italic">12,000 COINS</h2>
+                    <div class="price-tag mb-8">$1000</div>
+                    <button onclick="openCheckout('12,000 Coins', '$1000 NTD')" class="buy-btn w-full py-4 rounded-2xl btn-ultimate">立即結帳</button>
+                </div>
             </div>
         </div>
 
         <div id="rules-section" class="tab-content hidden">
-            <header class="mb-12"><h1 class="text-5xl font-black tracking-tighter uppercase italic">Rules</h1><p class="text-gray-400 font-bold mt-2 text-lg">請遵守以下伺服器規範</p></header>
+            <header class="mb-12"><h1 class="text-5xl font-black tracking-tighter uppercase italic">Rules</h1></header>
             <div class="space-y-12">
-                <section class="modern-card p-8 md:p-12">
+                <section class="modern-card p-8">
                     <div class="flex items-center mb-6"><span class="rule-number text-4xl mr-4">01</span><h2 class="text-3xl font-black">一般準則</h2></div>
-                    <ul class="space-y-6 text-gray-300">
-                        <li class="flex items-start"><span class="text-indigo-500 mr-3 mt-1">●</span><div><p class="font-bold text-white">尊重所有玩家</p><p class="text-sm">嚴禁任何形式的歧視、霸凌或人身攻擊。</p></div></li>
-                        <li class="flex items-start"><span class="text-indigo-500 mr-3 mt-1">●</span><div><p class="font-bold text-white">帳號安全</p><p class="text-sm">玩家需自行負擔帳號安全責任，任何由該帳號發出的行為皆視為本人所為。</p></div></li>
-                    </ul>
+                    <p class="text-gray-300 font-bold">尊重所有玩家，嚴禁霸凌。</p>
                 </section>
-                <section class="modern-card p-8 md:p-12">
+                <section class="modern-card p-8">
                     <div class="flex items-center mb-6"><span class="rule-number text-4xl mr-4">02</span><h2 class="text-3xl font-black">聊天室規範</h2></div>
-                    <ul class="space-y-6 text-gray-300">
-                        <li class="flex items-start"><span class="text-indigo-500 mr-3 mt-1">●</span><div><p class="font-bold text-white">嚴禁洗頻與廣告</p><p class="text-sm">禁止發送重複訊息、推廣其他伺服器網址或 Discord 連結。</p></div></li>
-                        <li class="flex items-start"><span class="text-indigo-500 mr-3 mt-1">●</span><div><p class="font-bold text-white">語言規範</p><p class="text-sm">請勿在公共頻道使用粗口、髒話或帶有性暗示的言論。</p></div></li>
-                    </ul>
+                    <p class="text-gray-300 font-bold">禁止洗頻與推廣其他伺服器。</p>
                 </section>
-                <section class="modern-card p-8 md:p-12 border-l-4 border-l-indigo-600">
-                    <div class="flex items-center mb-6"><span class="rule-number text-4xl mr-4">03</span><h2 class="text-3xl font-black">遊戲公平性 (重要)</h2></div>
-                    <div class="bg-red-500/10 border border-red-500/20 p-6 rounded-xl mb-6"><p class="text-red-400 text-sm font-bold italic">！OHW 伺服器對外掛程式採取零容忍政策</p></div>
-                    <ul class="space-y-6 text-gray-300">
-                        <li class="flex items-start"><span class="text-indigo-500 mr-3 mt-1">●</span><div><p class="font-bold text-white">禁止非法客戶端</p><p class="text-sm">嚴禁使用任何自動點擊器 (Autoclicker)、飛行、穿牆或 X-Ray 等模組。</p></div></li>
-                        <li class="flex items-start"><span class="text-indigo-500 mr-3 mt-1">●</span><div><p class="font-bold text-white">禁止惡意利用漏洞 (Bug)</p><p class="text-sm">發現漏洞請立即回報，惡意利用獲利者將面臨永久封禁。</p></div></li>
-                    </ul>
+                <section class="modern-card p-8 border-l-4 border-indigo-600">
+                    <div class="flex items-center mb-6"><span class="rule-number text-4xl mr-4">03</span><h2 class="text-3xl font-black">遊戲公平性</h2></div>
+                    <p class="text-gray-300 font-bold">禁止使用任何外掛 (Cheat/Hack)。</p>
                 </section>
-                <section class="modern-card p-8 md:p-12 border-l-4 border-l-indigo-600">
+                <section class="modern-card p-8 border-l-4 border-red-600">
                     <div class="flex items-center mb-6"><span class="rule-number text-4xl mr-4">04</span><h2 class="text-3xl font-black">處罰條例</h2></div>
-                    <div class="bg-red-500/10 border border-red-500/20 p-6 rounded-xl mb-6"><p class="text-red-400 text-sm font-bold italic">！OHW 伺服器尚未對此做出決策</p></div>
+                    <p class="text-red-400 font-bold italic">！OHW 伺服器尚未對此做出決策。</p>
                 </section>
             </div>
         </div>
 
         <div id="settings-section" class="tab-content hidden">
-            <header class="mb-12"><h1 class="text-5xl font-black tracking-tighter uppercase italic">Settings</h1><p class="text-gray-400 font-bold mt-2 text-lg">管理您的帳戶與隱私設定</p></header>
+            <header class="mb-12">
+                <h1 class="text-5xl font-black tracking-tighter uppercase italic">Settings</h1>
+            </header>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 space-y-6">
+                <div class="lg:col-span-2 space-y-8">
                     <div class="glass p-8 rounded-[2.5rem]">
-                        <h3 class="text-xs font-bold uppercase tracking-widest text-indigo-500 mb-6 flex items-center gap-2"><i class="fas fa-id-card"></i> Profile Information</h3>
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-indigo-500 mb-6 italic">Profile Information</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="block text-[10px] uppercase font-black text-gray-500 mb-2 ml-1 italic">Minecraft ID (不可變更)</label><input type="text" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl focus:outline-none text-gray-400 font-bold cursor-not-allowed" value="inytw" readonly></div>
-                            <div><label class="block text-[10px] uppercase font-black text-gray-500 mb-2 ml-1 italic">顯示暱稱</label><input type="text" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl focus:outline-none focus:border-indigo-500 transition font-bold" placeholder="輸入你想顯示的名稱"></div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-black text-gray-500 mb-2">Minecraft ID</label>
+                                <input type="text" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-gray-400 font-bold" value="inytw" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-black text-gray-500 mb-2">顯示暱稱</label>
+                                <input type="text" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl focus:border-indigo-500 outline-none transition font-bold">
+                            </div>
                         </div>
-                        <button class="mt-8 px-8 py-3 bg-white text-black font-black rounded-xl hover:scale-105 transition text-xs uppercase tracking-widest">儲存變更</button>
+                    </div>
+
+                    <div class="glass p-8 rounded-[2.5rem]">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-indigo-500 mb-6 italic">Preferences (主題切換)</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div onclick="setTheme('dark')" id="theme-dark" class="theme-option p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3">
+                                <div class="w-4 h-4 rounded-full bg-black border border-white/20"></div>
+                                <span class="text-sm font-bold">Dark Mode (預設)</span>
+                            </div>
+                            <div onclick="setTheme('space')" id="theme-space" class="theme-option p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3">
+                                <div class="w-4 h-4 rounded-full bg-indigo-900 border border-indigo-400"></div>
+                                <span class="text-sm font-bold">Space Black (宇宙黑)</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="space-y-6">
                     <div class="glass p-8 rounded-[2.5rem]">
                         <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">Linked Accounts</h3>
                         <div class="flex items-center justify-between p-4 bg-[#5865F2]/10 border border-[#5865F2]/30 rounded-2xl">
-                            <div class="flex items-center gap-3"><i class="fab fa-discord text-xl text-[#5865F2]"></i><div><p class="text-xs font-bold">Discord</p><p class="text-[10px] text-gray-400">Status: Active</p></div></div>
+                            <div class="flex items-center gap-3">
+                                <i class="fab fa-discord text-xl text-[#5865F2]"></i>
+                                <div><p class="text-xs font-bold">Discord</p></div>
+                            </div>
                             <span class="text-[10px] font-black text-[#5865F2] uppercase">已連結</span>
                         </div>
                     </div>
@@ -217,19 +374,59 @@
     </main>
 
     <script>
+        // 切換分頁邏輯
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(s => s.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('nav-link-active'); b.classList.add('text-gray-500'); });
-            document.getElementById(tabId + '-section').classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('nav-link-active');
+                b.classList.add('text-gray-500');
+            });
+
+            const targetSection = document.getElementById(tabId + '-section');
+            if (targetSection) targetSection.classList.remove('hidden');
+
             const navBtn = document.getElementById('nav-' + tabId);
-            if (navBtn) { navBtn.classList.add('nav-link-active'); navBtn.classList.remove('text-gray-500'); }
+            if (navBtn) {
+                navBtn.classList.add('nav-link-active');
+                navBtn.classList.remove('text-gray-500');
+            }
             document.getElementById('user-dropdown').classList.add('hidden');
             window.scrollTo(0, 0);
         }
 
-        function toggleUserMenu(event) { event.stopPropagation(); document.getElementById('user-dropdown').classList.toggle('hidden'); }
-        function openCheckout(name, price) { document.getElementById('modal-item-name').innerText = name; document.getElementById('modal-price').innerText = price; document.getElementById('checkout-modal').classList.remove('hidden'); }
-        function closeModal() { document.getElementById('checkout-modal').classList.add('hidden'); }
+        // 主題切換邏輯 (新增)
+        function setTheme(theme) {
+            document.body.classList.remove('theme-space');
+            document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
+
+            if (theme === 'space') {
+                document.body.classList.add('theme-space');
+                document.getElementById('theme-space').classList.add('active');
+            } else {
+                document.getElementById('theme-dark').classList.add('active');
+            }
+            localStorage.setItem('ohw-theme', theme);
+        }
+
+        // 初始化主題
+        const savedTheme = localStorage.getItem('ohw-theme') || 'dark';
+        setTheme(savedTheme);
+
+        // 其餘原有功能
+        function toggleUserMenu(event) {
+            event.stopPropagation();
+            document.getElementById('user-dropdown').classList.toggle('hidden');
+        }
+
+        function openCheckout(name, price) {
+            document.getElementById('modal-item-name').innerText = name;
+            document.getElementById('modal-price').innerText = price;
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
 
         let selectedMethod = '';
         function setPayment(method, el) {
@@ -239,13 +436,22 @@
         }
 
         function finalSubmit() {
-            if(!selectedMethod) { alert('請選擇支付方式！'); return; }
+            if (!selectedMethod) { alert('請選擇支付方式！'); return; }
             alert(`正在為玩家 [inytw] 導向支付...\n項目: ${document.getElementById('modal-item-name').innerText}\n方式: ${selectedMethod}`);
         }
 
-        window.onclick = function(e) { if (!e.target.closest('#user-menu-btn')) document.getElementById('user-dropdown').classList.add('hidden'); }
-        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+        window.onclick = function (e) {
+            if (!e.target.closest('#user-menu-btn')) {
+                document.getElementById('user-dropdown').classList.add('hidden');
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
     </script>
     <script src="script/dash.js"></script>
 </body>
+
 </html>
