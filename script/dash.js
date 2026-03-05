@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://thick-foxes-end.loca.lt/api";
+const API_BASE_URL = "http://ohw-api.loca.lt";
 
 function animateValue(obj, start, end, duration) {
     let startTimestamp = null;
@@ -24,7 +24,7 @@ function initStaticStatus() {
 
 async function fetchCoinsFromDB(discordID) {
     try {
-        const response = await fetch(`${API_BASE_URL}/get_player_data.php?discordID=${discordID}`, {
+        const response = await fetch(`${API_BASE_URL}/api/get_player_data.php?discordID=${discordID}`, {
             headers: { 'ngrok-skip-browser-warning': 'true' }
         });
         const data = await response.json();
@@ -50,7 +50,7 @@ async function claimReward() {
     formData.append('username', userData.username);
 
     try {
-        const response = await fetch(`${API_BASE_URL}/claim_reward.php`, {
+        const response = await fetch(`${API_BASE_URL}/api/claim_reward.php`, {
             method: 'POST',
             body: formData,
             headers: { 'ngrok-skip-browser-warning': 'true' }
