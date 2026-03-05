@@ -1,4 +1,4 @@
-const API_BASE_URL = "172.27.160.60/api";
+const API_BASE_URL = "https://thick-foxes-end.loca.lt/api/";
 
 function animateValue(obj, start, end, duration) {
     let startTimestamp = null;
