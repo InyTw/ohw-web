@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://buzzard-assured-unicorn.ngrok-free.app/api";
+const API_BASE_URL = "172.27.160.60/api";
 
 function animateValue(obj, start, end, duration) {
     let startTimestamp = null;
