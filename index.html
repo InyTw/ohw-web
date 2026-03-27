@@ -5,94 +5,187 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OHW Network | HOME</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="icon" href="images/server-icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', "Microsoft JhengHei", sans-serif; background-color: #000000; color: #fff; overflow-x: hidden; }
-        .grid-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 40px 40px; z-index: -1; }
-        .glow-spot { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%); filter: blur(50px); border-radius: 50%; z-index: -1; }
-        .modern-card { background: rgba(20, 20, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-radius: 20px; transition: 0.3s; }
-        .modern-card:hover { border-color: #6366f1; box-shadow: 0 0 30px rgba(99, 102, 241, 0.2); }
-        .text-glow { text-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
-        .btn-gradient { background: linear-gradient(90deg, #6366f1, #a855f7); transition: 0.3s; color: white; }
-        .btn-gradient:hover { filter: brightness(1.2); box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
+        body { 
+            font-family: 'Inter', "Microsoft JhengHei", sans-serif; 
+            background-color: #f0f2f5; 
+            color: #4a5568; 
+            overflow-x: hidden; 
+        }
+
+        /* --- 背景影片 --- */
+        .video-background {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+        .video-background video {
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: brightness(1.05);
+        }
+        
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(126, 126, 126, 0.5); 
+            backdrop-filter: blur(6px); 
+            z-index: -1;
+        }
+
+        /* --- 玻璃擬態卡片 --- */
+        .soft-card {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .text-soft-glow {
+            color: #6366f1;
+            text-shadow: 0 5px 15px rgba(99, 102, 241, 0.1);
+            letter-spacing: -0.05em;
+        }
+
+        /* --- 滑出動畫初始狀態 --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        /* 被觸發後的狀態 */
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center">
 
-    <div class="grid-bg"></div>
-    <div class="glow-spot" style="top: -200px; left: -100px;"></div>
-
-    <nav class="flex items-center justify-between px-8 py-6 bg-black/50 backdrop-blur-md sticky top-0 z-50">
-    
-
-    <div class="hidden md:flex flex-grow justify-center">
-        <div class="flex space-x-8 text-xs font-bold uppercase tracking-widest text-gray-400">
-            <a href="https://www.ohw.cloud-ip.cc/index.html" class="hover:text-white transition">Home</a>
-            <a href="https://www.ohw.cloud-ip.cc/rules.html" class="hover:text-white transition">Rules</a>
-        </div>
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="images/nijika-ijichi-bocchi-the-rock.3840x2160.mp4" type="video/webm">
+        </video>
     </div>
+    <div class="bg-overlay"></div>
 
-    <div class="flex-shrink-0 min-w-[120px] flex justify-end">
-        <div id="auth-zone">
-            <a href="login.html" id="nav-login-btn" class="text-xs font-bold uppercase tracking-widest bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-md transition shadow-lg shadow-indigo-500/20">
+    <!-- 導覽列 -->
+    <nav class="w-full flex items-center justify-between px-12 py-6 bg-white/20 backdrop-blur-md sticky top-0 z-50 border-b border-white/30">
+        <div class="flex-shrink-0 font-bold tracking-tighter text-indigo-500 text-xl">OHW</div>
+        <div class="hidden md:flex flex-grow justify-center">
+            <div class="flex space-x-10 text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+                <a href="#" class="hover:text-indigo-500 transition">Home</a>
+                <a href="#" class="hover:text-indigo-500 transition">Rules</a>
+            </div>
+        </div>
+        <div class="flex-shrink-0">
+            <a href="/login.html" class="text-xs font-bold uppercase tracking-widest bg-white/60 border border-white text-indigo-600 px-6 py-2.5 rounded-full hover:bg-indigo-50 transition shadow-sm">
                 Login
             </a>
-            
-            <a href="dashboard.html" id="nav-user-info" class="hidden flex items-center gap-3 group transition">
-                <div class="text-right hidden sm:block">
-                    <p id="nav-username" class="text-[10px] font-bold text-white uppercase tracking-widest leading-none">Username</p>
-                    <p class="text-[9px] text-indigo-400 font-bold uppercase tracking-tighter">Dashboard</p>
-                </div>
-                <img id="nav-avatar" src="" alt="" class="w-9 h-9 rounded-full border-2 border-indigo-500/50 group-hover:border-indigo-400 transition">
-            </a>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <main class="w-full max-w-5xl px-6">
-        <div class="text-center py-20">
-            <h1 class="text-7xl md:text-9xl font-black mb-6 tracking-tighter text-glow">OHW NETWORK</h1>
-            <p class="text-gray-400 text-lg mb-10 tracking-wide">全台首選競技平台：疊橋、PVP、極限生存</p>
-            
-            <div class="flex flex-col md:flex-row justify-center items-center gap-6">
-                <button onclick="copyIP()" class="btn-gradient px-12 py-5 rounded-full font-black text-xl tracking-tighter">
-                    <span id="ip-text">ohw.cloud-ip.cc</span>
-                </button>
-                <div class="flex items-center space-x-3">
-                    <div class="w-3 h-3 bg-green-500 rounded-full animate-ping"></div>
-                    <span id="player-count" class="text-sm font-bold text-gray-300">SERVER ONLINE</span>
-                </div>
+        <!-- Hero Section -->
+        <div class="text-center py-40">
+            <h1 class="text-6xl md:text-8xl font-light mb-6 text-soft-glow tracking-tighter">OHW NETWORK</h1>
+            <p class="text-gray-500 text-lg mb-12 tracking-[0.3em] font-light">全台首選競技平台：疊橋、PVP、極限生存</p>
+            <div class="animate-bounce mt-10 text-indigo-300">
+                <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 14l-7 7m0 0l-7-7m7 7V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
-            <div class="modern-card p-8 text-center">
-                <h3 class="text-indigo-400 text-xs font-black mb-2 uppercase tracking-widest">Game Mode</h3>
-                <p class="text-2xl font-bold">THE BRIDGE</p>
-            </div>
-            <div class="modern-card p-8 text-center border-b-4 border-b-indigo-500">
-                <h3 class="text-indigo-400 text-xs font-black mb-2 uppercase tracking-widest">Game Mode</h3>
-                <p class="text-2xl font-bold">PVP ARENA</p>
-            </div>
-            <div class="modern-card p-8 text-center">
-                <h3 class="text-indigo-400 text-xs font-black mb-2 uppercase tracking-widest">Game Mode</h3>
-                <p class="text-2xl font-bold">SURVIVAL</p>
+        <!-- 介紹區塊 (滑出) -->
+        <section class="reveal py-20">
+    <div class="soft-card p-10 flex flex-col md:flex-row items-center gap-12">
+        <div class="w-full md:w-1/2 flex flex-col items-center">
+            <!-- GIF 圖片 -->
+            <img src="https://media.tenor.com/bCMiGmOTl9kAAAAM/sakiko-mygo.gif" alt="Intro" class="rounded-2xl shadow-lg mb-6">
+            
+            <!-- 前往 saki_music.html 的連結按鈕 -->
+            <a href="saki_music.html" class="group relative flex items-center justify-center px-8 py-3 font-bold text-white transition-all duration-300">
+                <span class="absolute inset-0 w-full h-full rounded-full bg-gradient-to-r from-indigo-400 to-purple-400 opacity-70 blur-sm group-hover:opacity-100 group-hover:blur-md transition-all"></span>
+                <span class="relative flex items-center gap-2 text-sm tracking-widest">
+                    前往 【小祥音樂】 更新日誌
+                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </span>
+            </a>
+        </div>
+
+        <div class="w-full md:w-1/2 space-y-6">
+            <h2 class="text-3xl font-bold text-gray-700"> 小祥音樂降臨 Σ(っ°Д°;)っ</h2>
+            <p class="text-gray-500 leading-relaxed">
+                Saki Music 是一款專為音樂設計的 Discord 機器人，提供高品質的音樂播放體驗。無論是個人聆聽還是群組聚會，Saki Music 都能滿足您的需求，讓音樂成為您社交的神人。
+            </p>
+            <div class="flex gap-4">
+                <span class="px-4 py-2 bg-indigo-100/50 text-indigo-500 rounded-full text-xs font-bold uppercase">支援連結搜尋</span>
+                <span class="px-4 py-2 bg-teal-100/50 text-teal-600 rounded-full text-xs font-bold uppercase">中、低延遲</span>
             </div>
         </div>
+    </div>
+</section>
+
+        <!-- 連結區塊 (滑出) -->
+        <section class="reveal py-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <a href="https://www.ohw.cloud-ip.cc/discord" class="soft-card p-8 group hover:bg-white/50 transition">
+                    <div class="flex items-center gap-6">
+                        <div class="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-500 group-hover:scale-110 transition">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037 19.736 19.736 0 00-4.885 1.515.069.069 0 00-.032.027C.533 9.048-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-700">加入 Discord</h4>
+                            <p class="text-sm text-gray-400 font-light">與玩家社群互動，獲取最新消息</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://youtube.com/@InyTw87" class="soft-card p-8 group hover:bg-white/50 transition">
+                    <div class="flex items-center gap-6">
+                        <div class="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center text-red-500 group-hover:scale-110 transition">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505a3.017 3.017 0 00-2.122 2.136C0 8.055 0 12 0 12s0 3.945.501 5.814a3.015 3.015 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.945 24 12 24 12s0-3.945-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-700">官方 YouTube</h4>
+                            <p class="text-sm text-gray-400 font-light">觀看影片與最新通知</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
     </main>
 
-    <footer class="py-10 text-gray-700 text-[10px] tracking-widest uppercase">
+    <footer class="py-20 text-gray-400 text-[9px] tracking-[0.4em] uppercase font-light">
         © 2026 OHW Network Group. All rights reserved.
     </footer>
 
+    <!-- 動畫控制腳本 -->
     <script>
-        function copyIP() {
-            navigator.clipboard.writeText(serverIP);
-            const btnText = document.getElementById('ip-text');
-            btnText.innerText = "IP COPIED!";
-            setTimeout(() => { btnText.innerText = serverIP; }, 2000);
-        }
+        const observerOptions = {
+            threshold: 0.1 // 元件出現 10% 時觸發
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        // 監看所有帶有 .reveal 類別的標籤
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
     </script>
+
 </body>
 </html>
