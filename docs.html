@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saki Music | DOCS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0d0d0d; color: #e5e7eb; scroll-behavior: smooth; overflow: hidden; }
+        .sidebar-item { 
+            display: flex; align-items: center; padding: 8px 16px; font-size: 0.875rem;
+            color: #9ca3af; border-radius: 0.5rem; transition: all 0.2s; cursor: pointer;
+        }
+        .sidebar-item:hover { color: #fff; background-color: rgba(255,255,255,0.05); }
+        .sidebar-item.active { color: #818cf8; background-color: rgba(99, 102, 241, 0.1); font-weight: 600; }
+        .page-content { display: none; }
+        .page-content.active { display: block; animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        summary::-webkit-details-marker { display: none; }
+    </style>
+</head>
+<body class="flex h-screen">
+
+    <aside class="w-72 h-screen bg-[#0f0f0f] border-r border-white/5 flex flex-col shrink-0">
+        <div class="p-6 border-b border-white/5 flex items-center gap-3">
+            <img src="/images/sakikomusic.gif" class="w-8 h-8 rounded-full">
+            <span class="font-bold text-lg tracking-tight">小祥音樂 | Saki Music</span>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <details class="group" open>
+                <summary class="flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer hover:bg-white/5 transition">
+                    <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">開始使用</span>
+                    <svg class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <div class="mt-2 ml-2 border-l border-white/10 space-y-1">
+                    <div onclick="showPage('intro')" id="nav-intro" class="sidebar-item">簡介</div>
+                    <div onclick="showPage('features')" id="nav-features" class="sidebar-item">功能亮點</div>
+                </div>
+            </details>
+
+            <details class="group" open>
+                <summary class="flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer hover:bg-white/5 transition">
+                    <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">指令大集</span>
+                    <svg class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <div class="mt-2 ml-2 border-l border-white/10 space-y-1">
+                    <div onclick="showPage('info-cmd')" id="nav-info-cmd" class="sidebar-item">資訊指令</div>
+                    <div onclick="showPage('music-cmd')" id="nav-music-cmd" class="sidebar-item">音樂指令</div>
+                    <div onclick="showPage('other-cmd')" id="nav-other-cmd" class="sidebar-item">其他指令</div>
+                </div>
+            </details>
+
+            <details class="group">
+                <summary class="flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer hover:bg-white/5 transition">
+                    <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">機械狀態</span>
+                    <svg class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <div class="mt-2 ml-2 border-l border-white/10 space-y-1">
+                    <a href="/system/node-status.html" class="sidebar-item">節點狀態</a>
+                    <a href="/system/system-load.html" class="sidebar-item">系統負載</a>
+                </div>
+            </details>
+        </nav>
+
+        <div class="p-4 border-t border-white/5">
+            <a href="saki_music.html" class="text-xs text-gray-500 hover:text-white flex items-center gap-2 transition">← 返回更新紀錄</a>
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto p-12 bg-[#0d0d0d]">
+        <div class="max-w-4xl mx-auto">
+            
+            <div id="page-intro" class="page-content">
+                <header class="mb-12">
+                    <h1 class="text-5xl font-extrabold mb-4">簡介</h1>
+                    <p class="text-gray-400 text-lg">歡迎使用 Saki Music 小祥音樂文件中心。</p>
+                </header>
+                <div class="bg-[#161616] rounded-xl border border-white/5 overflow-hidden shadow-2xl p-6 space-y-4 text-sm leading-relaxed">
+                    <h3 class="text-blue-300 text-xl font-bold border-b border-white/5 pb-2">小祥音樂的出現...</h3>
+                    <p>一開始 InyTw 沒有想要做這個機器人，因為一直播放不了音樂。</p>
+                    <p class="text-gray-300">但後來他一次的成功，而成功改變了小祥音樂的人生。。。</p>
+                    <p class="text-gray-300">他一直更新新的內容...也一直不斷嘗試新的東西。終於他在 ohw Network 上建立了小祥音樂的家了！</p>
+                </div>
+            </div>
+
+            <div id="page-features" class="page-content">
+                <header class="mb-12">
+                    <h1 class="text-5xl font-extrabold mb-4">功能亮點</h1>
+                    <p class="text-gray-400 text-lg">小祥音樂 提供多種實用功能，讓您享受更好的音樂體驗。</p>
+                </header>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-[#161616] p-6 rounded-xl border border-white/5 shadow-xl">
+                        <div class="w-10 h-10 bg-indigo-500/20 text-indigo-400 flex items-center justify-center rounded-lg mb-4 font-bold">01</div>
+                        <h3 class="text-xl font-bold mb-2">高品質音質</h3>
+                        <p class="text-gray-400 text-sm">提供穩定且低延遲的音樂播放體驗，支援多種平台來源。</p>
+                    </div>
+                    <div class="bg-[#161616] p-6 rounded-xl border border-white/5 shadow-xl">
+                        <div class="w-10 h-10 bg-indigo-500/20 text-indigo-400 flex items-center justify-center rounded-lg mb-4 font-bold">02</div>
+                        <h3 class="text-xl font-bold mb-2">24在線上(?</h3>
+                        <p class="text-gray-400 text-sm">只要您需要，小祥隨時都在頻道為您播放心愛的樂曲。</p>
+                    </div>
+                    <div class="bg-[#161616] p-6 rounded-xl border border-white/5 shadow-xl">
+                        <div class="w-10 h-10 bg-indigo-500/20 text-indigo-400 flex items-center justify-center rounded-lg mb-4 font-bold">03</div>
+                        <h3 class="text-xl font-bold mb-2">便利性</h3>
+                        <p class="text-gray-400 text-sm">操作簡單直觀，讓您輕鬆享受音樂。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page-info-cmd" class="page-content">
+                <header class="mb-12">
+                    <h1 class="text-5xl font-extrabold mb-4">資訊指令</h1>
+                    <p class="text-gray-400 text-lg">查看機器人基本資訊的相關指令。</p>
+                </header>
+                <div class="bg-[#161616] rounded-xl border border-white/5 overflow-hidden shadow-2xl">
+                    <table class="w-full text-left border-collapse">
+                        <thead><tr class="bg-white/[0.02]"><th class="p-4 text-xs font-bold text-gray-400 uppercase">指令</th><th class="p-4 text-xs font-bold text-gray-400 uppercase">描述</th></tr></thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr class="hover:bg-white/[0.01] transition"><td class="p-4 font-mono text-indigo-400">/help</td><td class="p-4 text-gray-300 text-sm">顯示幫助指南與所有可用指令</td></tr>
+                            <tr class="hover:bg-white/[0.01] transition"><td class="p-4 font-mono text-indigo-400">/status</td><td class="p-4 text-gray-300 text-sm">查看目前系統延遲與伺服器資訊</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="page-music-cmd" class="page-content">
+                <header class="mb-12">
+                    <h1 class="text-5xl font-extrabold mb-4">音樂指令</h1>
+                </header>
+                <div class="bg-[#161616] rounded-xl border border-white/5 overflow-hidden shadow-2xl">
+                    <table class="w-full text-left border-collapse">
+                        <tbody class="divide-y divide-white/5">
+                            <tr class="hover:bg-white/[0.01] transition"><td class="p-4 font-mono text-indigo-400">/play [連結/名稱]</td><td class="p-4 text-gray-300 text-sm">搜尋音樂並播放</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="page-other-cmd" class="page-content">
+                <header class="mb-12"><h1 class="text-5xl font-extrabold mb-4">其他指令</h1></header>
+                <div class="bg-[#161616] rounded-xl border border-white/5 overflow-hidden shadow-2xl">
+                    <table class="w-full text-left border-collapse">
+                        <tbody class="divide-y divide-white/5">
+                            <tr class="hover:bg-white/[0.01] transition"><td class="p-4 font-mono text-indigo-400">/set_ticket</td><td class="p-4 text-gray-300 text-sm">設定客服單 (只限官方 Discord)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="page-node-status" class="page-content">
+                <header class="mb-12"><h1 class="text-5xl font-extrabold mb-4">節點狀態</h1></header>
+                <p class="text-gray-400">內容載入中...</p>
+            </div>
+
+            <div id="page-system-load" class="page-content">
+                <header class="mb-12"><h1 class="text-5xl font-extrabold mb-4">系統負載</h1></header>
+                <p class="text-gray-400">內容載入中...</p>
+            </div>
+
+        </div>
+    </main>
+
+    <aside class="w-64 h-screen sticky top-0 hidden xl:block p-12 overflow-y-auto bg-[#0d0d0d]">
+        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-6">本頁導覽</p>
+        <ul id="toc-list" class="space-y-4 text-sm border-l border-white/5 pl-4 text-gray-400"></ul>
+    </aside>
+
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                const navItem = document.getElementById('nav-' + pageId);
+                if (navItem) navItem.classList.add('active');
+                window.location.hash = pageId;
+                document.querySelector('main').scrollTo(0, 0);
+            }
+        }
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.replace('#', '');
+            if (hash) showPage(hash);
+        });
+        window.addEventListener('load', () => {
+            const hash = window.location.hash.replace('#', '');
+            showPage(hash || 'intro');
+        });
+    </script>
+</body>
+</html>
