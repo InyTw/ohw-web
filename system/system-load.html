@@ -64,22 +64,41 @@
 
     <script>
         async function refreshStats() {
-    // 加上時間戳防止快取
-    const res = await fetch(`./stats.json?t=${Date.now()}`);
-    const data = await res.json();
+    try {
+        // 1. 指向你的 GitHub Raw 連結，並加上時間戳防止瀏覽器快取
+        // 記得把下方網址換成你自己的 Repo 路徑
+        const GITHUB_RAW_URL = "https://raw.githubusercontent.com/InyTw/SakiBot-Music/main/stats.json";
+        const res = await fetch(`${GITHUB_RAW_URL}?t=${Date.now()}`);
+        const data = await res.json();
 
-    document.getElementById('uptime').innerText = data.uptime;
-    document.getElementById('guilds').innerText = data.guilds;
-    document.getElementById('players').innerText = data.players;
-    
-    // CPU & RAM 進度條更新
-    document.getElementById('cpu-text').innerText = `${data.cpu}%`;
-    document.getElementById('cpu-bar').style.width = `${data.cpu}%`;
-    document.getElementById('ram-text').innerText = `${data.ram_used}MB / ${data.ram_total}MB`;
-    document.getElementById('ram-bar').style.width = `${(data.ram_used / data.ram_total) * 100}%`;
+        // 2. 因為 main.py 現在產出的是 nodes 陣列，我們抓第一個節點 (TW-01)
+        const node = data.nodes[0];
+
+        // 3. 更新基礎文字資訊
+        document.getElementById('uptime').innerText = node.uptime;
+        document.getElementById('guilds').innerText = node.guilds;
+        
+        // 如果你的 main.py 沒抓玩家數，這裡可以先填固定值或從 system 抓
+        document.getElementById('players').innerText = data.system.lavalink === "connected" ? "運行中" : "斷開";
+
+        // 4. CPU 進度條更新
+        document.getElementById('cpu-text').innerText = `${node.cpu}%`;
+        document.getElementById('cpu-bar').style.width = `${node.cpu}%`;
+
+        // 5. RAM 進度條更新 (現在 main.py 給的是百分比)
+        document.getElementById('ram-text').innerText = `${node.ram_percent}%`;
+        document.getElementById('ram-bar').style.width = `${node.ram_percent}%`;
+        
+        // 6. 更新最後同步時間 (讓你知道數據有沒有過期)
+        console.log(`數據已更新於: ${data.last_update}`);
+
+    } catch (error) {
+        console.error("❌ 無法從 GitHub 獲取數據:", error);
+        document.getElementById('cpu-text').innerText = "連線失敗";
+    }
 }
 
-// 網頁每分鐘檢查一次新數據
+// 網頁每 1 分鐘檢查一次 GitHub 有沒有新數據
 setInterval(refreshStats, 60000);
 window.onload = refreshStats;
     </script>
