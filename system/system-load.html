@@ -66,7 +66,7 @@
 async function refreshStats() {
     try {
         // 使用 jsDelivr 代理 GitHub 檔案，確保 CORS 通過且讀取速度快
-        const GITHUB_URL = "https://raw.githubusercontent.com/InyTw/SakiBot-Music/main/stats.json";
+        const GITHUB_URL = "https://raw.githubusercontent.com/InyTw/SakiBot-Music/refs/heads/main/stats.json?token=GHSAT0AAAAAADVPMGB5NAKEL5NC5ZB2DQSC2OPO3BA";
         const res = await fetch(`${GITHUB_URL}?t=${Date.now()}`);
 
         if (!res.ok) throw new Error("GitHub 回傳錯誤");
