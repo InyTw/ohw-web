@@ -62,7 +62,7 @@
         <p id="last-update" class="mt-6 text-[10px] text-gray-600 font-mono uppercase text-right">Last sync: Never</p>
     </div>
 
-    <script>
+<script>
 async function refreshStats() {
     try {
         // 使用 jsDelivr 代理 GitHub 檔案，確保 CORS 通過且讀取速度快
@@ -73,7 +73,7 @@ async function refreshStats() {
 
         const data = await res.json();
 
-        // 1. 更新基礎資訊 (對應你提供的 JSON 欄位)
+        // 1. 更新基礎資訊 (對應你目前 stats.json 的欄位)
         document.getElementById('uptime').innerText = data.uptime || "---";
         document.getElementById('guilds').innerText = data.guilds || "0";
         document.getElementById('players').innerText = data.players || "0";
@@ -83,19 +83,19 @@ async function refreshStats() {
         document.getElementById('cpu-text').innerText = `${cpuVal}%`;
         document.getElementById('cpu-bar').style.width = `${cpuVal}%`;
 
-        // 3. 更新 RAM 條 (計算百分比)
+        // 3. 更新 RAM 條 (計算百分比: used / total * 100)
         const ramUsed = data.ram_used || 0;
         const ramTotal = data.ram_total || 2048;
-        const ramPercent = Math.round((ramUsed / ramTotal) * 100);
+        const ramPercent = Math.min(Math.round((ramUsed / ramTotal) * 100), 100);
         
         document.getElementById('ram-text').innerText = `${ramUsed}MB / ${ramTotal}MB`;
         document.getElementById('ram-bar').style.width = `${ramPercent}%`;
 
-        // 4. 更新同步時間
+        // 4. 更新同步時間標籤
         const now = new Date();
         document.getElementById('last-update').innerText = `Last sync: ${now.toLocaleTimeString()}`;
         
-        console.log("✅ 數據同步成功");
+        console.log("✅ 監控數據更新成功");
 
     } catch (error) {
         console.error("❌ 連線失敗:", error);
@@ -103,7 +103,7 @@ async function refreshStats() {
     }
 }
 
-// 每 60 秒自動刷新一次
+// 每 60 秒自動刷新一次數據
 setInterval(refreshStats, 60000);
 window.onload = refreshStats;
 </script>
