@@ -63,44 +63,44 @@
     </div>
 
     <script>
-        async function refreshStats() {
-    try {
-        // 1. 指向你的 GitHub Raw 連結，並加上時間戳防止瀏覽器快取
-        // 記得把下方網址換成你自己的 Repo 路徑
-        const GITHUB_RAW_URL = "https://raw.githubusercontent.com/InyTw/SakiBot-Music/main/stats.json";
-        const res = await fetch(`${GITHUB_RAW_URL}?t=${Date.now()}`);
-        const data = await res.json();
+    async function refreshStats() {
+        try {
+            // 1. 指向 GitHub 的 Raw 檔案連結，加上時間戳防止瀏覽器快取
+            const GITHUB_URL = "https://cdn.jsdelivr.net/gh/InyTw/SakiBot-Music@main/stats.json";
+            const res = await fetch(`${GITHUB_URL}?t=${Date.now()}`);
 
-        // 2. 因為 main.py 現在產出的是 nodes 陣列，我們抓第一個節點 (TW-01)
-        const node = data.nodes[0];
+            if (!res.ok) throw new Error("GitHub 回傳錯誤");
 
-        // 3. 更新基礎文字資訊
-        document.getElementById('uptime').innerText = node.uptime;
-        document.getElementById('guilds').innerText = node.guilds;
-        
-        // 如果你的 main.py 沒抓玩家數，這裡可以先填固定值或從 system 抓
-        document.getElementById('players').innerText = data.system.lavalink === "connected" ? "運行中" : "斷開";
+            const data = await res.json();
 
-        // 4. CPU 進度條更新
-        document.getElementById('cpu-text').innerText = `${node.cpu}%`;
-        document.getElementById('cpu-bar').style.width = `${node.cpu}%`;
+            // 2. 獲取第一個節點 (TW-01) 的數據
+            const node = data.nodes[0];
 
-        // 5. RAM 進度條更新 (現在 main.py 給的是百分比)
-        document.getElementById('ram-text').innerText = `${node.ram_percent}%`;
-        document.getElementById('ram-bar').style.width = `${node.ram_percent}%`;
-        
-        // 6. 更新最後同步時間 (讓你知道數據有沒有過期)
-        console.log(`數據已更新於: ${data.last_update}`);
+            // 3. 更新文字欄位
+            document.getElementById('uptime').innerText = node.uptime;
+            document.getElementById('guilds').innerText = node.guilds;
+            document.getElementById('players').innerText = data.system.lavalink === "connected" ? "連線中" : "離線";
 
-    } catch (error) {
-        console.error("❌ 無法從 GitHub 獲取數據:", error);
-        document.getElementById('cpu-text').innerText = "連線失敗";
+            // 4. 更新 CPU 進度條
+            document.getElementById('cpu-text').innerText = `${node.cpu}%`;
+            document.getElementById('cpu-bar').style.width = `${node.cpu}%`;
+
+            // 5. 更新 RAM 進度條
+            // 注意：因為 main.py 傳給我們的是 ram_percent
+            document.getElementById('ram-text').innerText = `${node.ram_percent}%`;
+            document.getElementById('ram-bar').style.width = `${node.ram_percent}%`;
+
+            console.log(`✅ 狀態已同步：${data.last_update}`);
+
+        } catch (error) {
+            console.error("❌ 連線失敗:", error);
+            document.getElementById('cpu-text').innerText = "連線失敗";
+        }
     }
-}
 
-// 網頁每 1 分鐘檢查一次 GitHub 有沒有新數據
-setInterval(refreshStats, 60000);
-window.onload = refreshStats;
+    // 每分鐘自動刷新一次
+    setInterval(refreshStats, 60000);
+    window.onload = refreshStats;
     </script>
 </body>
 </html>
