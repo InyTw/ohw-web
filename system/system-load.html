@@ -63,44 +63,53 @@
     </div>
 
     <script>
-    async function refreshStats() {
-        try {
-            // 1. 指向 GitHub 的 Raw 檔案連結，加上時間戳防止瀏覽器快取
-            const GITHUB_URL = "https://cdn.jsdelivr.net/gh/InyTw/SakiBot-Music@main/stats.json";
-            const res = await fetch(`${GITHUB_URL}?t=${Date.now()}`);
+async function refreshStats() {
+    try {
+        const statsContainer = document.getElementById('stats-container');
+        // 加上時間戳防止快取
+        const GITHUB_URL = "https://cdn.jsdelivr.net/gh/InyTw/SakiBot-Music@main/stats.json";
+        const res = await fetch(`${GITHUB_URL}?t=${Date.now()}`);
 
-            if (!res.ok) throw new Error("GitHub 回傳錯誤");
+        if (!res.ok) throw new Error("GitHub 回傳錯誤");
 
-            const data = await res.json();
+        const data = await res.json();
 
-            // 2. 獲取第一個節點 (TW-01) 的數據
-            const node = data.nodes[0];
+        // --- 根據你提供的 JSON 格式直接讀取 ---
+        document.getElementById('uptime').innerText = data.uptime || "---";
+        document.getElementById('guilds').innerText = data.guilds || "0";
+        document.getElementById('players').innerText = data.players || "0";
 
-            // 3. 更新文字欄位
-            document.getElementById('uptime').innerText = node.uptime;
-            document.getElementById('guilds').innerText = node.guilds;
-            document.getElementById('players').innerText = data.system.lavalink === "connected" ? "連線中" : "離線";
+        // 更新 CPU 進度條
+        const cpuVal = data.cpu || 0;
+        document.getElementById('cpu-text').innerText = `${cpuVal}%`;
+        document.getElementById('cpu-bar').style.width = `${cpuVal}%`;
 
-            // 4. 更新 CPU 進度條
-            document.getElementById('cpu-text').innerText = `${node.cpu}%`;
-            document.getElementById('cpu-bar').style.width = `${node.cpu}%`;
+        // 更新 RAM 進度條
+        // 根據你提供的 JSON: ram_used / ram_total
+        const ramUsed = data.ram_used || 0;
+        const ramTotal = data.ram_total || 2048;
+        const ramPercent = Math.round((ramUsed / ramTotal) * 100);
+        
+        document.getElementById('ram-text').innerText = `${ramUsed}MB / ${ramTotal}MB`;
+        document.getElementById('ram-bar').style.width = `${ramPercent}%`;
 
-            // 5. 更新 RAM 進度條
-            // 注意：因為 main.py 傳給我們的是 ram_percent
-            document.getElementById('ram-text').innerText = `${node.ram_percent}%`;
-            document.getElementById('ram-bar').style.width = `${node.ram_percent}%`;
+        // 更新同步時間
+        const now = new Date();
+        document.getElementById('last-update').innerText = `Last sync: ${now.toLocaleTimeString()}`;
+        
+        statsContainer.classList.remove('data-loading');
+        console.log("✅ 數據同步成功");
 
-            console.log(`✅ 狀態已同步：${data.last_update}`);
-
-        } catch (error) {
-            console.error("❌ 連線失敗:", error);
-            document.getElementById('cpu-text').innerText = "連線失敗";
-        }
+    } catch (error) {
+        console.error("❌ 連線失敗:", error);
+        document.getElementById('cpu-text').innerText = "連線失敗";
+        document.getElementById('stats-container').classList.add('data-loading');
     }
+}
 
-    // 每分鐘自動刷新一次
-    setInterval(refreshStats, 60000);
-    window.onload = refreshStats;
-    </script>
+// 每 60 秒自動刷新
+setInterval(refreshStats, 60000);
+window.onload = refreshStats;
+</script>
 </body>
 </html>
