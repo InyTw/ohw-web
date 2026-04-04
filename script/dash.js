@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initStaticStatus();
-    fetchCoinsFromDB(user.id);
 });
 
 function logout() {
