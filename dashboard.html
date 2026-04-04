@@ -337,23 +337,35 @@
 
         // 範例：獲取玩家 KBFFA 戰績
         async function getPlayerStats(name) {
-            try {
-                const response = await fetch(`api.php?player=${name}`);
-                const data = await response.json();
+        try {
+            // --- 關鍵修改點 ---
+            // 如果你用 Serveo：https://你的名稱.serveo.net/api.php
+            // 如果你用 LocalTunnel：https://inytw-api.localtunnel.me/api.php
+            const TUNNEL_URL = "https://ohw-api.serveousercontent.com/api.php"; 
             
-                if (data.error) {
-                    console.warn(data.error);
-                    return;
-                }
+            const response = await fetch(`${TUNNEL_URL}?player=${name}`);
+            // -----------------
             
-                // 把數據塞進你原本的 HTML ID 裡
-                document.getElementById('kbffa-kills').innerText = data.kills;
-                document.getElementById('kbffa-streak').innerText = data.max_streak;
-                
-            } catch (err) {
-                console.error("無法連接到 API:", err);
+            const data = await response.json();
+        
+            if (data.error) {
+                console.warn(data.error);
+                return;
             }
+        
+            // 把數據塞進你原本的 HTML ID 裡
+            // 記得 HTML 裡要有對應的 <span id="kbffa-kills"></span> 等標籤
+            if(document.getElementById('kbffa-kills')) {
+                document.getElementById('kbffa-kills').innerText = data.kills || 0;
+            }
+            if(document.getElementById('kbffa-max-streak')) { // 修正一下變數名稱
+                document.getElementById('kbffa-max-streak').innerText = data.max_streak || 0;
+            }
+            
+        } catch (err) {
+            console.error("無法連接到 API (請確認隧道是否開啟):", err);
         }
+    }
 
 // 執行測試
 getPlayerStats('InyTw');
