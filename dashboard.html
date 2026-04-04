@@ -124,7 +124,7 @@
         <div class="p-10">
             <div class="flex items-center gap-3">
                 <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-black text-white">O</div>
-                <span class="font-black text-white tracking-tighter text-xl">OHW DASH</span>
+                <span class="font-black text-white tracking-tighter text-xl">OHW DASHBOARD</span>
             </div>
         </div>
 
@@ -178,23 +178,54 @@
                 <h1 class="text-4xl lg:text-5xl font-black text-white tracking-tighter italic uppercase mb-2">Overview</h1>
                 <p class="text-indigo-400 font-medium">歡迎回來，<span id="welcome-user">玩家</span>。</p>
             </header>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+    
+    <div class="bg-[#161616] border border-white/10 p-6 rounded-2xl">
+        <p class="text-xs text-gray-500 uppercase font-bold tracking-widest mb-2">玩家階級</p>
+        <div class="flex items-center gap-3">
+            <span id="player-rank" class="text-2xl font-bold text-indigo-400">載入中...</span>
+        </div>
+        <p id="join-date" class="text-[10px] text-gray-600 mt-2 font-mono">加入時間: ---</p>
+    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div class="glass-card p-10">
-                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-6">資產餘額 Balance</p>
-                    <h2 class="text-5xl font-black text-white flex items-baseline gap-3">
-                        <span id="coin-balance">--</span>
-                        <span class="text-xs font-bold text-indigo-500 uppercase">OHW Coins</span>
-                    </h2>
-                </div>
-                <div class="glass-card p-10 flex flex-col justify-center">
-                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-6">每日簽到 Daily</p>
-                    <button onclick="claimReward()" id="claim-btn" class="btn-primary w-full py-5 rounded-2xl font-black text-sm uppercase tracking-widest">
-                        領取每日 10 枚硬幣
-                    </button>
-                </div>
+    <div class="bg-[#161616] border border-white/10 p-6 rounded-2xl">
+        <p class="text-xs text-gray-500 uppercase font-bold tracking-widest mb-2">KBFFA 資訊</p>
+        <div class="flex justify-between items-end">
+            <div>
+                <p class="text-sm text-gray-400">擊殺數</p>
+                <p id="kbffa-kills" class="text-2xl font-mono text-white">0</p>
+            </div>
+            <div class="text-right">
+                <p class="text-sm text-gray-400">最高連殺</p>
+                <p id="kbffa-streak" class="text-xl font-mono text-indigo-300">0</p>
             </div>
         </div>
+    </div>
+
+    <div class="bg-[#161616] border border-white/10 p-6 rounded-2xl">
+        <p class="text-xs text-gray-500 uppercase font-bold tracking-widest mb-2">疊橋練習 (Brushing)</p>
+        <div class="flex justify-between items-end">
+            <div>
+                <p class="text-sm text-gray-400">最佳紀錄</p>
+                <p id="bridge-best" class="text-2xl font-mono text-white">--s</p>
+            </div>
+            <div class="text-right">
+                <p class="text-sm text-gray-400">今日練習</p>
+                <p id="bridge-count" class="text-xl font-mono text-indigo-300">0 次</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-[#161616] border border-white/10 p-6 rounded-2xl">
+        <p class="text-xs text-gray-500 uppercase font-bold tracking-widest mb-2">帳號安全性</p>
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+            <span class="text-sm text-gray-300">驗證狀態: 已連動</span>
+        </div>
+        <p class="text-[10px] text-gray-600 mt-2 font-mono">UUID: 讀取中...</p>
+    </div>
+</div>
 
         <!-- Store Section -->
         <div id="store-section" class="tab-content hidden">
