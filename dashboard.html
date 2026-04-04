@@ -332,36 +332,33 @@
         }
 
         // 範例：獲取玩家 KBFFA 戰績
-        async function getPlayerStats(name) {
-        try {
-            // --- 關鍵修改點 ---
-            // 如果你用 Serveo：https://你的名稱.serveo.net/api.php
-            // 如果你用 LocalTunnel：https://inytw-api.localtunnel.me/api.php
-            const TUNNEL_URL = "https://ohw-api.serveousercontent.com/api.php"; 
-            
-            const response = await fetch(`${TUNNEL_URL}?player=${name}`);
-            // -----------------
-            
-            const data = await response.json();
-        
-            if (data.error) {
-                console.warn(data.error);
-                return;
+        // 擴充你的 getPlayerStats 或獨立一個更新邏輯
+        async function updateOHWStats() {
+            try {
+                // 抓取你同步到 GitHub 或 API 的 stats.json
+                const response = await fetch('https://www.ohw.cloud-ip.cc/stats.json');
+                const data = await response.json();
+
+                // 更新人數文字
+                const players = data.players_online || 0;
+                const maxPlayers = 60;
+                document.getElementById('ohw-players').innerText = players;
+
+                // 更新進度條長度
+                const percent = (players / maxPlayers) * 100;
+                document.getElementById('player-bar').style.width = `${percent}%`;
+
+                // 順便把原本的 CPU/RAM 顯示在 Console 或是其他隱藏地方
+                console.log(`[OHW Engine] CPU: ${data.cpu}% | RAM: ${data.ram_used}MB`);
+
+            } catch (err) {
+                console.warn("OHW 數據抓取失敗，伺服器可能正在維護");
             }
-        
-            // 把數據塞進你原本的 HTML ID 裡
-            // 記得 HTML 裡要有對應的 <span id="kbffa-kills"></span> 等標籤
-            if(document.getElementById('kbffa-kills')) {
-                document.getElementById('kbffa-kills').innerText = data.kills || 0;
-            }
-            if(document.getElementById('kbffa-max-streak')) { // 修正一下變數名稱
-                document.getElementById('kbffa-max-streak').innerText = data.max_streak || 0;
-            }
-            
-        } catch (err) {
-            console.error("無法連接到 API (請確認隧道是否開啟):", err);
         }
-    }
+
+// 每 30 秒自動刷新一次「型」度
+setInterval(updateOHWStats, 30000);
+updateOHWStats();
 
 // 執行測試
 getPlayerStats('InyTw');
