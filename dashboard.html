@@ -335,18 +335,28 @@
             alert("系統正在初始化 " + name + " 的安全結帳程序...");
         }
 
-        // dash.js 範例邏輯
-        async function loadPlayerStats(discordId) {
-            // 假設你之後寫好了 API
-            // const response = await fetch(`https://api.ohw-network.com/user/${discordId}`);
-            // const data = await response.json();
-        
-            // 模擬填入數據
-            document.getElementById('player-rank').innerText = "[MVP++]";
-            document.getElementById('kbffa-kills').innerText = "1,248";
-            document.getElementById('bridge-best').innerText = "12.45s";
-            document.getElementById('user-uuid').innerText = "UUID: 550e8400-e29b-41d4-a716-446655440000";
+        // 範例：獲取玩家 KBFFA 戰績
+        async function getPlayerStats(name) {
+            try {
+                const response = await fetch(`api.php?player=${name}`);
+                const data = await response.json();
+            
+                if (data.error) {
+                    console.warn(data.error);
+                    return;
+                }
+            
+                // 把數據塞進你原本的 HTML ID 裡
+                document.getElementById('kbffa-kills').innerText = data.kills;
+                document.getElementById('kbffa-streak').innerText = data.max_streak;
+                
+            } catch (err) {
+                console.error("無法連接到 API:", err);
+            }
         }
+
+// 執行測試
+getPlayerStats('InyTw');
     </script>
 </body>
 </html>
