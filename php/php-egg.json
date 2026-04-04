@@ -1,0 +1,45 @@
+{
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "name": "PHP 8.2 with Nginx",
+    "description": "Custom PHP environment for InyTw Dashboard",
+    "features": null,
+    "docker_images": {
+        "ghcr.io/pterodactyl/yolks:php_8.2": "ghcr.io/pterodactyl/yolks:php_8.2"
+    },
+    "file_denylist": [],
+    "startup": "/usr/local/bin/php-fpm -D; nginx -g 'daemon off;'",
+    "config": {
+        "files": "{}",
+        "startup": "{\"done\": \"ready on port\"}",
+        "stop": "^C",
+        "logs": "{}",
+        "extends": null
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/bash\napt update\napt install -y git curl",
+            "container": "debian:bookworm-slim",
+            "entrypoint": "bash"
+        },
+        "post_installation": {
+            "script": null,
+            "container": null,
+            "entrypoint": null
+        }
+    },
+    "variables": [
+        {
+            "name": "Web Port",
+            "description": "Port for Nginx",
+            "env_var": "SERVER_PORT",
+            "default_value": "8080",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|numeric|digits_between:1,5",
+            "field_type": "text"
+        }
+    ]
+}
