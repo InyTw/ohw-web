@@ -108,6 +108,36 @@
 
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+        .ohw-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border-radius: 15px;
+            border-left: 4px solid #8b5cf6; /* 紫色側邊條，超有型 */
+        }
+
+        .bg-scanline {
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.5) 50%);
+            background-size: 100% 4px;
+        }
+
+        /* 玻璃卡片懸停發光 */
+        .glass-card {
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(99, 102, 241, 0.5); /* indigo-500 */
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+            transform: translateY(-2px);
+        }
+
     </style>
 </head>
 
@@ -173,66 +203,32 @@
     <main class="flex-1 lg:ml-72 p-8 lg:p-20">
         
         <!-- Overview Section -->
-        <div id="overview-section" class="tab-content">
-            <header class="mb-16">
-                <h1 class="text-4xl lg:text-5xl font-black text-white tracking-tighter italic uppercase mb-2">Overview</h1>
-                <p class="text-indigo-400 font-medium">歡迎回來，<span id="welcome-user">玩家</span>。</p>
-            </header>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-                
-                <div class="glass-card p-6 flex flex-col justify-between min-h-[160px]">
-                    <div>
-                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-4">Player Rank</p>
-                        <div class="flex items-center gap-3">
-                            <span id="player-rank" class="text-2xl font-black text-indigo-400 italic">載入中...</span>
-                        </div>
-                    </div>
-                    <p id="join-date" class="text-[9px] text-gray-600 font-mono tracking-tighter">SINCE: 2026/01/22</p>
-                </div>
+        <div class="glass-card p-6 flex flex-col justify-between min-h-[160px] relative overflow-hidden group">
+    <div class="absolute inset-0 pointer-events-none opacity-10 bg-scanline"></div>
+    
+    <div class="flex justify-between items-start">
+        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-4">Server Status</p>
+        <div class="flex items-center gap-2">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+            </span>
+            <span class="text-[9px] font-black text-indigo-400 font-mono">LIVE</span>
+        </div>
+    </div>
 
-                <div class="glass-card p-6 flex flex-col justify-between min-h-[160px]">
-                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-4">KBFFA Stats</p>
-                    <div class="flex justify-between items-end">
-                        <div>
-                            <p class="text-[9px] text-gray-500 uppercase mb-1">Total Kills</p>
-                            <p id="kbffa-kills" class="text-3xl font-black text-white font-mono">0</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-[9px] text-gray-500 uppercase mb-1">Max Streak</p>
-                            <p id="kbffa-streak" class="text-xl font-black text-indigo-300 font-mono">0</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-card p-6 flex flex-col justify-between min-h-[160px]">
-                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-4">Bridge Practice</p>
-                    <div class="flex justify-between items-end">
-                        <div>
-                            <p class="text-[9px] text-gray-500 uppercase mb-1">Best Record</p>
-                            <p id="bridge-best" class="text-3xl font-black text-white font-mono">--s</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-[9px] text-gray-500 uppercase mb-1">Today</p>
-                            <p id="bridge-count" class="text-xl font-black text-indigo-300 font-mono">0</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-card p-6 flex flex-col justify-between min-h-[160px]">
-                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-4">Security</p>
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                            <span class="text-[10px] font-bold text-gray-300">VERIFIED</span>
-                        </div>
-                        <p id="user-uuid" class="text-[8px] text-gray-600 font-mono break-all leading-tight">UUID: fetching...</p>
-                    </div>
-                </div>
-
-            </div>
-            
-            </div>
+    <div>
+        <h3 class="text-xl font-black text-white italic uppercase tracking-tighter mb-1">OHW NETWORK</h3>
+        <div class="flex items-end gap-2">
+            <p id="ohw-players" class="text-3xl font-black text-white font-mono leading-none">0</p>
+            <p class="text-[10px] text-gray-500 font-bold mb-1">/ 60 ONLINE</p>
+        </div>
+    </div>
+    
+    <div class="w-full h-1 bg-gray-800 rounded-full mt-4 overflow-hidden">
+        <div id="player-bar" class="h-full bg-gradient-to-r from-indigo-600 to-purple-500 transition-all duration-1000" style="width: 0%"></div>
+    </div>
+</div>
 
 
         <!-- Store Section -->
