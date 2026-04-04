@@ -208,31 +208,20 @@
                 <h1 class="text-4xl lg:text-5xl font-black text-white tracking-tighter italic uppercase mb-2">Overview</h1>
                 <p class="text-indigo-400 font-medium">歡迎回來，<span id="welcome-user">玩家</span>。</p>
             </header>
-            
-        <div class="glass-card p-6 flex flex-col justify-between min-h-[160px] relative overflow-hidden group">
-        <div class="absolute inset-0 pointer-events-none opacity-10 bg-scanline"></div>
-            
-        <div class="flex justify-between items-start">
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-4">Server Status</p>
-            <div class="flex items-center gap-2">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                </span>
-                <span class="text-[9px] font-black text-indigo-400 font-mono">LIVE</span>
+        
+            <div class="my-4">
+                <h3 class="text-xs font-bold text-indigo-300 uppercase mb-1 tracking-wider">ohw 伺服器 狀態</h3>
+                <div class="flex items-baseline gap-2">
+                    <span id="mc-online" class="text-4xl font-black text-white font-mono italic">0</span>
+                    <span class="text-gray-600 font-bold text-sm">/ <span id="mc-max">1000</span></span>
+                </div>
             </div>
-        </div>
-
-        <div>
-            <h3 class="text-xl font-black text-white italic uppercase tracking-tighter mb-1">OHW NETWORK</h3>
-            <div class="flex items-end gap-2">
-                <p id="ohw-players" class="text-3xl font-black text-white font-mono leading-none">0</p>
-                <p class="text-[10px] text-gray-500 font-bold mb-1">/ 60 ONLINE</p>
+        
+            <div class="relative w-full h-1.5 bg-gray-900 rounded-full overflow-hidden">
+                <div id="mc-bar" class="absolute top-0 left-0 h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-700" style="width: 0%"></div>
             </div>
-        </div>
 
-        <div class="w-full h-1 bg-gray-800 rounded-full mt-4 overflow-hidden">
-            <div id="player-bar" class="h-full bg-gradient-to-r from-indigo-600 to-purple-500 transition-all duration-1000" style="width: 0%"></div>
+            <p class="text-[8px] text-gray-600 font-mono mt-2 uppercase tracking-widest">版本: Java 1.8+</p>
         </div>
     </div>
 
