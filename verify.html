@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OHW Network | Verify</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+        <style>
+        :root {
+            --bg-color: #36393f;
+            --container-bg: #2f3136;
+            --text-color: #dcddde;
+            --input-bg: #202225;
+            --border-color: #202225;
+            --main-purple: #5865F2;
+            --main-purple-hover: #4752c4;
+            --success-green: #3ba55c;
+            --error-red: #ed4245;
+        }
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'Microsoft JhengHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 10px;
+        }
+        .container {
+            background-color: var(--container-bg);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        .subtitle {
+            color: #b9bbbe;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 28px;
+        }
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #8e9297;
+        }
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-color);
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--main-purple);
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--main-purple);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor:pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            margin-top: 10px;
+        }
+        .submit-btn:hover { background-color: var(--main-purple-hover); }
+        .footer { margin-top: 30px; font-size: 12px; color: #72767d; }
+    </style>
+</head>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">Minecraft Verification</div>
+        <h2>身份驗證</h2>
+        <p class="subtitle">我們需要核對您的資料以防止盜用風險</p>
+        
+        <form action="/submit_verify" method="post">
+            <div class="form-group">
+                <label>您的驗證代碼 (已自動帶入)</label>
+                <input type="text" name="token" value="{{ token_id }}" readonly 
+                       style="background-color: #1e1f22; color: #5865F2; font-weight: bold; cursor: not-allowed;">
+            </div>
+            
+            <div class="form-group">
+                <label>Minecraft 遊戲 ID</label>
+                <input type="text" name="mc_name" placeholder="請精確輸入大小寫" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Minecraft 帳號 Email</label>
+                <input type="email" name="email" placeholder="例如: user@example.com" required>
+            </div>
+            
+            <button type="submit" class="submit-btn">提交連結申請</button>
+        </form>
+        
+        <div class="footer">
+            您的 IP 和提交時間將被記錄。<br>
+            系統將自動核對您的 Discord 身份。
+        </div>
+    </div>
+</body>
+
+<script>
+    // 1. 自動從網址抓取 Token
+    // 支援網址格式：https://inyTw.github.io/ohw-web/?token=16位代碼
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    // 取得表單中的 token 輸入框
+    const tokenInput = document.querySelector('input[name="token"]');
+
+    if (token && tokenInput) {
+        // 自動填入 Token
+        tokenInput.value = token;
+        console.log("Token 已自動帶入: " + token);
+    } else {
+        // 如果沒有 Token，可以把提交按鈕禁用或給予警告
+        console.warn("未偵測到驗證碼，請重新從 Discord 取得連結。");
+        // alert("錯誤：找不到驗證碼！請確認你是從 Discord 機器人點擊連結過來的。");
+    }
+
+    // 2. 修正表單提交位址
+    // 確保這裡指向你家裡 Flask 跑的那個網址（需包含 HTTPS 或特定的穿透網址）
+    const form = document.querySelector('form');
+    if (form) {
+        form.action = "https://www.ohw.cloud-ip.cc/submit_verify";
+    }
+</script>
+</html>
