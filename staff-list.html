@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理團隊 | NETWORK</title>
+    <style>
+        :root { --bg-main: #060814; --primary: #00f5d4; --secondary: #9b5de5; --glass-base: rgba(11, 15, 33, 0.7); --text-light: #f8fafc; --text-muted: #64748b; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-light); }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 8%; background: rgba(6, 8, 20, 0.75); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .brand-logo { font-size: 1.6rem; font-weight: 800; background: linear-gradient(45deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav a { color: var(--text-muted); text-decoration: none; margin-left: 2rem; font-weight: 600; }
+        nav a.active { color: var(--primary); }
+
+        .main-wrap { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; }
+        .group-header { font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem; color: #ffffff; letter-spacing: 0.5px; }
+        
+        .matrix-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; }
+        .panel-anchor { text-decoration: none; color: inherit; }
+        .user-panel { background: var(--glass-base); border: 1px solid rgba(255,255,255,0.03); border-radius: 20px; padding: 2.5rem 1.5rem; text-align: center; backdrop-filter: blur(10px); transition: all 0.25s ease; }
+        .user-panel:hover { border-color: var(--primary); transform: translateY(-4px); }
+        
+        /* 中性科技感幾何識別框（非特定伺服器元素） */
+        .hex-identity { width: 80px; height: 80px; border-radius: 24px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 2px; }
+        .hex-core { width: 100%; height: 100%; background: #0c0f1d; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; color: var(--primary); }
+        
+        .user-panel h3 { font-size: 1.25rem; margin-bottom: 0.6rem; font-weight: 700; }
+        .role-badge { display: inline-block; padding: 0.3rem 1rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.04); color: var(--text-light); border: 1px solid rgba(255,255,255,0.05); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="brand-logo">ohw Network</div>
+        <nav>
+            <a href="index.html">首頁入口</a>
+            <a href="news.html">公告資訊</a>
+            <a href="staff-list.html" class="active">管理團隊</a>
+            <a href="apply.html">加入招募</a>
+        </nav>
+    </header>
+
+    <div class="main-wrap">
+        <h2 class="group-header">管理群架構</h2>
+        <div class="matrix-grid">
+            <a href="staff.html?identity=root_admin" class="panel-anchor">
+                <div class="user-panel">
+                    <div class="hex-identity"><div class="hex-core">ADMIN</div></div>
+                    <h3>Technical_Admin</h3>
+                    <span class="role-badge">系統總負責人</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

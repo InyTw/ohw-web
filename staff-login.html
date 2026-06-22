@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成員後台驗證 | NETWORK STAFF</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg-main: #060814;
+            --primary: #00f5d4;
+            --accent-alert: #ff0055;
+            --glass-panel: rgba(11, 15, 33, 0.75);
+            --text-light: #f8fafc;
+            --text-muted: #64748b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, monospace; }
+        body { background-color: var(--bg-main); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+
+        body::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 245, 212, 0.03) 0%, transparent 60%);
+            z-index: -1;
+        }
+
+        /* 導覽列 */
+        header {
+            display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 8%; 
+            background: rgba(6, 8, 20, 0.75); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .brand-logo { font-size: 1.6rem; font-weight: 800; background: linear-gradient(45deg, var(--primary), #9b5de5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav a { color: var(--text-muted); text-decoration: none; margin-left: 2rem; font-weight: 600; font-size: 0.95rem; }
+        nav a.active { color: var(--primary); }
+
+        /* 登入外框 */
+        .auth-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .terminal-box {
+            background: var(--glass-panel); border: 1px solid rgba(255, 255, 255, 0.04);
+            width: 100%; max-width: 440px; padding: 3.5rem 2.5rem; border-radius: 24px;
+            backdrop-filter: blur(20px); box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6); position: relative;
+        }
+        .terminal-box::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--primary), #9b5de5); border-radius: 24px 24px 0 0;
+        }
+        
+        .terminal-box h2 { font-size: 1.6rem; font-weight: 900; letter-spacing: 1px; margin-bottom: 0.4rem; text-align: center; }
+        .alert-status { color: var(--text-muted); font-size: 0.8rem; text-align: center; margin-bottom: 2rem; }
+        .alert-status span { color: var(--accent-alert); font-weight: bold; }
+
+        /* 錯誤訊息框 */
+        .error-message-box {
+            display: none; background: rgba(255, 0, 85, 0.08); border: 1px solid rgba(255, 0, 85, 0.2);
+            padding: 0.9rem 1.2rem; border-radius: 12px; color: #ff4a85; font-size: 0.85rem;
+            font-weight: 600; margin-bottom: 1.8rem; line-height: 1.5; animation: shakeAndFade 0.4s ease-in-out;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.1);
+        }
+
+        @keyframes shakeAndFade {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        /* 輸入框 */
+        .field-block { margin-bottom: 1.5rem; }
+        .field-block label { display: block; font-size: 0.8rem; color: var(--primary); margin-bottom: 0.6rem; font-weight: 700; }
+        .field-block input {
+            width: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1rem 1.2rem; border-radius: 12px; color: #fff; font-size: 1rem; transition: all 0.25s;
+        }
+        .field-block input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 245, 212, 0.15); }
+        .field-block input::placeholder { color: rgba(255, 255, 255, 0.2); }
+
+        /* 按鈕 */
+        .action-btn {
+            width: 100%; background: linear-gradient(90deg, #00f5d4, #00b4d8); color: #060814;
+            border: none; padding: 1.1rem; border-radius: 12px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: all 0.25s;
+        }
+        .action-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(0, 245, 212, 0.3); }
+        
+        .sys-log { margin-top: 2rem; font-size: 0.75rem; color: #414a60; text-align: center; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 1.5rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-logo">MYSERVER</div>
+        <nav>
+            <a href="index.html">首頁入口</a>
+            <a href="news.html">公告資訊</a>
+            <a href="staff-list.html">管理團隊</a>
+            <a href="apply.html">加入招募</a>
+            <a href="staff-login.html" class="active">成員登入</a>
+        </nav>
+    </header>
+
+    <div class="auth-container">
+        <div class="terminal-box">
+            <h2>STAFF VERIFICATION</h2>
+            <div class="alert-status">⚠️ <span>RESTRICTED AREA</span> / 內部授權分區</div>
+            
+            <div class="error-message-box" id="error-box"></div>
+
+            <form id="login-form">
+                <div class="field-block">
+                    <label>管理員電子信箱 (STAFF EMAIL)</label>
+                    <input type="email" id="email" required placeholder="admin@yourserver.com">
+                </div>
+                <div class="field-block">
+                    <label>安全驗證密鑰 (ACCESS KEY)</label>
+                    <input type="password" id="password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="action-btn">執行安全登入</button>
+            </form>
+            
+            <div class="sys-log">SECURE CONNECTION NODE // 認證加密傳輸已啟用</div>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ 請填入你的 Supabase 專案資訊
+        const SUPABASE_URL = 'https://zllomerkzdmmphfcceew.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpsbG9tZXJremRtbXBoZmNjZWV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMzUxOTQsImV4cCI6MjA5NzcxMTE5NH0.x_0KZpvzJQBPLFccYCzz4I2aqNPBnB-t0ohjHhKSePk';
+        
+        // 使用 window.supabase 確保不與 CDN 載入的全域變數衝突
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: {
+                persistSession: true,
+                storageKey: 'sb-auth-token',
+                storage: window.localStorage
+            }
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errorBox = document.getElementById('error-box');
+
+            errorBox.style.display = 'none';
+            errorBox.innerHTML = '';
+
+            // 執行登入
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+            if (error) {
+                errorBox.style.display = 'block';
+                const errMsg = error.message.toLowerCase();
+
+                if (errMsg.includes('invalid login credentials')) {
+                    errorBox.innerHTML = `❌ 很抱歉，系統內查無此帳號的使用授權，或是您的驗證密鑰有誤。`;
+                } else if (errMsg.includes('email not confirmed')) {
+                    errorBox.innerHTML = `⚠️ 該帳號尚未通過電子郵件安全核可，請聯繫 Technical_Admin。`;
+                } else {
+                    errorBox.innerHTML = `❌ 驗證失敗：${error.message}`;
+                }
+                return;
+            }
+
+            // 成功登入後緩衝跳轉
+            setTimeout(() => {
+                window.location.href = 'staff.html';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理後台 | NETWORK STAFF</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg-main: #060814;
+            --bg-side: #0b0f21;
+            --primary: #00f5d4;
+            --accent-alert: #ff0055;
+            --glass-base: rgba(11, 15, 33, 0.6);
+            --text-light: #f8fafc;
+            --text-muted: #64748b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, monospace; }
+        body { background-color: var(--bg-main); color: var(--text-light); display: flex; min-height: 100vh; overflow: hidden; }
+
+        /* 驗證時的加載遮罩層 */
+        #loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #060814;
+            display: flex; justify-content: center; align-items: center; z-index: 9999; color: var(--primary); font-weight: 800; font-size: 1.2rem; letter-spacing: 1px;
+        }
+
+        /* 左側選單 */
+        aside {
+            width: 280px; background: var(--bg-side); border-right: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; flex-direction: column; padding: 2rem 1rem 1.5rem 1rem; justify-content: space-between;
+        }
+        .brand { font-size: 1.3rem; font-weight: 800; letter-spacing: 1px; color: #fff; padding-left: 1rem; margin-bottom: 3rem; }
+        .brand span { color: var(--primary); }
+        
+        .nav-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .nav-item {
+            display: flex; align-items: center; padding: 1rem 1.2rem; color: var(--text-muted);
+            text-decoration: none; font-weight: 600; border-radius: 12px; font-size: 0.95rem; cursor: pointer; transition: all 0.25s;
+        }
+        .nav-item:hover, .nav-item.active { color: var(--primary); background: rgba(0, 245, 212, 0.05); box-shadow: inset 3px 0 0 var(--primary); }
+
+        /* 使用者資訊卡片 */
+        .user-profile-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px; padding: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem;
+            backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .user-main-info { display: flex; align-items: center; gap: 0.75rem; }
+        
+        /* 左下角圓形動態頭貼 */
+        .user-avatar {
+            width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #00b4d8);
+            display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: #060814;
+            box-shadow: 0 0 15px rgba(0, 245, 212, 0.2); overflow: hidden; background-repeat: no-repeat;
+        }
+        .user-meta { display: flex; flex-direction: column; gap: 0.2rem; flex: 1; }
+        .user-name { font-size: 0.95rem; font-weight: 700; color: #ffffff; }
+        .user-rank { font-size: 0.75rem; color: var(--primary); font-weight: 600; }
+        
+        .verify-badge { display: inline-block; font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 6px; font-weight: 700; width: fit-content; }
+        .verify-badge.verified { background: rgba(0, 245, 212, 0.1); color: var(--primary); border: 1px solid rgba(0, 245, 212, 0.2); }
+        .verify-badge.unverified { background: rgba(255, 0, 85, 0.1); color: var(--accent-alert); border: 1px solid rgba(255, 0, 85, 0.2); }
+        
+        .user-action-line { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 0.7rem; font-size: 0.75rem; margin-top: 0.2rem; }
+        .user-account-email { color: var(--text-muted); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .inline-logout-btn { color: var(--text-muted); text-decoration: none; cursor: pointer; font-weight: 700; transition: color 0.2s; }
+        .inline-logout-btn:hover { color: var(--accent-alert); }
+
+        /* 右側主要內容區 */
+        main { flex: 1; padding: 2.5rem 3.5rem; overflow-y: auto; }
+        .page-header { margin-bottom: 2.5rem; }
+        .page-header h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.4rem; }
+        .page-header p { color: var(--text-muted); font-size: 0.9rem; }
+
+        .content-panel { display: none; animation: fadeIn 0.3s ease forwards; }
+        .content-panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--glass-base); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 20px; padding: 2rem; backdrop-filter: blur(20px); margin-bottom: 2rem; }
+        
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-size: 0.85rem; color: var(--primary); font-weight: 700; margin-bottom: 0.6rem; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); padding: 0.9rem 1.2rem; color: #fff; border-radius: 12px; font-size: 0.95rem;
+        }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
+
+        /* 🔥 大頭貼直覺預覽框（滑鼠拖曳外觀） */
+        .avatar-preview-container {
+            display: flex; flex-direction: column; align-items: center; margin-top: 1rem; background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .avatar-preview {
+            width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.05);
+            border: 2px solid var(--primary); overflow: hidden; background-repeat: no-repeat;
+            display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--text-muted);
+            cursor: grab; user-select: none; box-shadow: 0 0 20px rgba(0, 245, 212, 0.15);
+        }
+        .avatar-preview:active { cursor: grabbing; }
+        .avatar-tip { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; margin-bottom: 1rem; }
+
+        /* 縮放專用控制條 */
+        .zoom-control { display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px; }
+        .zoom-control input[type="range"] { accent-color: var(--primary); cursor: pointer; height: 6px; }
+
+        .btn { background: linear-gradient(90deg, var(--primary), #00b4d8); color: #060814; border: none; padding: 0.9rem 2rem; border-radius: 12px; font-weight: 800; cursor: pointer; transition: all 0.2s; }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 5px 15px rgba(0, 245, 214, 0.3); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    </style>
+</head>
+<body>
+
+    <div id="loading-overlay">AUTHENTICATING SECURE SESSION...</div>
+
+    <aside>
+        <div class="nav-group">
+            <div class="brand">STAFF<span>PANEL</span></div>
+            <div class="nav-item active" onclick="switchTab('news-panel', this)">上架新聞</div>
+            <div class="nav-item" onclick="switchTab('profile-panel', this)">帳號設定面板</div>
+            <div class="nav-item" onclick="switchTab('ban-panel', this)">Ban 玩家</div>
+            <div class="nav-item" onclick="switchTab('rank-panel', this)">玩家 Rank 管理</div>
+            <div class="nav-item" onclick="switchTab('server-panel', this)">伺服器與機器人狀態</div>
+        </div>
+
+        <div class="user-profile-card">
+            <div class="user-main-info">
+                <div class="user-avatar" id="display-avatar">...</div>
+                <div class="user-meta">
+                    <div class="user-name" id="display-username">載入中...</div>
+                    <div class="user-rank" id="display-rank">Rank: --</div>
+                    <span class="verify-badge unverified" id="display-status">檢查中</span>
+                </div>
+            </div>
+            <div class="user-action-line">
+                <span class="user-account-email" id="display-email">loading...</span>
+                <span class="inline-logout-btn" onclick="handleLogout()">登出 ➔</span>
+            </div>
+        </div>
+    </aside>
+
+    <main>
+        <div id="news-panel" class="content-panel active">
+            <div class="page-header"><h1>上架新聞公告</h1><p>發佈最新消息至伺服器官網首頁與公告區。</p></div>
+            <div class="card">
+                <form id="news-form" onsubmit="publishNews(event)">
+                    <div class="form-group">
+                        <label>公告分類</label>
+                        <select id="news-category">
+                            <option value="SYSTEM">SYSTEM / 系統公告</option>
+                            <option value="SYSTEM">EVENT / 活動公告</option>
+                            <option value="SYSTEM">EMERGENCY / 緊急公告</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>新聞標題</label>
+                        <input type="text" id="news-title" placeholder="請輸入標題..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>詳細公告內容</label>
+                        <textarea id="news-content" rows="6" placeholder="請輸入詳細公告內容..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn" id="btn-publish-news">發佈公告</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="profile-panel" class="content-panel">
+            <div class="page-header"><h1>帳號與個人資料設定</h1><p>管理員數據將儲存於 Supabase 資料庫中的 profiles 資料表。</p></div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>📝 變更管理員名稱與頭像</h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0.5rem 0 1.5rem 0;">上傳圖片後，直接在圓圈圈上**按住滑鼠拖曳移動位置**，並用控制條放大縮小。</p>
+                    <form onsubmit="updateUserProfileDatabase(event)">
+                        <div class="form-group">
+                            <label>全新使用者名稱</label>
+                            <input type="text" id="input-new-username" placeholder="請輸入新暱稱..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>上傳個人頭像圖片</label>
+                            <input type="file" id="input-file-avatar" accept="image/*" onchange="previewSelectedAvatar(this)">
+                            
+                            <div class="avatar-preview-container">
+                                <div class="avatar-preview" id="avatar-preview-box">無預覽</div>
+                                <span class="avatar-tip">💡 點選圓框並拖曳滑鼠可移動頭像位置</span>
+                                
+                                <div class="zoom-control">
+                                    <span style="font-size:0.8rem; color:var(--text-muted)">➖</span>
+                                    <input type="range" id="range-scale" min="50" max="300" value="100" oninput="applyLiveAvatarStyle()">
+                                    <span style="font-size:0.8rem; color:var(--text-muted)">➕</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn" id="btn-update-profile">儲存個人設定</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const SUPABASE_URL = 'https://zllomerkzdmmphfcceew.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpsbG9tZXJremRtbXBoZmNjZWV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMzUxOTQsImV4cCI6MjA5NzcxMTE5NH0.x_0KZpvzJQBPLFccYCzz4I2aqNPBnB-t0ohjHhKSePk'; 
+        
+        let supabaseClient;
+        let currentUserObj = null;
+        let currentUsername = 'Staff';
+        
+        // 核心狀態變數
+        let base64AvatarString = ''; 
+        let currentScale = 100;
+        let currentX = 50;
+        let currentY = 50;
+
+        // 拖曳狀態變數
+        let isDragging = false;
+        let startX, startY;
+        let startPercentX, startPercentY;
+
+        try {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+                auth: { persistSession: true, storageKey: 'sb-auth-token', storage: window.localStorage }
+            });
+        } catch (e) {
+            alert("⚠️ 系統初始化失敗！");
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (!supabaseClient) return;
+            setupDragEvents(); // 初始化滑鼠拖曳監聽
+            try {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (session) {
+                    currentUserObj = session.user;
+                    await fetchAndSyncProfile();
+                    removeOverlay();
+                } else {
+                    window.location.href = 'staff-login.html';
+                }
+            } catch (err) {
+                window.location.href = 'staff-login.html';
+            }
+        });
+
+        // 撈取資料庫
+        async function fetchAndSyncProfile() {
+            if (!currentUserObj) return;
+
+            const { data: profile, error } = await supabaseClient
+                .from('profiles')
+                .select('username, avatar_url, rank, avatar_scale, avatar_pos_x, avatar_pos_y')
+                .eq('id', currentUserObj.id)
+                .single();
+
+            let dbUsername = currentUserObj.email.split('@')[0];
+            let dbAvatarUrl = '';
+            let dbRank = currentUserObj.user_metadata?.rank || 'Staff';
+            
+            currentScale = 100;
+            currentX = 50;
+            currentY = 50;
+
+            if (profile && !error) {
+                if(profile.username) dbUsername = profile.username;
+                if(profile.avatar_url) dbAvatarUrl = profile.avatar_url;
+                if(profile.rank) dbRank = profile.rank;
+                if(profile.avatar_scale) currentScale = parseInt(profile.avatar_scale);
+                if(profile.avatar_pos_x) currentX = parseInt(profile.avatar_pos_x);
+                if(profile.avatar_pos_y) currentY = parseInt(profile.avatar_pos_y);
+            }
+
+            currentUsername = dbUsername;
+            base64AvatarString = dbAvatarUrl;
+
+            document.getElementById('display-email').innerText = currentUserObj.email;
+            document.getElementById('display-username').innerText = dbUsername;
+            document.getElementById('display-rank').innerText = `Rank: ${dbRank}`;
+            document.getElementById('input-new-username').value = dbUsername;
+            document.getElementById('range-scale').value = currentScale;
+
+            const avatarEl = document.getElementById('display-avatar');
+            const previewBox = document.getElementById('avatar-preview-box');
+
+            if (dbAvatarUrl) {
+                avatarEl.innerText = "";
+                avatarEl.style.backgroundImage = `url('${dbAvatarUrl}')`;
+                previewBox.innerText = "";
+                previewBox.style.backgroundImage = `url('${dbAvatarUrl}')`;
+            } else {
+                avatarEl.style.backgroundImage = "none";
+                avatarEl.innerText = currentUserObj.email.charAt(0).toUpperCase();
+                previewBox.style.backgroundImage = "none";
+                previewBox.innerText = "無預覽";
+            }
+
+            applyLiveAvatarStyle();
+
+            const statusBadge = document.getElementById('display-status');
+            if (currentUserObj.email_confirmed_at) {
+                statusBadge.className = "verify-badge verified";
+                statusBadge.innerText = "已驗證成員";
+            }
+        }
+
+        // 🔥 更新 CSS 樣式（只留一條拉桿跟滑鼠同步）
+        function applyLiveAvatarStyle() {
+            currentScale = document.getElementById('range-scale').value;
+
+            const avatarEl = document.getElementById('display-avatar');
+            const previewBox = document.getElementById('avatar-preview-box');
+
+            if (base64AvatarString) {
+                [avatarEl, previewBox].forEach(el => {
+                    el.style.backgroundSize = `${currentScale}%`;
+                    el.style.backgroundPosition = `${currentX}% ${currentY}%`;
+                });
+            }
+        }
+
+        // 🔥 初始化滑鼠拖曳核心事件 (把 XYZ 軸換成直覺的手感)
+        function setupDragEvents() {
+            const box = document.getElementById('avatar-preview-box');
+
+            box.addEventListener('mousedown', (e) => {
+                if (!base64AvatarString) return;
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                startPercentX = currentX;
+                startPercentY = currentY;
+                e.preventDefault();
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                // 算移動像素跟比例的轉換 (拖曳靈敏度度調校)
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+
+                // 往左滑 X 變大、往上滑 Y 變大 (符合正常網站拖拉圖片習慣)
+                currentX = startPercentX - (deltaX / 2);
+                currentY = startPercentY - (deltaY / 2);
+
+                // 邊界防跑掉 (限制在 0% ~ 100% 內)
+                if (currentX < 0) currentX = 0; if (currentX > 100) currentX = 100;
+                if (currentY < 0) currentY = 0; if (currentY > 100) currentY = 100;
+
+                applyLiveAvatarStyle();
+            });
+
+            window.addEventListener('mouseup', () => { isDragging = false; });
+            
+            // 支援手機平板觸控拖曳
+            box.addEventListener('touchstart', (e) => {
+                if (!base64AvatarString) return;
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                startPercentX = currentX;
+                startPercentY = currentY;
+            });
+            window.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                const deltaX = e.touches[0].clientX - startX;
+                const deltaY = e.touches[0].clientY - startY;
+                currentX = startPercentX - (deltaX / 2);
+                currentY = startPercentY - (deltaY / 2);
+                if (currentX < 0) currentX = 0; if (currentX > 100) currentX = 100;
+                if (currentY < 0) currentY = 0; if (currentY > 100) currentY = 100;
+                applyLiveAvatarStyle();
+            });
+            window.addEventListener('touchend', () => { isDragging = false; });
+        }
+
+        function previewSelectedAvatar(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            if (file.size > 1024 * 1024) {
+                alert("⚠️ 請選擇 1MB 以下的圖片！");
+                input.value = "";
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                base64AvatarString = e.target.result;
+                const previewBox = document.getElementById('avatar-preview-box');
+                const avatarEl = document.getElementById('display-avatar');
+                
+                previewBox.innerText = "";
+                previewBox.style.backgroundImage = `url('${base64AvatarString}')`;
+                avatarEl.innerText = "";
+                avatarEl.style.backgroundImage = `url('${base64AvatarString}')`;
+                
+                // 上傳新圖時重置回置中
+                currentX = 50;
+                currentY = 50;
+                document.getElementById('range-scale').value = 100;
+                
+                applyLiveAvatarStyle();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 儲存設定
+        async function updateUserProfileDatabase(e) {
+            e.preventDefault();
+            if (!currentUserObj) return;
+
+            const btn = document.getElementById('btn-update-profile');
+            const newName = document.getElementById('input-new-username').value.trim();
+            
+            btn.innerText = "儲存中...";
+            btn.disabled = true;
+
+            const { error } = await supabaseClient
+                .from('profiles')
+                .upsert({ 
+                    id: currentUserObj.id,
+                    username: newName,
+                    avatar_url: base64AvatarString,
+                    avatar_scale: String(Math.round(currentScale)),
+                    avatar_pos_x: String(Math.round(currentX)),
+                    avatar_pos_y: String(Math.round(currentY)),
+                    updated_at: new Date().toISOString()
+                });
+
+            if (error) {
+                alert(`❌ 儲存失敗：${error.message}`);
+            } else {
+                alert("🎉 個人資料與自訂頭像位置已成功存入雲端！");
+                await fetchAndSyncProfile();
+            }
+            btn.innerText = "儲存個人設定";
+            btn.disabled = false;
+        }
+
+        // 基礎功能
+        async function publishNews(e) { e.preventDefault(); alert("新聞發布成功"); }
+        function removeOverlay() { document.getElementById('loading-overlay').style.display = 'none'; }
+        async function handleLogout() { if (confirm('確定登出？')) { await supabaseClient.auth.signOut(); window.location.href = 'staff-login.html'; } }
+        function switchTab(panelId, element) { document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); document.getElementById(panelId).classList.add('active'); element.classList.add('active'); }
+    </script>
+</body>
+</html>
