@@ -1,0 +1,150 @@
+:root { --bg-main: #060814; --primary: #00f5d4; --secondary: #9b5de5; --glass-base: rgba(11, 15, 33, 0.7); --text-light: #f8fafc; --text-muted: #64748b; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-light); }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 8%; background: rgba(6, 8, 20, 0.75); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .brand-logo { font-size: 1.6rem; font-weight: 800; background: linear-gradient(45deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav a { color: var(--text-muted); text-decoration: none; margin-left: 2rem; font-weight: 600; }
+        nav a.active { color: var(--primary); }
+
+        .main-wrap { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; }
+        .group-header { font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem; color: #ffffff; letter-spacing: 0.5px; }
+        
+        .matrix-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; }
+        .panel-anchor { text-decoration: none; color: inherit; }
+        .user-panel { background: var(--glass-base); border: 1px solid rgba(255,255,255,0.03); border-radius: 20px; padding: 2.5rem 1.5rem; text-align: center; backdrop-filter: blur(10px); transition: all 0.25s ease; }
+        .user-panel:hover { border-color: var(--primary); transform: translateY(-4px); }
+        
+        /* 中性科技感幾何識別框（非特定伺服器元素） */
+        .hex-identity { width: 80px; height: 80px; border-radius: 24px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 2px; }
+        .hex-core { width: 100%; height: 100%; background: #0c0f1d; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; color: var(--primary); }
+        
+        .user-panel h3 { font-size: 1.25rem; margin-bottom: 0.6rem; font-weight: 700; }
+        .role-badge { display: inline-block; padding: 0.3rem 1rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.04); color: var(--text-light); border: 1px solid rgba(255,255,255,0.05); }
+
+        /* 確保父容器是相對定位 */
+.user-panel {
+    position: relative;
+    padding: 2rem;
+    background: #0b0f21;
+    border-radius: 20px;
+    transition: transform 0.2s;
+}
+
+/* 頭像樣式 */
+.mc-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    border: 2px solid var(--primary);
+    margin-bottom: 1rem;
+}
+
+.hover-card {
+    position: absolute;
+    top: 110%; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    
+    /* 🔥 關鍵：高級毛玻璃核心樣式 */
+    background: rgba(15, 23, 42, 0.6); /* 深藍色底，透明度 0.6 */
+    backdrop-filter: blur(15px);      /* 這是關鍵：背景模糊 */
+    -webkit-backdrop-filter: blur(15px); /* Safari 兼容 */
+    
+    border: 1px solid rgba(255, 255, 255, 0.1); /* 極細的半透明邊框 */
+    border-radius: 24px;              /* 更圓潤的邊角 */
+    padding: 1.2rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+}
+
+/* 當滑鼠懸停時顯示 */
+.user-panel:hover .hover-card {
+    opacity: 1;
+    visibility: visible;
+    top: 110%; /* 給予一點滑動進入的效果 */
+}
+
+.hover-card {
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    height: 350px; /* 固定高度 */
+    border-radius: 24px;
+    overflow: hidden; /* 確保內容不會溢出圓角 */
+    
+    /* 毛玻璃基底 */
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+}
+
+.card-bg {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    /* 圖片變暗並稍微模糊，讓文字更突出 */
+    filter: brightness(0.4) blur(2px);
+    transition: filter 0.3s;
+}
+
+/* 確保文字不會因為背景圖而糊掉 */
+.hover-content {
+    position: relative;
+    z-index: 1;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.user-custom-bio {
+    font-style: italic;
+    color: #cbd5e1;
+}
+
+.role-description {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+
+.user-panel:hover .hover-card {
+    opacity: 1;
+    visibility: visible;
+    top: 105%;
+}
+
+.owner {
+    color: red;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.admin {
+    color: rgb(134, 0, 0);
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.builder {
+    color: aqua;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.staff {
+    color: rgb(116, 116, 116);
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}

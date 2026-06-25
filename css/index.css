@@ -1,0 +1,55 @@
+:root {
+            --bg-main: #060814;
+            --primary: #00f5d4;
+            --secondary: #9b5de5;
+            --glass-base: rgba(11, 15, 33, 0.7);
+            --border-glow: rgba(0, 245, 212, 0.15);
+            --text-light: #f8fafc;
+            --text-muted: #64748b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-light); overflow-x: hidden; position: relative; min-height: 100vh; }
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 10% 20%, rgba(0, 245, 212, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 90% 80%, rgba(155, 93, 229, 0.06) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* 導覽列 */
+        header {
+            position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center;
+            padding: 1.2rem 8%; background: rgba(6, 8, 20, 0.75); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 100;
+        }
+        .brand-logo { font-size: 1.6rem; font-weight: 800; letter-spacing: 1px; background: linear-gradient(45deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav a { color: var(--text-muted); text-decoration: none; margin-left: 2rem; font-weight: 600; font-size: 0.95rem; transition: all 0.3s ease; }
+        nav a:hover, nav a.active { color: var(--primary); text-shadow: 0 0 15px rgba(0, 245, 212, 0.4); }
+
+        /* 英雄主視覺區 */
+        .hero-section { text-align: center; padding: 10rem 2rem 6rem; max-width: 900px; margin: 0 auto; }
+        .hero-section h1 { font-size: 3.5rem; font-weight: 900; margin-bottom: 1.5rem; letter-spacing: -0.5px; line-height: 1.15; }
+        .hero-section h1 span { color: var(--primary); text-shadow: 0 0 20px rgba(0, 245, 212, 0.2); }
+        .hero-section p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 3rem; line-height: 1.8; }
+
+        /* 互動 IP 複製器 */
+        .ip-wrapper {
+            display: inline-flex; align-items: center; background: var(--glass-base); border: 1px solid var(--border-glow);
+            padding: 1rem 2.2rem; border-radius: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .ip-wrapper:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 0 30px rgba(0, 245, 214, 0.2); }
+
+        /* 特色卡片排版 */
+        .main-container { max-width: 1200px; margin: 0 auto 6rem; padding: 0 2rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .feature-item {
+            background: var(--glass-base); border: 1px solid rgba(255,255,255,0.03); border-radius: 20px; padding: 2.5rem;
+            backdrop-filter: blur(16px); transition: all 0.3s ease;
+        }
+        .feature-item:hover { transform: translateY(-5px); border-color: var(--border-glow); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); }
+        .feature-item h3 { font-size: 1.35rem; margin-bottom: 1rem; color: #ffffff; position: relative; padding-bottom: 0.5rem; }
+        .feature-item h3::after { content: ''; position: absolute; bottom: 0; left: 0; width: 30px; height: 2px; background: var(--primary); }
+        .feature-item p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-top: 0.5rem; }
+
+        footer { text-align: center; padding: 3rem; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; }

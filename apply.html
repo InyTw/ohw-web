@@ -4,119 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>加入招募 | ohw Network</title>
-    <style>
-        :root { --bg-main: #060814; --primary: #00f5d4; --glass-base: rgba(11, 15, 33, 0.7); --border-glow: rgba(0, 245, 214, 0.15); --text-light: #f8fafc; --text-muted: #64748b; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-light); }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 8%; background: rgba(6, 8, 20, 0.75); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .brand-logo { font-size: 1.6rem; font-weight: 800; background: linear-gradient(45deg, var(--primary), #9b5de5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        nav a { color: var(--text-muted); text-decoration: none; margin-left: 2rem; font-weight: 600; }
-        nav a.active { color: var(--primary); }
-
-        .form-wrap { max-width: 680px; margin: 4rem auto; padding: 3rem 2.5rem; background: var(--glass-base); border: 1px solid rgba(255,255,255,0.03); border-radius: 24px; backdrop-filter: blur(15px); }
-        h1 { font-size: 2rem; margin-bottom: 0.5rem; font-weight: 800; }
-        .subtitle { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 0.95rem; }
-
-        .input-row { margin-bottom: 1.8rem; }
-        .input-row label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.6rem; color: var(--primary); letter-spacing: 0.5px; }
-        .input-row input, .input-row select, .input-row textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); padding: 1rem; color: white; border-radius: 12px; font-size: 0.95rem; transition: border 0.25s; }
-        .input-row input:focus, .input-row select:focus, .input-row textarea:focus { outline: none; border-color: var(--primary); }
-        
-        .submit-btn { width: 100%; background: linear-gradient(90deg, var(--primary), #00b4d8); color: #060814; border: none; padding: 1.1rem; border-radius: 12px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: all 0.25s; }
-        .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 20px rgba(0, 245, 214, 0.3); }
-    </style>
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="/css/apply.css">
+    <script src="/scripts/apply.js"></script>
 </head>
 <body>
-    <header>
-        <div class="brand-logo">ohw Network</div>
-        <nav>
-            <a href="index.html">首頁入口</a>
-            <a href="news.html">公告資訊</a>
-            <a href="staff-list.html">管理團隊</a>
-            <a href="apply.html" class="active">加入招募</a>
-        </nav>
-    </header>
-
     <div class="form-wrap">
         <h1>招募申請</h1>
-        <p class="subtitle">提交您的營運或技術意向書，加入核心開發與維護梯隊。</p>
-        
-            <form onsubmit="sendApplication(event)">
-        <div class="input-row"><label>Minecraft ID</label><input type="text" id="mc-id" required placeholder="Steve"></div>
-        <div class="input-row"><label>Discord ID</label><input type="text" id="dc-id" required placeholder="steve_487"></div>
-        <div class="input-row"><label>Gmail 帳號</label><input type="email" id="email" required placeholder="steve487@gmail.com"></div>
-        <div class="input-row">
-            <label>應徵核心職責</label>
-            <select id="role" style="color: white; background: #0b0e17;">
-                <option value="技術工程">技術工程 (插件除錯、架構維護)</option>
-                <option value="環境設計">環境設計 (場景規劃、美學構建)</option>
-                <option value="社群營運">社群營運 (秩序維護、活動策劃)</option>
-            </select>
-        </div>
-        <div class="input-row"><label>資歷與相關技術範例述職</label><textarea id="bio" rows="5" required placeholder="請簡述您的實作經驗或提供開源程式庫連結..."></textarea></div>
-        <button type="submit" class="submit-btn" id="submit-btn">提交審查單</button>
-</form>
+        <p class="subtitle">請填寫下方資訊，加入我們的開發團隊。</p>
+        <form id="apply-form">
+            <div class="input-row">
+                <label for="mc-id">Minecraft ID</label>
+                <input type="text" id="mc-id" name="mc-id" required placeholder="例如: Steve" autocomplete="username">
+            </div>
+            <div class="input-row">
+                <label for="dc-id">Discord ID</label>
+                <input type="text" id="dc-id" name="dc-id" required placeholder="例如: user#0000" autocomplete="nickname">
+            </div>
+            <div class="input-row">
+                <label for="email">電子郵件 (Gmail)</label>
+                <input type="email" id="email" name="email" required placeholder="example@gmail.com" autocomplete="email">
+            </div>
+            <div class="input-row">
+                <label for="role">應徵職位</label>
+                <select id="role" name="role" autocomplete="off">
+                    <option value="環境設計">環境設計</option>
+                    <option value="社群營運">社群營運</option>
+                </select>
+            </div>
+            <div class="input-row">
+                <label for="bio">簡述資歷 (50字以上)</label>
+                <textarea id="bio" name="bio" rows="5" required placeholder="請簡單介紹你的實作經驗..." autocomplete="off"></textarea>
+            </div>
+            <button type="submit" class="submit-btn" id="submit-btn">提交審查單</button>
+        </form>
     </div>
-
-    <script>
-
-        // 請填入你從 Discord 複製的 Webhook URL
-const WEBHOOK_URL = 'https://discord.com/api/webhooks/1519687214282313809/oSTaCb2hRVVQmSfbHrvRkucyEBEVesAN2u_NfwlJG2_JqzX-siVeLmP8JjgoeW5LSqLw';
-
-async function sendApplication(event) {
-    event.preventDefault();
-    
-    const bio = document.getElementById('bio').value;
-    if (bio.length < 50) {
-        alert('⚠️ 資歷述職請達到 50 字以上。');
-        return;
-    }
-
-    const btn = document.getElementById('submit-btn');
-    btn.disabled = true;
-    btn.innerText = '提交中...';
-
-    const payload = {
-        embeds: [{
-            title: "📩 新的招募申請",
-            color: 62207,
-            fields: [
-                { name: "Minecraft ID", value: document.getElementById('mc-id').value, inline: true },
-                { name: "Discord ID", value: document.getElementById('dc-id').value, inline: true },
-                { name: "Email", value: document.getElementById('email').value, inline: false },
-                { name: "應徵職位", value: document.getElementById('role').value, inline: false },
-                { name: "資歷與技術說明", value: bio, inline: false }
-            ],
-            footer: { text: "來自 ohw Network 官網" },
-            timestamp: new Date()
-        }]
-    };
-
-    try {
-        const response = await fetch(WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        if (response.ok) {
-            alert('📬 申請已成功送出！請等待審核。');
-            event.target.reset(); // 清空表單
-        } else {
-            alert('❌ 發送失敗，請確認 Webhook URL 是否正確。');
-        }
-    } catch (err) {
-        alert('⚠️ 連線錯誤：' + err.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerText = '提交審查單';
-    }
-}
-
-        function sendApplication(event) {
-            event.preventDefault();
-            alert('📬 已發送給工作人員！請等待Email通知...');
-        }
-    </script>
 </body>
 </html>

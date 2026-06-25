@@ -1,0 +1,17 @@
+:root { --bg-main: #060814; --primary: #00f5d4; --text-light: #f8fafc; --text-muted: #64748b; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, monospace; }
+        body { background-color: var(--bg-main); color: var(--text-light); padding: 3rem 2rem; }
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        .news-card { 
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: 20px; overflow: hidden; margin-bottom: 2rem;
+        }
+        
+        .news-cover { width: 100%; height: 250px; background-size: cover; background-position: center; background-color: #1a1d2e; }
+        
+        .news-body { padding: 2rem; }
+        .category { color: var(--primary); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
+        .title { font-size: 1.8rem; margin: 0.5rem 0; color: #fff; }
+        .content { color: #cbd5e1; line-height: 1.8; margin-top: 1rem; white-space: pre-wrap; }
+        .footer { margin-top: 2rem; font-size: 0.8rem; color: var(--text-muted); }
