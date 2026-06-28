@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,25 +12,29 @@
     <script src="/scripts/staff.js" defer></script>
     <link rel="stylesheet" href="/css/staff.css">
 </head>
+
 <body>
 
     <div id="loading-overlay">載入驗證中...</div>
 
     <aside id="sidebar">
-    <div class="nav-group">
-        <div class="brand">
-            <span id="toggle-btn" onclick="toggleSidebar()">☰</span>
-            <span class="brand-text">STAFF<span>PANEL</span></span>
-        </div>
-        
-        <div class="nav-item" onclick="switchTab('review-panel', this)">
-            <span class="icon">📋</span><span class="nav-text">審核申請清單</span>
-        </div>
-        <div class="nav-item active" onclick="switchTab('news-panel', this)">
-            <span class="icon">📰</span><span class="nav-text">發布新聞</span>
-        </div>
+        <div class="nav-group">
+            <div class="brand">
+                <span id="toggle-btn" onclick="toggleSidebar()">☰</span>
+                <span class="brand-text">STAFF<span>PANEL</span></span>
+            </div>
+
+            <div class="nav-item" onclick="switchTab('review-panel', this)">
+                <span class="icon">📋</span><span class="nav-text">審核申請清單</span>
+            </div>
+            <div class="nav-item active" onclick="switchTab('news-panel', this)">
+                <span class="icon">📰</span><span class="nav-text">發布新聞</span>
+            </div>
             <div class="nav-item" onclick="switchTab('server-panel', this)">
-                <span class="icon">🖥️</span><span class="nav-text">伺服器與機器人狀態</span>
+                <span class="icon">🖥️</span><span class="nav-text">伺服器與機器人列表</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('staff-members-panel', this)">
+                <span class="icon">👷‍♂️</span><span class="nav-text">Staff 成員</span>
             </div>
         </div>
 
@@ -51,24 +56,26 @@
 
     <main>
         <div id="review-panel" class="content-panel">
-        <div class="page-header">
-            <h1>招募申請審核</h1>
-            <p>處理所有待審核的技術與營運入隊申請。</p>
-        </div>
-        <div id="review-list" style="display:grid; gap:1rem;">
+            <div class="page-header">
+                <h1>招募申請審核</h1>
+                <p>新人的簡歷，當然是要跟我好好的討論</p>
             </div>
+            <div id="review-list" style="display:grid; gap:1rem;"></div>
         </div>
-        
-        <div id="news-panel" class="content-panel active">
-            <div class="page-header"><h1>上架新聞公告</h1><p>發佈最新消息至伺服器官網首頁與公告區。</p></div>
+
+        <div id="news-panel" class="content-panel">
+            <div class="page-header">
+                <h1>上架新聞公告</h1>
+                <p>你發的內容會出現在 <a href="">news</a> 上公告給玩家，請勿亂發布</p>
+            </div>
             <div class="card">
                 <form id="news-form" onsubmit="publishNews(event)">
                     <div class="form-group">
                         <label>公告分類</label>
                         <select id="news-category">
                             <option value="SYSTEM">SYSTEM / 系統公告</option>
-                            <option value="SYSTEM">EVENT / 活動公告</option>
-                            <option value="SYSTEM">EMERGENCY / 緊急公告</option>
+                            <option value="EVENT">EVENT / 活動公告</option>
+                            <option value="EMERGENCY">EMERGENCY / 緊急公告</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -84,64 +91,128 @@
             </div>
         </div>
 
-        <div id="ban-panel" class="content-panel">
-            <div class="search-bar">
-                <input type="text" id="player-search" placeholder="輸入 ID 搜尋...">
-                <button id="search-btn">搜尋</button>
+        <div id="staff-members-panel" class="content-panel active">
+            <div class="page-header">
+                <h1>Staff 成員管理</h1>
+                <p>所有Staff都會列在這裡，權限亂調的話...我想你應該想要調的是離職對吧?</p>
             </div>
-        
-            <div id="player-grid" class="player-grid"></div>
+            <div id="staff-members-list">
+                <select class="m-perm" onchange="updateMemberPermissions('${m.id}', this.value, '${m.rank}')">
+                    <option value="" disabled selected>管理權限</option>
+                    <!-- 這裡改用遍歷權限表 -->
+                    ${Object.keys(rolePermissions).map(role => `
+                    <option value="${role}">${role} 模式 (套用預設權限)</option>
+                    `).join("")}
+                </select>
+            </div>
         </div>
 
         <div id="profile-panel" class="content-panel">
-    <div class="page-header">
-        <h1>帳號與個人資料設定</h1>
-        <p>管理員數據將儲存於 Supabase 資料庫中的 profiles 資料表</p>
-    </div>
-    <div class="grid-2">
-        <div class="card">
-            <h3>📝 變更管理員名稱與頭像</h3>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0.5rem 0 1.5rem 0;">
-                點擊頭像即可上傳，拖曳滑鼠可移動位置，並用控制條縮放。
-            </p>
-            <form onsubmit="updateUserProfileDatabase(event)">
-                <div class="form-group">
-                    <label>全新使用者名稱</label>
-                    <input type="text" id="input-new-username" placeholder="請輸入新暱稱..." required>
+            <div class="page-header">
+                <h1>帳號與個人資料設定</h1>
+                <p>數據將儲存於 Supabase 資料庫中</p>
+                <br>
+                <p>你們的頭像跟名稱最好不要給我用很奇怪的東西喔，你想要黑人頭像、小時候的你、你的idol還是你家蘿莉(?) 我都沒差，但不要給我出現奇怪的東西都行</p>
+                <br>
+                <p>名字也是一樣，最好不要給我出現什麼【我是超可愛小酪梨】、【我迪奧超大】、【奶媽奶我一口】、【我要入館】、【即拔超大】... 抓到一律撤銷你的職位，找個工作人員方便講的！</p>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>📝 變更管理員名稱與頭像</h3>
+                    <form onsubmit="updateUserProfileDatabase(event)">
+                        <div class="form-group">
+                            <label>個人頭像</label>
+                            <input type="file" id="input-file-avatar" accept="image/*" hidden
+                                onchange="previewSelectedAvatar(this)">
+                            <div class="avatar-preview-container">
+                                <label for="input-file-avatar" class="avatar-preview" id="avatar-preview-box">
+                                    <div class="upload-overlay">變更頭像</div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>全新使用者名稱</label>
+                            <input type="text" id="input-new-username" placeholder="請輸入新暱稱..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>自我介紹</label>
+                            <textarea id="bio-input" placeholder="寫點什麼來介紹自己..." rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>卡片背景</label>
+                            <div class="file-upload-wrapper">
+                                <button class="btn-modern">選擇圖片</button>
+                                <input type="file" id="bg-upload" accept="image/*">
+                            </div>
+                            <button id="save-btn" class="btn-modern" onclick="uploadAndSaveBackground(event)">
+                                儲存設定
+                            </button>
+                        </div>
+                        <button type="submit" class="btn" id="btn-update-profile">儲存個人設定</button>
+                    </form>
                 </div>
-                
-                <div class="form-group">
-                    <label>個人頭像</label>
-                    <input type="file" id="input-file-avatar" accept="image/*" hidden onchange="previewSelectedAvatar(this)">
-                    
-                    <div class="avatar-preview-container">
-                        <label for="input-file-avatar" class="avatar-preview" id="avatar-preview-box">
-                            <div class="upload-overlay">變更頭像</div>
-                        </label>
+
+
+                <div id="staff-card-container" class="ba-card">
+                    <div class="card-header">
+                        <div id="card-avatar" class="avatar-circle"></div>
+                        <div class="header-info">
+                            <h2 id="card-username"></h2>
+                            <div class="card-rank" id="card-rank"></div>
+                        </div>
                     </div>
+
+                    <div class="divider"></div>
+
+                    <div class="card-body">
+                        <div class="section-title">工作內容</div>
+                        <div class="content-box-work">
+                            <p id="card-role-desc"></p>
+                        </div>
+
+                        <div class="section-title">自我介紹</div>
+                        <div class="content-box-bio">
+                            <p id="card-bio"></p>
+                        </div>
+                    </div>
+
+                    <div class="footer-text">OHW NETWORK</div>
                 </div>
-                <button onsubmit="updateUserProfileDatabase(event)" type="submit" class="btn" id="btn-update-profile">儲存個人設定</button>
-            </form>
-        </div>
-    </div>
-</div>
+            </div>
         </div>
     </main>
 
-    
-<div id="avatar-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
-    <div class="modal-content" style="background:#2a2a40; padding:20px; border-radius:12px; width:90%; max-width:500px; color:white;">
-        <h3>編輯頭像</h3>
-        <div id="img-container" style="width:100%; height:300px; background:#000;">
-            <img id="image-to-crop" src="" style="max-width:100%;">
-        </div>
-        <div style="margin-top:20px;">
-            <button onclick="closeModal()">取消</button>
-            <button onclick="saveCroppedImage()">套用</button>
+
+    <div id="avatar-modal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+        <div class="modal-content"
+            style="background:#2a2a40; padding:20px; border-radius:12px; width:90%; max-width:500px; color:white;">
+            <h3>編輯頭像</h3>
+            <div id="img-container" style="width:100%; height:300px; background:#000;">
+                <img id="image-to-crop" src="" style="max-width:100%;">
+            </div>
+            <div style="margin-top:20px;">
+                <button onclick="closeModal()">取消</button>
+                <button onclick="saveCroppedImage()">套用</button>
+            </div>
         </div>
     </div>
-</div>
 
-</div>
+    <div id="bg-modal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+        <div class="modal-content"
+            style="background:#2a2a40; padding:20px; border-radius:12px; width:90%; max-width:800px; color:white;">
+            <h3>裁切背景圖片</h3>
+            <div style="width:100%; height:400px; background:#000;">
+                <img id="bg-to-crop" style="max-width:100%;">
+            </div>
+            <div style="margin-top:20px;">
+                <button onclick="closeBgModal()">取消</button>
+                <button onclick="saveCroppedBg()">套用並儲存</button>
+            </div>
+        </div>
+    </div>
+
 </body>
+
 </html>

@@ -17,3 +17,19 @@ document.querySelectorAll('.user-panel').forEach(panel => {
         descElement.innerText = "歡迎加入我們的開發團隊！";
     }
 });
+
+
+// 儲存設定並同步資料
+async function updateProfile() {
+    const newBio = document.getElementById('bio-input').value;
+    const userId = 10020;
+
+    const { error } = await supabaseClient
+        .from('profiles')
+        .update({ bio: newBio })
+        .eq('id', userId);
+
+    if (!error) {
+        alert("自介已更新，將同步至您的員工卡！");
+    }
+}
