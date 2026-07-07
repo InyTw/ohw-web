@@ -7,30 +7,44 @@
     <link rel="icon" href="/images/favicon.png" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="/css/apply.css">
+    <link rel="stylesheet" href="/css/index.css">
     <script src="/scripts/apply.js"></script>
 </head>
 <body>
+
+    <header>
+        <div class="brand-logo">ohw Network</div>
+        <nav>
+            <a href="index.html">首頁入口</a>
+            <a href="news.html">公告資訊</a>
+            <a href="staff-list.html">管理團隊</a>
+            <a href="apply.html" class="active">加入招募</a>
+        </nav>
+    </header>
+
     <div class="form-wrap">
-        <h1>招募申請</h1>
+        <h1>ohw｜招募申請</h1>
         <p class="subtitle">請填寫下方資訊，加入我們的開發團隊。</p>
         <form id="apply-form">
             <div class="input-row">
                 <label for="mc-id">Minecraft ID</label>
-                <input type="text" id="mc-id" name="mc-id" required placeholder="例如: Steve" autocomplete="username">
+                <input type="text" id="mc-id" name="mc-id" required placeholder="ohw_tw_" autocomplete="username">
             </div>
             <div class="input-row">
                 <label for="dc-id">Discord ID</label>
-                <input type="text" id="dc-id" name="dc-id" required placeholder="例如: user#0000" autocomplete="nickname">
+                <input type="text" id="dc-id" name="dc-id" required placeholder="ohw-tw#0000" autocomplete="nickname">
             </div>
             <div class="input-row">
-                <label for="email">電子郵件 (Gmail)</label>
-                <input type="email" id="email" name="email" required placeholder="example@gmail.com" autocomplete="email">
+                <label for="email">電子郵件 (這將是你成為staff後的控制面板帳號)</label>
+                <input type="email" id="email" name="email" required placeholder="ohw487-_o@gmail.com" autocomplete="email">
             </div>
             <div class="input-row">
                 <label for="role">應徵職位</label>
                 <select id="role" name="role" autocomplete="off">
-                    <option value="環境設計">環境設計</option>
-                    <option value="社群營運">社群營運</option>
+                    <option value="環境設計">伺服器高層管理 (Admin)</option>
+                    <option value="環境設計">伺服器基礎管理 (Moderator)</option>
+                    <option value="環境設計">伺服器環境設計 (Builder)</option>
+                    <option value="社群營運">伺服器社群營運 (Staff)</option>
                 </select>
             </div>
             <div class="input-row">

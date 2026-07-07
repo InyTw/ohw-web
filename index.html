@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>網站維護模式 | ohw Network</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+    <link rel="icon" href="/images/png/favicon.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* 定義柔和莫蘭迪色調 */
-            --bg-soft: #f7f9fc; /* 米白/淡藍灰，與主頁一致 */
-            --text-main: #ffffff; /* 柔和深灰 */
-            --text-sub: #000000; /* 淡灰 */
-            --primary-pastel: #a29bfe; /* 柔和紫 */
+            --bg-soft: #f7f9fc;
+            --text-main: #ffffff;
+            --text-sub: #000000;
+            --primary-pastel: #a29bfe;
             --card-bg: #ffffff;
-
         }
 
         :root.color {
@@ -39,27 +38,24 @@
             height: 100vh;
         }
 
-        /* 延用主頁的柔和 GIF 背景 */
         .bg-video {
             position: fixed;
             min-width: 100%;
             min-height: 100%;
             width: auto;
             height: auto;
-            z-index: -1; /* 保持在頁面最底層 */
-            object-fit: cover; /* 確保影片填滿螢幕不留白 */
+            z-index: -1;
+            object-fit: cover;
         }
 
-        /* 超級大圓角柔和卡片 */
         .glass-card {
             background: rgba(255, 255, 255, 0.041);
-            backdrop-filter: blur(10px); /* 玻璃模糊 */
+            backdrop-filter: blur(10px);
             border: 1px solid rgb(255, 255, 255);
-            border-radius: 40px; /* 超大圓角 */
-            box-shadow: 0 20px 50px rgba(162, 155, 254, 0.1); /* 淡淡的紫色陰影 */
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(162, 155, 254, 0.1);
         }
 
-        /* 柔和漸層按鈕 */
         .btn-pastel {
             background: linear-gradient(135deg, #a29bfe 0%, #d630311a 100%);
             background-color: var(--primary-pastel);
@@ -73,15 +69,26 @@
             box-shadow: 0 12px 30px rgba(162, 155, 254, 0.4);
         }
 
-        /* 頁尾文字 */
         .footer-text {
             color: var(--text-sub);
             font-size: 11px;
             letter-spacing: 0.4em;
-
         }
 
-        /* 連結樣式 */
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.726);
+            z-index: 0;
+        }
+
+        .bg-video {
+            z-index: -1;
+        }
+
         .link {
             color: #fd4646;
             text-decoration: none;
@@ -89,44 +96,91 @@
             transition: 0.3s;
         }
 
-        .ann-link {
-            color: #7700ff;
+        .ann-1 {
+            color: #00aeff;
+            text-decoration: solid;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .ann-2 {
+            color: #fbff00;
             text-decoration: none;
             font-weight: 600;
             transition: 0.3s;
         }
 
-        .val {
-            color: #00aeff;
-            text-decoration:solid;
+        .ann-3 {
+            color: #a70000;
+            text-decoration: none;
             font-weight: 600;
             transition: 0.3s;
         }
     </style>
 </head>
+
 <body class="p-6">
 
-    <video autoplay muted loop playsinline class="bg-video">
-        <source src="/images/Gawr-Gura-and-Amelia-Watson-vibing-near-a-campfire-live-wallpaper.mp4" type="video/mp4">
+    <video autoplay muted playsinline class="bg-video">
+        <source src="/images/vid/roxy.mp4" type="video/mp4">
     </video>
 
+    <div class="video-overlay"></div>
+
     <div class="relative z-10 text-center">
-        
         <div class="glass-card p-12 lg:p-16 max-w-2xl mx-auto mt-4">
-            <h2 class="text-2xl font-bold tracking-tight mb-4 text-[#2d3436]">
-<h2 class="text-2xl font-bold tracking-tight mb-4 text-[#ff0000]">【維護模式】</h2><br>(<a class="link" href="https://dsc.gg/ohw-network" target="_blank">Discord 被低能炸了</a>)
+            <h2 class="text-2xl font-bold tracking-tight mb-4 text-[#ff0000]">【維護模式】</h2>
+            <p class="mb-4">(<a class="link" href="https://dsc.gg/ohw-network" target="_blank">Discord 被低能炸了</a>)</p>
+
             <p class="text-[var(--text-main)] text-sm leading-relaxed tracking-wider mb-10">
                 我們的網站變得更優質了，還加入了論壇系統！<br>
-                <p class="text-[#ffc400] font-bold">最新情報！！！</p><br>
-                <a class="val" href="https://www.youtube.com/watch?v=mydz0zXDjfA" target="_blank">全球預約熱烈開跑！<br>【Official Music Video】証命讚歌（Shoumeisanka）/ MyGO!!!!!</a><a class="ann-link" href="https://youtu.be/lkS9XIzWObc?si=BiSfG3B0GlezU5Rt" target="_blank"></a>
+                <span class="text-2xl text-[#ffc400] font-bold mb-4 block mt-4">
+                    <e class="text-[#00EC00]">✔</e> 最新動漫情報
+                </span>
+                1. <a class="ann-1" href="https://www.youtube.com/watch?v=mydz0zXDjfA" target="_blank">Bang
+                    Dream！OurNotes全球預約熱烈開跑！</a>
+                <br>
+                2. <a class="ann-2" href="https://ani.gamer.com.tw/animeVideo.php?sn=49822" target="_blank">夢限大YUME∞MITA
+                    上線啦！！！</a>
+                <br>
+                3. <a class="ann-3" href="https://www.youtube.com/watch?v=mydz0zXDjfA"
+                    target="_blank">無職轉生～到了異世界就拿出真本事～第三季 上線啦！！！</a>
                 <br><br>
-                <p class="font-bold">現在 <e class="text-[#00aeff] font-bold">BanG Dream！交織的樂章</e> 已正式展開預約！！！</p>
+                <span class="font-bold">現在 <e class="text-[#00aeff] font-bold">BanG Dream！交織的樂章</e> 已正式展開預約！！！</span>
             </p>
 
-        <div class="mt-16 footer-text">
-            ohw Network · Maintenance System
+            <div class="mt-16 footer-text">
+                ohw Network · Maintenance System
+            </div>
         </div>
     </div>
 
+    <script>
+        const annVideos = [
+            "/images/vid/ann/bdon.mp4",
+            "/images/vid/ann/bdmt.mp4"
+        ];
+        const fallbackVideo = "/images/vid/roxy.mp4";
+
+        let currentIndex = 0;
+        const videoParent = document.querySelector('.bg-video');
+        const videoSource = videoParent.querySelector('source');
+
+        videoParent.addEventListener('ended', () => {
+            currentIndex = (currentIndex + 1) % annVideos.length;
+            videoSource.src = annVideos[currentIndex];
+            videoParent.load();
+            videoParent.play();
+        });
+
+        videoParent.addEventListener('error', () => {
+            if (videoSource.src !== window.location.origin + fallbackVideo) {
+                videoSource.src = fallbackVideo;
+                videoParent.load();
+                videoParent.play();
+            }
+        }, true);
+    </script>
 </body>
+
 </html>
