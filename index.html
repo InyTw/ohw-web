@@ -130,57 +130,18 @@
     <div class="relative z-10 text-center">
         <div class="glass-card p-12 lg:p-16 max-w-2xl mx-auto mt-4">
             <h2 class="text-2xl font-bold tracking-tight mb-4 text-[#ff0000]">【維護模式】</h2>
-            <p class="mb-4">(<a class="link" href="https://dsc.gg/ohw-network" target="_blank">Discord 被低能炸了</a>)</p>
+            <p class="mb-4">(維護原因：<a class="link" href="https://dsc.gg/ohw-network" target="_blank">Discord 被低能炸了</a>)</p>
 
             <p class="text-[var(--text-main)] text-sm leading-relaxed tracking-wider mb-10">
                 我們的網站變得更優質了，還加入了論壇系統！<br>
-                <span class="text-2xl text-[#ffc400] font-bold mb-4 block mt-4">
-                    <e class="text-[#00EC00]">✔</e> 最新動漫情報
-                </span>
-                1. <a class="ann-1" href="https://www.youtube.com/watch?v=mydz0zXDjfA" target="_blank">Bang
-                    Dream！OurNotes全球預約熱烈開跑！</a>
-                <br>
-                2. <a class="ann-2" href="https://ani.gamer.com.tw/animeVideo.php?sn=49822" target="_blank">夢限大YUME∞MITA
-                    上線啦！！！</a>
-                <br>
-                3. <a class="ann-3" href="https://www.youtube.com/watch?v=mydz0zXDjfA"
-                    target="_blank">無職轉生～到了異世界就拿出真本事～第三季 上線啦！！！</a>
-                <br><br>
-                <span class="font-bold">現在 <e class="text-[#00aeff] font-bold">BanG Dream！交織的樂章</e> 已正式展開預約！！！</span>
+                但由於 Discord 被炸，所以我們暫時關閉了網站<br>
+                以便進行維護和修復<br>
             </p>
-
-            <div class="mt-16 footer-text">
+            <div class="mt-16 text-sm tracking-widest footer-text">
                 ohw Network · Maintenance System
             </div>
         </div>
     </div>
-
-    <script>
-        const annVideos = [
-            "/images/vid/ann/bdon.mp4",
-            "/images/vid/ann/bdmt.mp4"
-        ];
-        const fallbackVideo = "/images/vid/roxy.mp4";
-
-        let currentIndex = 0;
-        const videoParent = document.querySelector('.bg-video');
-        const videoSource = videoParent.querySelector('source');
-
-        videoParent.addEventListener('ended', () => {
-            currentIndex = (currentIndex + 1) % annVideos.length;
-            videoSource.src = annVideos[currentIndex];
-            videoParent.load();
-            videoParent.play();
-        });
-
-        videoParent.addEventListener('error', () => {
-            if (videoSource.src !== window.location.origin + fallbackVideo) {
-                videoSource.src = fallbackVideo;
-                videoParent.load();
-                videoParent.play();
-            }
-        }, true);
-    </script>
 </body>
 
 </html>
