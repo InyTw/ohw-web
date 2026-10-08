@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+    <title>玩家論壇 | ohw Network</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/forum.css">
+</head>
+<body>
+
+    <header>
+        <div class="brand-logo">ohw Network</div>
+        <nav>
+            <a href="index.html">首頁</a>
+            <a href="forum.html">論壇</a>
+            <a href="news.html">公告</a>
+            <a href="staff-list.html">管理團隊</a>
+            <a href="apply.html">加入招募</a>
+        </nav>
+        <div class="user-auth">
+            <a class="btn-login" href="login.html">登入 / 註冊</a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="forum-action-bar">
+            <h2>玩家討論區</h2>
+            <button class="btn-primary" onclick="checkAuthAndCreatePost()">➕ 發表新文章</button>
+        </div>
+
+        <div class="forum-list">
+            <div class="forum-card">
+                <h3>【討論】生存分流的新手建築教學</h3>
+                <p class="author">發布者：Steve | 發布時間：2026-10-08</p>
+                <p class="preview">歡迎大家來到 ohw Network，這裡分享一些剛開局防爆箱與保護區設定...</p>
+                <div class="comment-section">
+                    <input type="text" placeholder="🔒 需登入帳號才能參與留言..." class="comment-input" readonly onclick="checkAuthToComment()">
+                    <button class="btn-primary" onclick="checkAuthToComment()">留言</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 ohw Network. 保留所有權利。</p></footer>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        function onUserStatusChange(isLoggedIn) {
+            const commentInputs = document.querySelectorAll('.comment-input');
+
+            commentInputs.forEach(input => {
+                if (isLoggedIn) {
+                    input.removeAttribute('readonly');
+                    input.placeholder = '撰寫留言...';
+                } else {
+                    input.setAttribute('readonly', 'true');
+                    input.placeholder = '🔒 需登入帳號才能參與留言...';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            onUserStatusChange(!!currentUser);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+    <title>ohw Network | 官方網站</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+
+    <header>
+        <div class="brand-logo">ohw Network</div>
+        <nav>
+            <a href="index.html" class="active">首頁</a>
+            <a href="forum.html">論壇</a>
+            <a href="news.html">公告</a>
+            <a href="staff-list.html">管理團隊</a>
+            <a href="apply.html">加入招募</a>
+        </nav>
+        <div class="user-auth">
+            <a class="btn-login" href="login.html">登入 / 註冊</a>
+            <div class="user-auth" id="userAuthContainer"></div>
+        </div>
+    </header>
+
+
+    <section class="hero-section">
+        <h1>探索全分流競技 <span>跨版本相容</span></h1>
+        <p>獨立優化底層架構，完美支援 1.8 至最新版本。原生低延遲生存、天梯對決、自訂深度冒險與多元主題玩法全面整合。</p>
+        <div class="ip-wrapper" onclick="copyServerIP()">
+            <span style="color: var(--primary); margin-right: 10px;">➔</span> ohw-tw.net
+        </div>
+    </section>
+
+    <div class="main-container">
+        <div class="features-grid">
+            <div class="feature-item">
+                <h3>社群生存分流</h3>
+                <p>經調校的經濟系統與動態地圖機制，確保跨版本玩家均能享有流暢、穩定的建築與發展環境。</p>
+            </div>
+            <div class="feature-item">
+                <h3>核心競技對戰</h3>
+                <p>特製算法優化經典打擊判定，同時包容新版本戰術思維。提供高更新率的公平競技場環境。</p>
+            </div>
+            <div class="feature-item">
+                <h3>客製化角色系統</h3>
+                <p>非傳統的多維度遊玩體驗。包含原創裝備模組、技能树配置與多人副本挑戰玩法。</p>
+            </div>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 ohw Network. 保留所有權利。</p></footer>
+
+    <script>
+        function copyServerIP() {
+            navigator.clipboard.writeText('ohw-tw.net').then(() => {
+                alert('🔗 伺服器節點位址已複製至剪貼簿。');
+            }).catch(err => {
+                alert('❌ 無法複製到剪貼簿，請手動複製：ohw-tw.net');
+            });
+        }
+    </script>
+</body>
+</html>

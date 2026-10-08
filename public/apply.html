@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+    <title>加入招募 | ohw Network</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/apply.css">
+</head>
+<body>
+
+    <header>
+        <div class="brand-logo">ohw Network</div>
+        <nav>
+            <a href="index.html">首頁</a>
+            <a href="forum.html">論壇</a>
+            <a href="news.html">公告</a>
+            <a href="staff-list.html">管理團隊</a>
+            <a href="apply.html">加入招募</a>
+        </nav>
+        <div class="user-auth">
+            <a class="btn-login" href="login.html">登入 / 註冊</a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="apply-box">
+            <h2>加入 ohw Network 團隊</h2>
+            <p>我們正在尋找熱情且具備專業能力的夥伴，請選擇您想應徵的職位並填寫表單。</p>
+            
+            <form id="applyForm" onsubmit="event.preventDefault(); alert('申請已提交！');">
+                <div class="form-group">
+                    <label>Discord Tag / 聯絡方式：</label>
+                    <input type="text" required placeholder="例如：user#1234">
+                </div>
+                <div class="form-group">
+                    <label>應徵職位：</label>
+                    <select required>
+                        <option value="">請選擇職位</option>
+                        <option value="builder">建築師 (Builder)</option>
+                        <option value="developer">技術開發 (Developer)</option>
+                        <option value="helper">遊戲管理員 / 客服 (Helper)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>個人簡介與作品集/經驗說明：</label>
+                    <textarea rows="5" required placeholder="請簡單介紹自己，並附上作品連結（如建築照片、GitHub等）"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">提交申請</button>
+            </form>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 ohw Network. 保留所有權利。</p></footer>
+</body>
+</html>
